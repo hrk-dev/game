@@ -17,5 +17,6 @@ var $plugins =
 {"name":"AltMenuScreen3","status":true,"description":"Yet Another menu screen layout.","parameters":{"bgBitmapMenu":"","bgBitmapItem":"","bgBitmapSkill":"","bgBitmapEquip":"","bgBitmapStatus":"","bgBitmapOptions":"","bgBitmapFile":"","bgBitmapGameEnd":"","maxColsMenu":"1","commandRows":"1","isDisplayStatus":"1"}},
 {"name":"MPP_ChoiceEX","status":true,"description":"【ver.3.3】選択肢の機能拡張","parameters":{"maxPageRow":"6"}},
 {"name":"blur","status":true,"description":"屏幕截图&模糊 工具","parameters":{"blurLevel":"5"}},
-{"name":"MenuAlignCenter","status":true,"description":"文字居中","parameters":{}}
+{"name":"MenuAlignCenter","status":true,"description":"文字居中","parameters":{}},
+{"name":"DestinationWindow","status":true,"description":"行动目标窗口插件(修改)","parameters":{"目标窗口开关ID":"1","事件中关闭":"true","窗口X坐标":"24","窗口Y坐标":"24","窗口透明度":"255","渐隐时间":"8","字体大小":"22","默认文字":"随便逛逛吧"}}
 ];
