@@ -3,6 +3,7 @@ var electron = require("electron");
 var vueApp = new Vue({
   el: "#app",
   data: () => ({
+    dev: false,
     ready: false,
     title: "Hiiro",
     index: 0,
@@ -129,6 +130,10 @@ var vueApp = new Vue({
     }
   },
   mounted() {
+    if (process.env.NODE_ENV === 'development') {
+      this.dev = true
+    }
+
     this.titleList = [
       "H",
       "A",

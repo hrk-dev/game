@@ -26,8 +26,15 @@
           <div class="text">{{title}}</div>
         </div>
         <div class="btn-list">
-          <div class="btn" @click="ipc('app:reload')">Re</div>
-          <div class="btn" style="width: 50px" @click="ipc('app:dev')">Dev</div>
+          <div class="btn" @click="ipc('app:reload')" v-if="dev">Re</div>
+          <div
+            class="btn"
+            style="width: 50px"
+            @click="ipc('app:dev')"
+            v-if="dev"
+          >
+            Dev
+          </div>
           <div class="btn" style="line-height: 20px" @click="ipc('app:min')">
             _
           </div>
