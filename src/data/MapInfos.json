@@ -1,5 +1,8 @@
 [
 null,
-{"id":1,"expanded":false,"name":"学校 教室","order":2,"parentId":0,"scrollX":1139,"scrollY":632},
-{"id":2,"expanded":false,"name":"默认地图","order":1,"parentId":0,"scrollX":542,"scrollY":304}
+{"id":1,"expanded":true,"name":"课室(剧情)","order":3,"parentId":4,"scrollX":498,"scrollY":622},
+{"id":2,"expanded":false,"name":"初始","order":1,"parentId":0,"scrollX":498,"scrollY":622},
+{"id":3,"expanded":false,"name":"课室","order":4,"parentId":4,"scrollX":498,"scrollY":622},
+{"id":4,"expanded":true,"name":"课室","order":2,"parentId":0,"scrollX":498,"scrollY":622},
+{"id":5,"expanded":true,"name":"课室(班会后)","order":5,"parentId":4,"scrollX":832,"scrollY":640}
 ]
