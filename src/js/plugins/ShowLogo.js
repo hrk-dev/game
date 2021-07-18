@@ -35,6 +35,18 @@
  * @default 160
  * @type Number
  *
+ * @param 提示图片
+ * @require 1
+ * @dir img/system/
+ * @type file
+ * 
+ * @param 是否显示提示图片
+ * @type boolean
+ * @default false
+ *
+ * @param 没有存档时跳过主界面
+ * @type boolean
+ * @default true
  */
 
 //-----------------------------------------------------------------------------
@@ -56,6 +68,9 @@ function Scene_Splash() {
     ShowLogo.FadeOutTime = Number(ShowLogo.Parameters['渐隐时长']) || 120;
     ShowLogo.FadeInTime = Number(ShowLogo.Parameters['渐入时长']) || 120;
     ShowLogo.WaitTime = Number(ShowLogo.Parameters['显示时长']) || 160;
+    ShowLogo.ShowTips = JSON.parse(ShowLogo.Parameters['是否显示提示图片']);
+    ShowLogo.TipsImage = String(ShowLogo.Parameters['提示图片']);
+    ShowLogo.SkipTitle = JSON.parse(ShowLogo.Parameters['没有存档时跳过主界面']);
 
     //-----------------------------------------------------------------------------
     // Scene_Boot
@@ -70,6 +85,9 @@ function Scene_Splash() {
         }
         if (ShowLogo.ShowCustom) {
             ImageManager.loadSystem(ShowLogo.CustomImage);
+        }
+        if (ShowLogo.ShowTips) {
+            ImageManager.loadSystem(ShowLogo.TipsImage);
         }
     };
 
@@ -91,9 +109,12 @@ function Scene_Splash() {
     Scene_Splash.prototype.constructor = Scene_Splash;
 
     Scene_Splash.prototype.initialize = function () {
+        this.firstStart = ShowLogo.SkipTitle && (DataManager.loadGlobalInfo() || []).length <= 1
+
         Scene_Base.prototype.initialize.call(this);
         this._mvSplash = null;
         this._customSplash = null;
+        this._tipsSplash = null;
         this._mvWaitTime = ShowLogo.WaitTime;
         this._customWaitTime = ShowLogo.WaitTime;
         this._mvFadeOut = false;
@@ -101,7 +122,13 @@ function Scene_Splash() {
         this._waitTime = Math.min(ShowLogo.FadeInTime, ShowLogo.FadeOutTime)
         this._customFadeOut = false;
         this._customFadeIn = false;
+        this._tipsFadeOut = true;
+        this._tipsFadeIn = false;
+        this._tipsWaitTime = ShowLogo.FadeOutTime
+        this._tipsFadeTime = 60
+        this._end = false
         this._skip = false
+        this._tipsSkip = false
         if (ShowLogo.ShowLogo || ShowLogo.ShowCustom) {
             document.addEventListener('keydown', this.skip.bind(this), {
                 once: true
@@ -226,18 +253,63 @@ function Scene_Splash() {
 
         if (ShowLogo.ShowCustom) {
             if (ShowLogo.ShowLogo && this._mvFadeOut == true && this._customFadeOut == true) {
-                this.gotoTitleOrTest();
+                this.showTips();
             } else if (!ShowLogo.ShowLogo && this._customFadeOut == true) {
-                this.gotoTitleOrTest();
+                this.showTips();
             }
         } else {
             if (this._mvFadeOut == true) {
-                this.gotoTitleOrTest();
+                this.showTips();
             }
         }
 
         Scene_Base.prototype.update.call(this);
     };
+
+    Scene_Splash.prototype.showTips = function () {
+        if (ShowLogo.ShowTips && ShowLogo.TipsImage) {
+            if (this._tipsWaitTime > 0) {
+                this._tipsWaitTime--;
+            } else {
+                if (!this._end) {
+                    if (this._mvFadeOut) {
+                        this.removeChild(this._mvSplash)
+                    }
+                    if (this._customFadeOut) {
+                        this.removeChild(this._customSplash)
+                    }
+                    document.addEventListener('keydown', () => {
+                        if (this._tipsFadeOut && !this._tipsSkip) {
+                            this._tipsFadeOut = false
+                            this._tipsSkip = true
+                        }
+                    }, {
+                        once: true
+                    });
+                    document.addEventListener('mousedown', () => {
+                        if (this._tipsFadeOut && !this._tipsSkip) {
+                            this._tipsFadeOut = false
+                            this._tipsSkip = true
+                        }
+                    }, {
+                        once: true
+                    });
+                    this._end = true
+                }
+                if (!this._tipsFadeIn) {
+                    this._tipsSplash.opacity = 255;
+                    this.startFadeIn(60, false);
+                    this._tipsFadeIn = true;
+                } else if (!this._tipsFadeOut) {
+                    this.startFadeOut(60, false);
+                    this.gotoTitleOrTest();
+                    this._tipsFadeOut = true
+                }
+            }
+        } else {
+            this.gotoTitleOrTest();
+        }
+    }
 
     Scene_Splash.prototype.createSplashes = function () {
         if (ShowLogo.ShowLogo) {
@@ -249,6 +321,11 @@ function Scene_Splash() {
             this._customSplash = new Sprite(ImageManager.loadSystem(ShowLogo.CustomImage));
             this._customSplash.opacity = 0;
             this.addChild(this._customSplash);
+        }
+        if (ShowLogo.ShowTips) {
+            this._tipsSplash = new Sprite(ImageManager.loadSystem(ShowLogo.TipsImage));
+            this._tipsSplash.opacity = 0;
+            this.addChild(this._tipsSplash);
         }
     };
 
@@ -271,8 +348,12 @@ function Scene_Splash() {
         } else {
             this.checkPlayerLocation();
             DataManager.setupNewGame();
-            SceneManager.goto(Scene_Title);
-            Window_TitleCommand.initCommandPosition();
+            if (this.firstStart) {
+                SceneManager.goto(Scene_Map);
+            } else {
+                SceneManager.goto(Scene_Title);
+                Window_TitleCommand.initCommandPosition();
+            }
         }
         this.updateDocumentTitle();
     };

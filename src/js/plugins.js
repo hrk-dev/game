@@ -6,7 +6,7 @@ var $plugins =
 {"name":"TerraxLighting","status":true,"description":"v1.5.1 Creates an extra layer that darkens a map and adds lightsources!","parameters":{"Player radius":"50","Add to options":"Yes","Option menu entry":"Lighting effects","Reset Lights":"No","Save DaynightHours":"0","Save DaynightMinutes":"0","Save DaynightSeconds":"0","Flashlight offset":"0","Screensize X":"1024","Screensize Y":"726","Kill Switch":"No"}},
 {"name":"TS_Debug","status":true,"description":"","parameters":{}},
 {"name":"Community_Basic","status":true,"description":"Plugin used to set basic parameters.","parameters":{"cacheLimit":"10","screenWidth":"1024","screenHeight":"726","changeWindowWidthTo":"1024","changeWindowHeightTo":"726","renderingMode":"auto","alwaysDash":"off"}},
-{"name":"ShowLogo","status":true,"description":"打开游戏显示LOGO，根据官方插件MadeWithMv修改，增加跳过功能","parameters":{"是否显示LOGO图":"true","LOGO图片":"logo","是否显示自定义图片":"true","自定义图片":"MadeWithMv","渐隐时长":"50","渐入时长":"100","显示时长":"100"}},
+{"name":"ShowLogo","status":true,"description":"打开游戏显示LOGO，根据官方插件MadeWithMv修改，增加跳过功能","parameters":{"是否显示LOGO图":"true","LOGO图片":"logo","是否显示自定义图片":"true","自定义图片":"MadeWithMv","渐隐时长":"50","渐入时长":"100","显示时长":"100","提示图片":"tips","是否显示提示图片":"true","没有存档时跳过主界面":"true"}},
 {"name":"VIPArcher_Bubble_Message","status":true,"description":"VIPArcher_气泡对话框","parameters":{"BubbleTagName":"BubbleTag","TopMessageReviseY":"0","TopTagReviseY":"0","BottomMessageReviseY":"0","BottomTagReviseY":"0"}},
 {"name":"aligncenter","status":true,"description":"对话框文字居中居右对齐插件","parameters":{}},
 {"name":"GALV_MessageBusts","status":true,"description":"(v.2.6) Displays a bust image instead of selected face image","parameters":{"Bust Priority":"1","Bust Position":"1","Text X Offset":"390","Filename Append":""}},
