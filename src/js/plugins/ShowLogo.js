@@ -267,7 +267,7 @@ function Scene_Splash() {
     };
 
     Scene_Splash.prototype.showTips = function () {
-        if (ShowLogo.ShowTips && ShowLogo.TipsImage) {
+        if (ShowLogo.ShowTips && ShowLogo.TipsImage && this.firstStart) {
             if (this._tipsWaitTime > 0) {
                 this._tipsWaitTime--;
             } else {
@@ -322,7 +322,7 @@ function Scene_Splash() {
             this._customSplash.opacity = 0;
             this.addChild(this._customSplash);
         }
-        if (ShowLogo.ShowTips) {
+        if (ShowLogo.ShowTips && this.firstStart) {
             this._tipsSplash = new Sprite(ImageManager.loadSystem(ShowLogo.TipsImage));
             this._tipsSplash.opacity = 0;
             this.addChild(this._tipsSplash);
