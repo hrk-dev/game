@@ -10,3 +10,7 @@ Window_Base.prototype.standardFontFace = function () {
     return 'GameFont';
   }
 };
+
+Window_Options.prototype.addGeneralOptions = function() {
+  this.addCommand(TextManager.alwaysDash, 'alwaysDash');
+};

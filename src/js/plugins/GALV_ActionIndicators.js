@@ -25,12 +25,12 @@ Galv.AI = Galv.AI || {};      // Galv's plugin stuff
 
 //-----------------------------------------------------------------------------
 /*:
- * @plugindesc Display an icon when the player is able to interact with an event. View help for comment tag.
+ * @plugindesc Display an icon when the player is able to interact with an event. View help for comment tag. (经过修改)
  *
  * @author Galv - galvs-scripts.com & Blacktunes
  *
  * @param Y Offset
- * @desc Pixel offset for icon's Y position (经过修改)
+ * @desc Pixel offset for icon's Y position
  * @default 0
  *
  * @param Z Position
@@ -54,6 +54,8 @@ Galv.AI = Galv.AI || {};      // Galv's plugin stuff
  *
  *   <actionIcon: id>       // The code to use in a COMMENT within and event.
  *                          // id = the icon ID to use for the indicator.
+ * 
+ *   <direction: 8/2/4/6>   // 方向
  *
  * ----------------------------------------------------------------------------
  *  PLUGIN COMMANDS
@@ -136,6 +138,13 @@ Galv.AI.checkActionIcon = function() {
 	// CHECK EVENT STANDING ON
 	$gameMap.eventsXy($gamePlayer._x, $gamePlayer._y).forEach(function(event) {
 		action = Galv.AI.checkEventForIcon(event);
+		const eventDirection = Galv.AI.checkEventForDirection(event)
+		if ([2,4,6,8].includes(eventDirection)) {
+			const playerDirection = $gamePlayer.direction()
+			if (eventDirection !== playerDirection) {
+				action = {'eventId': 0, 'iconId': 0};
+			}
+		}
 	});
 	
 	// CHECK EVENT IN FRONT
@@ -146,19 +155,19 @@ Galv.AI.checkActionIcon = function() {
 			};
 		});
 
-		//---------------------------------------------------------------
-		// 适配半格移动
-		$gameMap.eventsXy(x2, y2 + 0.5).forEach(function(event) {
-			if (event.isNormalPriority()) {
-				action = Galv.AI.checkEventForIcon(event);
-			};
-		});
-		$gameMap.eventsXy(x2, y2 - 0.5).forEach(function(event) {
-			if (event.isNormalPriority()) {
-				action = Galv.AI.checkEventForIcon(event);
-			};
-		});
-		//---------------------------------------------------------------
+		// //---------------------------------------------------------------
+		// // 适配半格移动
+		// $gameMap.eventsXy(x2, y2 + 0.5).forEach(function(event) {
+		// 	if (event.isNormalPriority()) {
+		// 		action = Galv.AI.checkEventForIcon(event);
+		// 	};
+		// });
+		// $gameMap.eventsXy(x2, y2 - 0.5).forEach(function(event) {
+		// 	if (event.isNormalPriority()) {
+		// 		action = Galv.AI.checkEventForIcon(event);
+		// 	};
+		// });
+		// //---------------------------------------------------------------
 	};
 	
 	// CHECK COUNTER
@@ -173,6 +182,7 @@ Galv.AI.checkActionIcon = function() {
 		});
 	};
 	action = action || {'eventId': 0, 'iconId': 0};
+
 	$gamePlayer.actionIconTarget = action;
 };
 
@@ -198,6 +208,22 @@ Galv.AI.checkEventForIcon = function(event) {
 	return null;
 };
 
+Galv.AI.checkEventForDirection = function(event) {
+	if (event.page()) {
+		var listCount = event.page().list.length;
+		
+		for (var i = 0; i < listCount; i++) {
+			if (event.page().list[i].code === 408) {
+				var check = event.page().list[i].parameters[0].match(/<direction: (.*)>/i)
+				if (check) {
+					return Number(check[1])
+					break;
+				};
+			};
+		};
+	};
+	return null;
+};
 
 //-----------------------------------------------------------------------------
 // Spriteset_Map
