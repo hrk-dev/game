@@ -1,7 +1,7 @@
 [
 null,
 {"id":1,"expanded":false,"name":"1-901(剧情)","order":13,"parentId":4,"scrollX":498,"scrollY":622},
-{"id":2,"expanded":true,"name":"初始","order":1,"parentId":0,"scrollX":1139,"scrollY":627},
+{"id":2,"expanded":true,"name":"初始","order":1,"parentId":0,"scrollX":442.6666666666667,"scrollY":552.8888888888889},
 {"id":3,"expanded":false,"name":"测试","order":53,"parentId":0,"scrollX":1088.7272727272727,"scrollY":1357.0909090909092},
 {"id":4,"expanded":true,"name":"901","order":12,"parentId":19,"scrollX":498,"scrollY":622},
 {"id":5,"expanded":false,"name":"1-901","order":14,"parentId":4,"scrollX":498,"scrollY":622},
@@ -49,9 +49,9 @@ null,
 {"id":47,"expanded":false,"name":"3-901","order":45,"parentId":45,"scrollX":1708.5,"scrollY":940.5},
 {"id":48,"expanded":false,"name":"3-1F","order":41,"parentId":43,"scrollX":1748,"scrollY":818.6666666666666},
 {"id":49,"expanded":true,"name":"3-3F","order":46,"parentId":43,"scrollX":1708.5,"scrollY":940.5},
-{"id":50,"expanded":false,"name":"3-广场","order":47,"parentId":43,"scrollX":1711.5,"scrollY":940.5},
+{"id":50,"expanded":false,"name":"3-广场","order":47,"parentId":43,"scrollX":1712,"scrollY":1632},
 {"id":51,"expanded":true,"name":"家","order":48,"parentId":43,"scrollX":332,"scrollY":414.6666666666667},
 {"id":52,"expanded":false,"name":"3-客厅","order":49,"parentId":51,"scrollX":442.6666666666667,"scrollY":552.8888888888889},
 {"id":53,"expanded":false,"name":"3-浴室","order":51,"parentId":51,"scrollX":442.6666666666667,"scrollY":552.8888888888889},
-{"id":54,"expanded":false,"name":"3-房间","order":50,"parentId":51,"scrollX":332,"scrollY":414.6666666666667}
+{"id":54,"expanded":false,"name":"3-房间","order":50,"parentId":51,"scrollX":442.6666666666667,"scrollY":552.8888888888889}
 ]
