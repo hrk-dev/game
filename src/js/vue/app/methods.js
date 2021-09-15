@@ -1,32 +1,26 @@
-VueMain.setTitleColor = function (color) {
+VueMain.setTitleColor = (color) => {
   VueMain.app.$refs.title.color = color
 }
 
-VueMain.setTitle = function (title) {
+VueMain.setTitle = (title) => {
   VueMain.app.$refs.title.title = title
 }
 
-/**
- * test
- */
-VueMain.titleTest = function () {
+/** test */
+VueMain.titleTest = () => {
   VueMain.app.$refs.title.titleTest()
 }
 
-VueMain.startEnding = function () {
+VueMain.startEnding = () => {
   VueMain.app.$refs.ending.startEnding()
 }
 
-/**
- * test
- */
-VueMain.showDanmu = function () {
+/** test */
+VueMain.showDanmu = () => {
   VueMain.app.$refs.danmu.showDanmu()
 }
 
-/**
- * test
- */
-VueMain.stopDanmu = function () {
+/** test */
+VueMain.stopDanmu = () => {
   VueMain.app.$refs.danmu.stopDanmu()
 }

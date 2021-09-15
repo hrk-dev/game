@@ -1,23 +1,23 @@
 Game_Interpreter.prototype.isRunning = function () {
-  return this._wait || !!this._list;
-};
+  return this._wait || !!this._list
+}
 
 Game_Interpreter.prototype.update = function () {
   while (this.isRunning()) {
     if (this._wait) {
-      break;
+      break
     }
     if (this.updateChild() || this.updateWait()) {
-      break;
+      break
     }
     if (SceneManager.isSceneChanging()) {
-      break;
+      break
     }
     if (!this.executeCommand()) {
-      break;
+      break
     }
     if (this.checkFreeze()) {
-      break;
+      break
     }
   }
-};
+}

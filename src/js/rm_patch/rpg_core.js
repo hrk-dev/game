@@ -1,6 +1,4 @@
-/**
- * 默认返回非nwjs以禁用nwjs相关代码
- */
+/** 默认返回非nwjs以禁用nwjs相关代码 */
 Utils.isNwjs = function () {
   return false
 };
@@ -51,16 +49,12 @@ Graphics._updateRealScale = function () {
   }
 };
 
-/**
- * 默认开启自适应
- */
+/** 默认开启自适应 */
 Graphics._defaultStretchMode = function () {
   return true
 };
 
-/**
- * 标题栏适配
- */
+/** 标题栏适配 */
 Graphics._createModeBox = function () {
   var box = document.createElement('div');
   box.id = 'modeTextBack';
@@ -92,9 +86,7 @@ Graphics._createModeBox = function () {
   this._modeBox = box;
 };
 
-/**
- * 标题栏适配
- */
+/** 标题栏适配 */
 Graphics._centerElement = function (element) {
   var width = element.width * this._realScale;
   var height = element.height * this._realScale;
@@ -109,9 +101,7 @@ Graphics._centerElement = function (element) {
   element.style.height = height + 'px';
 };
 
-/**
- * 视频播放结束隐藏VUE层
- */
+/** 视频播放结束隐藏VUE层 */
 Graphics._onVideoEnd = function () {
   if (VueMain.app) {
     VueMain.app.$refs.video.show = false
@@ -119,9 +109,7 @@ Graphics._onVideoEnd = function () {
   this._updateVisibility(false);
 };
 
-/**
- * 禁用F3 F4
- */
+/** 禁用F3 F4 */
 Graphics._onKeyDown = function (event) {
   if (!event.ctrlKey && !event.altKey) {
     if (event.keyCode === 112) {
