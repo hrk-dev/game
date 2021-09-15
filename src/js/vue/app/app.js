@@ -6,7 +6,8 @@ VueMain.app = new Vue({
     VMain: VueMain.loadComponent('Main'),
     VVideo: VueMain.loadComponent('Video'),
     Ending: VueMain.loadComponent('Ending'),
-    Danmu: VueMain.loadComponent('Danmu')
+    Danmu: VueMain.loadComponent('Danmu'),
+    Tip: VueMain.loadComponent('Tip')
   },
   data: () => ({
     ready: false,
