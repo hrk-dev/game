@@ -79,10 +79,12 @@ Galv.ZOOM = Galv.ZOOM || {};          // Galv's stuff
 	};
 
 	Galv.ZOOM.move = function (x, y, scale, duration) {
+		$gameSystem._savedZoom.follow = false
 		$gameScreen.startZoom(x, y, scale, duration);
 	};
 
 	Galv.ZOOM.center = function (scale, duration) {
+		$gameSystem._savedZoom.follow = false
 		var x = Graphics.boxWidth / 2;
 		var y = Graphics.boxHeight / 2;
 		$gameScreen.startZoom(x, y, scale, duration);
@@ -91,6 +93,7 @@ Galv.ZOOM = Galv.ZOOM || {};          // Galv's stuff
 	Galv.ZOOM.target = function (id, scale, duration) {
 		if (id <= 0) {
 			var target = $gamePlayer;
+			$gameSystem._savedZoom.follow = true
 		} else {
 			var target = $gameMap.event(id);
 		}
@@ -100,6 +103,7 @@ Galv.ZOOM = Galv.ZOOM || {};          // Galv's stuff
 	};
 
 	Galv.ZOOM.restore = function (duration) {
+		$gameSystem._savedZoom.follow = false
 		var x = Graphics.boxWidth / 2;
 		var y = Graphics.boxHeight / 2;
 		$gameScreen.startZoom(x, y, 1, duration);
@@ -251,5 +255,28 @@ Galv.ZOOM = Galv.ZOOM || {};          // Galv's stuff
 		Galv.ZOOM.dontSave = false;
 		Galv.ZOOM.Scene_Battle_terminate.call(this);
 	};
+
+	Game_Player.prototype.updateScroll = function(lastScrolledX, lastScrolledY) {
+		const zoom = $gameSystem._savedZoom;
+    var x1 = lastScrolledX;
+    var y1 = lastScrolledY;
+    var x2 = this.scrolledX();
+    var y2 = this.scrolledY();
+    if (y2 > y1 && y2 > this.centerY()) {
+        $gameMap.scrollDown(y2 - y1);
+    }
+    if (x2 < x1 && x2 < this.centerX()) {
+        $gameMap.scrollLeft(x1 - x2);
+    }
+    if (x2 > x1 && x2 > this.centerX()) {
+        $gameMap.scrollRight(x2 - x1);
+    }
+    if (y2 < y1 && y2 < this.centerY()) {
+        $gameMap.scrollUp(y1 - y2);
+    }
+		if (zoom && zoom.follow) {
+			Galv.ZOOM.target(0, zoom.scale, 1)
+		}
+};
 
 })();
