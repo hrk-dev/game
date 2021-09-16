@@ -57,10 +57,6 @@
 
 	var _credits = Scene_Title.prototype.createCommandWindow;
 
-	Scene_Title.prototype.fadeSpeed = function () {
-		return 1
-	}
-
 	Scene_Title.prototype.createCommandWindow = function () {
 		_credits.call(this);
 		this._commandWindow.setHandler('mcredits_A', this.commandCreditsA.bind(this));
@@ -114,37 +110,5 @@
 
 	Scene_Title.prototype.commandExit = function () {
 		SceneManager.exit()
-	};
-
-	var _credits_command = {
-		'SET_MEMOR': 'setMemoryButton',
-		'SET_CREDITS': 'setCreditsButton',
-		'SET_CREDITS_NORMAL': 'setCreditsNormal'
 	}
-
-	var _credits_pluginCommand = Game_Interpreter.prototype.pluginCommand;
-	Game_Interpreter.prototype.pluginCommand = function (command, args) {
-		_credits_pluginCommand.apply(this, arguments);
-		if (_credits_command[command.toUpperCase()]) {
-			$gameSystem[_credits_command[command.toUpperCase()]](JSON.parse(args[0]));
-		}
-	};
-
-	Game_System.prototype.setMemoryButton = function (flag) {
-		const globalInfo = DataManager.loadGlobalInfo() || [];
-		globalInfo[0] = { ...globalInfo[0], ...{ memory: flag } };
-		DataManager.saveGlobalInfo(globalInfo);
-	};
-
-	Game_System.prototype.setCreditsButton = function (flag) {
-		const globalInfo = DataManager.loadGlobalInfo() || [];
-		globalInfo[0] = { ...globalInfo[0], ...{ credits: flag } };
-		DataManager.saveGlobalInfo(globalInfo);
-	};
-
-	Game_System.prototype.setCreditsNormal = function (flag) {
-		const globalInfo = DataManager.loadGlobalInfo() || [];
-		globalInfo[0] = { ...globalInfo[0], ...{ normal: flag } };
-		DataManager.saveGlobalInfo(globalInfo);
-	};
 })()

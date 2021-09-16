@@ -41,4 +41,37 @@ const Plugins = class {
     DataManager.saveGlobalInfo(globalInfo)
     window.titleTemp = {}
   }
+
+  /**
+   * 是否显示标题A(false为显示B)
+   * @plugins Credits
+   * @param {boolean} flag 
+   */
+  static setCreditsButton(flag) {
+    const globalInfo = DataManager.loadGlobalInfo() || []
+    globalInfo[0] = { ...globalInfo[0], ...{ credits: flag } }
+    DataManager.saveGlobalInfo(globalInfo)
+  }
+
+  /**
+   * 是否显示正常的制作组
+   * @plugins Credits
+   * @param {boolean} flag 
+   */
+  static setCreditsNormal(flag) {
+    const globalInfo = DataManager.loadGlobalInfo() || []
+    globalInfo[0] = { ...globalInfo[0], ...{ normal: flag } }
+    DataManager.saveGlobalInfo(globalInfo)
+  }
+
+  /**
+   * 是否开启回忆之间按钮
+   * @plugins Credits
+   * @param {boolean} flag 
+   */
+  static setMemoryButton(flag) {
+    const globalInfo = DataManager.loadGlobalInfo() || []
+    globalInfo[0] = { ...globalInfo[0], ...{ memory: flag } }
+    DataManager.saveGlobalInfo(globalInfo)
+  }
 }
