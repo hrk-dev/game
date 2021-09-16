@@ -28,3 +28,17 @@ const Patch = class {
     DataManager.saveGlobalInfo(globalInfo)
   }
 }
+
+/** 插件方法 */
+const Plugins = class {
+  /**
+   * 设置主界面背景和动画
+   * @plugins title
+   */
+  static setTitle(bg, animation, frame) {
+    const globalInfo = DataManager.loadGlobalInfo() || []
+    globalInfo[0] = { ...globalInfo[0], ...{ title: { bg, animation, frame } } }
+    DataManager.saveGlobalInfo(globalInfo)
+    window.titleTemp = {}
+  }
+}
