@@ -8,7 +8,7 @@
         >{{ enText }}</div>
         <div
           class="cn"
-          :style="{ fontSize: `${fontSize * 0.6}px`, lineHeight: `${fontSize * 0.6}px` }"
+          :style="{ margin: `${5 * scale}px auto`, fontSize: `${fontSize * 0.6}px`, lineHeight: `${fontSize * 0.6}px` }"
         >{{ cnText }}</div>
       </div>
     </transition>
@@ -80,7 +80,7 @@ module.exports = {
 .tip-wrapper
   .tip
     position absolute
-    top 2px
+    top 5px
     left 50%
     transform translateX(-50%)
     text-align center
@@ -93,7 +93,7 @@ module.exports = {
   opacity 0 !important
 
 .slide-down-enter-to, .slide-down-leave
-  top 2px !important
+  top 5px !important
   opacity 1 !important
 
 .slide-down-enter-active, .slide-down-leave-active
