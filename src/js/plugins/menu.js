@@ -7,8 +7,9 @@
   var _Scene_Menu_create = Scene_Menu.prototype.create;
   Scene_Menu.prototype.create = function () {
     _Scene_Menu_create.call(this);
-    this._commandWindow.opacity = 0;
+    this._commandWindow.opacity = 255;
     this._commandWindow.y = (Graphics.height - this._commandWindow.height) / 2;
+    this._commandWindow.x = 25;
   };
   Scene_Menu.prototype.start = function () {
   };
@@ -26,20 +27,20 @@
   };
 
   Window_MenuCommand.prototype.windowWidth = function () {
-    return Graphics.boxWidth;
+    return Graphics.boxWidth - 50;
   };
 
   Window_MenuCommand.prototype.windowHeight = function () {
-    return 96
+    return 72
   };
 
   Window_MenuCommand.prototype.itemRect = function (index) {
     var rect = new Rectangle();
     var maxCols = this.maxCols();
     rect.width = this.itemWidth();
-    rect.height = 96;
+    rect.height = this.windowHeight();
     rect.x = index % maxCols * (rect.width + this.spacing()) - this._scrollX;
-    rect.y = Math.floor(index / maxCols) * rect.height - this._scrollY + this.textPadding() * 3;
+    rect.y = Math.floor(index / maxCols) * rect.height;
     return rect;
   };
 
@@ -48,6 +49,6 @@
   };
 
   Window_MenuCommand.prototype.numVisibleRows = function () {
-    return 1;
+    return ;
   };
 })()
