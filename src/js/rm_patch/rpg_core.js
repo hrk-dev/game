@@ -118,3 +118,20 @@ Graphics._onKeyDown = function (event) {
     }
   }
 };
+
+/** 主菜单监听 */
+Input._onKeyDown = function (event) {
+  if (this._shouldPreventDefault(event.keyCode)) {
+      event.preventDefault();
+  }
+  if (event.keyCode === 144) {    // Numlock
+      this.clear();
+  }
+  var buttonName = this.keyMapper[event.keyCode];
+  if (ResourceHandler.exists() && buttonName === 'ok') {
+      ResourceHandler.retry();
+  } else if (buttonName) {
+      this._currentState[buttonName] = true;
+  }
+  VueMain.app.$refs.MainMenu.checkInput(buttonName)
+}

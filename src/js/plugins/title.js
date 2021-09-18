@@ -23,6 +23,7 @@
   if (frame > 60) frame = 60
 
   Scene_Title.prototype.create = function () {
+    return
     Scene_Base.prototype.create.call(this)
     this._bg = pic
     this._time = window.titleTemp._time || 0
@@ -41,6 +42,8 @@
   }
 
   Scene_Title.prototype.start = function () {
+    VueMain.app.$refs.MainMenu.show = true
+    return
     Scene_Base.prototype.start.call(this)
     SceneManager.clearStack()
     this.centerSprite(this._backSprite1)
@@ -83,6 +86,7 @@
   }
 
   Scene_Title.prototype.update = function () {
+    return
     if (!this.isBusy()) {
       this._commandWindow.open()
     }
@@ -112,6 +116,10 @@
     this.addChild(this._backSprite1)
     this.addChild(this._backSprite2)
   }
+
+  Scene_Title.prototype.isBusy = function () {
+    return false
+  };
 
   Window_TitleCommand.prototype.drawText = function (text, x, y, maxWidth) {
     this.contents.drawText(text, x, y, maxWidth, this.lineHeight(), 'left')

@@ -1,5 +1,5 @@
 <template>
-  <div class="tip-wrapper">
+  <div>
     <transition name="slide-down">
       <div class="tip" :style="{ padding: `${2 * scale}px ${10 * scale}px` }" v-if="show">
         <div
@@ -77,16 +77,15 @@ module.exports = {
 </script>
 
 <style lang="stylus" scoped>
-.tip-wrapper
-  .tip
-    position absolute
-    top 5px
-    left 50%
-    transform translateX(-50%)
-    text-align center
-    border 1px solid #666
-    border-radius 10px
-    background #eee
+.tip
+  position absolute
+  top 5px
+  left 50%
+  transform translateX(-50%)
+  text-align center
+  border 1px solid #666
+  border-radius 10px
+  background #eee
 
 .slide-down-enter, .slide-down-leave-to
   top -50px !important

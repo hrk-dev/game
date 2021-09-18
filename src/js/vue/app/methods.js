@@ -1,14 +1,14 @@
 VueMain.setTitleColor = (color) => {
-  VueMain.app.$refs.title.color = color
+  VueMain.app.$refs.TitleBar.color = color
 }
 
 VueMain.setTitle = (title) => {
-  VueMain.app.$refs.title.title = title
+  VueMain.app.$refs.TitleBar.title = title
 }
 
 /** test */
 VueMain.titleTest = () => {
-  VueMain.app.$refs.title.titleTest()
+  VueMain.app.$refs.TitleBar.titleTest()
 }
 
 VueMain.startEnding = () => {

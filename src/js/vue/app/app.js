@@ -2,7 +2,8 @@ VueMain.app = new Vue({
   el: '#app',
   template: VueMain.loadTemplate('app'),
   components: {
-    VTitle: VueMain.loadComponent('Title'),
+    MainMenu: VueMain.loadComponent('MainMenu'),
+    TitleBar: VueMain.loadComponent('TitleBar'),
     VMain: VueMain.loadComponent('Main'),
     VVideo: VueMain.loadComponent('Video'),
     Ending: VueMain.loadComponent('Ending'),
