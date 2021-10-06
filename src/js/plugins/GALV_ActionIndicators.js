@@ -130,7 +130,9 @@ Game_CharacterBase.prototype.moveStraight = function(d) {
 	Galv.AI.needRefresh = true;
 };
 
-Galv.AI.checkActionIcon = function() {
+	Galv.AI.checkActionIcon = function () {
+	VueMain.app.$refs.movetip.hide()
+
 	var x2 = $gameMap.roundXWithDirection($gamePlayer._x, $gamePlayer._direction);
     var y2 = $gameMap.roundYWithDirection($gamePlayer._y, $gamePlayer._direction);
 	var action = null;
@@ -143,7 +145,11 @@ Galv.AI.checkActionIcon = function() {
 			const playerDirection = $gamePlayer.direction()
 			if (eventDirection !== playerDirection) {
 				action = {'eventId': 0, 'iconId': 0};
+			} else {
+				setMoveTip(event)
 			}
+		} else {
+			setMoveTip(event)
 		}
 	});
 	
@@ -213,7 +219,7 @@ Galv.AI.checkEventForDirection = function(event) {
 		var listCount = event.page().list.length;
 		
 		for (var i = 0; i < listCount; i++) {
-			if (event.page().list[i].code === 408) {
+			if (event.page().list[i].code === 108 || event.page().list[i].code === 408) {
 				var check = event.page().list[i].parameters[0].match(/<direction: (.*)>/i)
 				if (check) {
 					return Number(check[1])
@@ -224,6 +230,42 @@ Galv.AI.checkEventForDirection = function(event) {
 	};
 	return null;
 };
+	
+	Galv.AI.checkEventForTip = function (event) {
+	let res = {cn: '', en: ''}
+	if (event.page()) {
+		var listCount = event.page().list.length;
+
+		for (var i = 0; i < listCount; i++) {
+			if (event.page().list[i].code === 408 || event.page().list[i].code === 108) {
+				var check = event.page().list[i].parameters[0].match(/<cn: (.*)>/i)
+				if (check) {
+					res.cn = check[1]
+					break;
+				};
+			};
+		};
+		for (var i = 0; i < listCount; i++) {
+			if (event.page().list[i].code === 408 || event.page().list[i].code === 108) {
+				var check = event.page().list[i].parameters[0].match(/<en: (.*)>/i)
+				if (check) {
+					res.en = check[1]
+					break;
+				};
+			};
+		};
+	};
+	return res;
+};
+
+	const setMoveTip = function (event) {
+		const eventTip = Galv.AI.checkEventForTip(event)
+		if (eventTip.cn || eventTip.en) {
+			VueMain.app.$refs.movetip.show(eventTip.cn, eventTip.en)
+		} else {
+			VueMain.app.$refs.movetip.hide()
+		}
+	}
 
 //-----------------------------------------------------------------------------
 // Spriteset_Map
