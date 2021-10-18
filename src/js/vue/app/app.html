@@ -1,11 +1,11 @@
 <div>
   <TitleBar ref="TitleBar" @ipc="ipc" />
   <VMain :width="main.width" :height="main.height" :margin="main.margin">
-    <MainMenu ref="MainMenu" :fontSize="_fontSize" />
+    <MainMenu ref="MainMenu" :fontSize="_fontSize" :scale="main.scale" />
     <VVideo ref="video" :scale="main.scale" />
     <Danmu ref="danmu" :height="main.height" :fontSize="_fontSize" />
     <Ending ref="ending" :fontSize="_fontSize" :scale="main.scale" />
     <Tip ref="tip" :fontSize="_fontSize" :scale="main.scale" />
-     <MoveTip ref="movetip" :fontSize="_fontSize" :scale="main.scale" />
+    <MoveTip ref="movetip" :fontSize="_fontSize" :scale="main.scale" />
   </VMain>
 </div>

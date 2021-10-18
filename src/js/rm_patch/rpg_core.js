@@ -113,8 +113,8 @@ Graphics._onVideoEnd = function () {
 Graphics._onKeyDown = function (event) {
   if (!event.ctrlKey && !event.altKey) {
     if (event.keyCode === 112) {
-        event.preventDefault();
-        this._switchFPSMeter();
+      event.preventDefault();
+      this._switchFPSMeter();
     }
   }
 };
@@ -122,16 +122,27 @@ Graphics._onKeyDown = function (event) {
 /** 主菜单监听 */
 Input._onKeyDown = function (event) {
   if (this._shouldPreventDefault(event.keyCode)) {
-      event.preventDefault();
+    event.preventDefault();
   }
   if (event.keyCode === 144) {    // Numlock
-      this.clear();
+    this.clear();
   }
   var buttonName = this.keyMapper[event.keyCode];
   if (ResourceHandler.exists() && buttonName === 'ok') {
-      ResourceHandler.retry();
+    ResourceHandler.retry();
   } else if (buttonName) {
-      this._currentState[buttonName] = true;
+    this._currentState[buttonName] = true;
   }
   VueMain.app.$refs.MainMenu.checkInput(buttonName)
+}
+
+TouchInput._onMouseDown = function (event) {
+  if (event.button === 0) {
+    this._onLeftButtonDown(event)
+  } else if (event.button === 1) {
+    this._onMiddleButtonDown(event)
+  } else if (event.button === 2) {
+    this._onRightButtonDown(event)
+    VueMain.app.$refs.MainMenu.back()
+  }
 }
