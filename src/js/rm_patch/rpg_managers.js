@@ -66,7 +66,7 @@ StorageManager.localFileDirectoryPath = function () {
   var path = require('path')
 
   const base = __dirname.replace(path.sep + 'app.asar', '')
-  return path.join(base, 'save/')
+  return path.join(base, 'icu/')
 }
 
 StorageManager.localFilePath = function (savefileId) {
