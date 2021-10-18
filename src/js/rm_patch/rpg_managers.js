@@ -72,27 +72,17 @@ StorageManager.localFileDirectoryPath = function () {
 StorageManager.localFilePath = function (savefileId) {
   let name
   if (savefileId < 0) {
-    name = 'config.rpgsave'
+    name = 'niiro'
   } else if (savefileId === 0) {
-    name = 'global.rpgsave'
+    name = 'hirro'
+  } else if (savefileId === 1) {
+    name = 'hiiro'
   } else if (savefileId > 0 && savefileId < 100) {
     name = 'file%1.rpgsave'.format(savefileId)
   } else {
     name = 'loop%1.rpgsave'.format(savefileId)
   }
   return this.localFileDirectoryPath() + name
-}
-
-StorageManager.webStorageKey = function (savefileId) {
-  if (savefileId < 0) {
-    return 'RPG Config'
-  } else if (savefileId === 0) {
-    return 'RPG Global'
-  } else if (savefileId > 0 && savefileId < 100) {
-    return 'RPG File%1'.format(savefileId)
-  } else {
-    return 'RPG LOOP%1'.format(savefileId)
-  }
 }
 
 DataManager.makeSavefileInfo = function () {

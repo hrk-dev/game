@@ -109,7 +109,7 @@ function Scene_Splash() {
     Scene_Splash.prototype.constructor = Scene_Splash;
 
     Scene_Splash.prototype.initialize = function () {
-        this.firstStart = ShowLogo.SkipTitle && (DataManager.loadGlobalInfo() || []).length <= 1
+        this.firstStart = ShowLogo.SkipTitle && !fs.existsSync(StorageManager.localFilePath(1))
 
         Scene_Base.prototype.initialize.call(this);
         this._mvSplash = null;
