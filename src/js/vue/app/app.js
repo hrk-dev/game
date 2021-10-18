@@ -8,7 +8,8 @@ VueMain.app = new Vue({
     VVideo: VueMain.loadComponent('Video'),
     Ending: VueMain.loadComponent('Ending'),
     Danmu: VueMain.loadComponent('Danmu'),
-    Tip: VueMain.loadComponent('Tip')
+    Tip: VueMain.loadComponent('Tip'),
+    MoveTip: VueMain.loadComponent('MoveTip')
   },
   data: () => ({
     ready: false,
