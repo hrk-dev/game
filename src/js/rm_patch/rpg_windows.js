@@ -3,16 +3,13 @@ Window_Base.prototype.standardFontFace = function () {
   if ($gameSystem.isChinese()) {
     return 'GameFont, SimHei, Heiti TC, sans-serif'
   } else if ($gameSystem.isKorean()) {
-    
     return 'GameFont, Dotum, AppleGothic, sans-serif'
   } else {
-    
     return 'GameFont'
   }
-  
 }
 
 
-Window_Options.prototype.addGeneralOptions = function() {
+Window_Options.prototype.addGeneralOptions = function () {
   this.addCommand(TextManager.alwaysDash, 'alwaysDash')
 }
