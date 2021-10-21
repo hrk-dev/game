@@ -1,284 +1,292 @@
 <template>
-  <div class="menu-wrapper" v-if="show">
-    <div>
-      <div class="bg">
-        <img src="img/pictures/bg.jpg" alt="" draggable="false" />
+  <div class="menu-wrapper">
+    <transition name="fade">
+      <div v-if="show">
+        <div class="bg">
+          <img src="img/pictures/bg.jpg" alt="" draggable="false" />
+        </div>
+        <transition name="slide-up" appear>
+          <div class="btn-list" v-if="menu.show">
+            <template v-for="(item, index) in menu.list">
+              <div
+                v-if="item.show"
+                class="btn"
+                :class="{
+                  'menu-higtlight': item.cn === menu.list[menu.current].cn,
+                }"
+                :style="{
+                  flexDirection: item.multiline ? 'column' : '',
+                  alignItems: item.multiline ? 'normal' : '',
+                  padding: `${5 * scale}px ${35 * scale}px ${5 * scale}px ${
+                    5 * scale
+                  }px`,
+                  height: `${28 * scale}px`,
+                  fontSize: `${fontSize - 12}px`,
+                  background: `linear-gradient(233deg, transparent ${
+                    25 * scale
+                  }px, #666 0) top right`,
+                }"
+                :key="index"
+                @click="click(item.cn)"
+                @mouseover="mouseOver(item.cn)"
+              >
+                <div
+                  class="cn"
+                  :style="{
+                    fontSize: item.multiline ? `${fontSize - 16}px` : '',
+                    lineHeight: item.multiline ? `${fontSize - 16}px` : '',
+                    margin: `${5 * scale}px ${5 * scale}px 0 ${5 * scale}px`,
+                  }"
+                >
+                  {{ item.cn }}
+                </div>
+                <div
+                  class="en"
+                  :style="{
+                    fontSize: item.multiline ? `${fontSize - 18}px` : '',
+                    lineHeight: item.multiline ? `${fontSize - 18}px` : '',
+                    margin: item.multiline
+                      ? `${2 * scale}px ${5 * scale}px 0 ${5 * scale}px`
+                      : `${5 * scale}px ${5 * scale}px 0 0`,
+                  }"
+                >
+                  {{ item.en }}
+                </div>
+              </div>
+            </template>
+          </div>
+        </transition>
+        <transition name="fade">
+          <div class="setting-wrapper" v-if="setting.show">
+            <div
+              class="vertical-frame"
+              :style="{
+                margin: `0 ${10 * scale}px`,
+                width: `calc(100% - ${20 * scale}px)`,
+                borderWidth: `${5 * scale}px`,
+              }"
+            >
+              <div
+                class="title"
+                :style="{
+                  fontSize: `${24 * scale}px`,
+                  padding: `${5 * scale}px ${15 * scale}px`,
+                  height: `${45 * scale}px`,
+                }"
+              >
+                <div>设置 Setting</div>
+              </div>
+            </div>
+            <div
+              class="horizontal-frame"
+              :style="{
+                bottom: `${15 * scale}px`,
+                padding: `0 ${25 * scale}px`,
+                height: `calc(100% - ${60 * scale}px)`,
+                borderWidth: `${5 * scale}px`,
+              }"
+            >
+              <div class="setting" :style="{ paddingLeft: `${10 * scale}px` }">
+                <div class="item" :style="{ height: `${40 * scale}px` }">
+                  <div class="text" :style="{ width: `${250 * scale}px` }">
+                    <div
+                      class="cn"
+                      :style="{
+                        fontSize: `${fontSize - 8}px`,
+                        lineHeight: `${fontSize - 8}px`,
+                      }"
+                    >
+                      持续奔跑
+                    </div>
+                    <div
+                      class="en"
+                      :style="{
+                        fontSize: `${fontSize - 10}px`,
+                        lineHeight: `${fontSize - 8}px`,
+                      }"
+                    >
+                      Keep Running
+                    </div>
+                  </div>
+                  <div
+                    class="switch"
+                    :class="{ higtlight: setting.current === 0 }"
+                    :style="{
+                      fontSize: `${40 * scale}px`,
+                      lineHeight: `${32 * scale}px`,
+                      width: `${32 * scale}px`,
+                      padding: `${2 * scale}px`,
+                    }"
+                    @mouseover="settingMouseOver(0)"
+                    @click="changeKeepRunning"
+                  >
+                    {{ setting.keepRunning ? "○" : "×" }}
+                  </div>
+                </div>
+                <div class="item" :style="{ height: `${40 * scale}px` }">
+                  <div class="text" :style="{ width: `${250 * scale}px` }">
+                    <div
+                      class="cn"
+                      :style="{
+                        fontSize: `${fontSize - 8}px`,
+                        lineHeight: `${fontSize - 8}px`,
+                      }"
+                    >
+                      背景音量
+                    </div>
+                    <div
+                      class="en"
+                      :style="{
+                        fontSize: `${fontSize - 10}px`,
+                        lineHeight: `${fontSize - 8}px`,
+                      }"
+                    >
+                      BGM Volume
+                    </div>
+                  </div>
+                  <div
+                    class="slider"
+                    :class="{ higtlight: setting.current === 1 }"
+                    :style="{
+                      width: `${300 * scale}px`,
+                      padding: `0 ${5 * scale}px`,
+                    }"
+                    @mouseover="settingMouseOver(1)"
+                  >
+                    <div
+                      v-for="i in 10"
+                      :key="'bgm' + i"
+                      class="block"
+                      :style="{
+                        background: i <= setting.bgm ? '#fff' : '',
+                        margin: `${5 * scale}px`,
+                      }"
+                      @click="setBgm(i)"
+                    ></div>
+                  </div>
+                  <div
+                    class="percent"
+                    :style="{ fontSize: `${fontSize - 8}px` }"
+                  >
+                    {{ bgm }}%
+                  </div>
+                </div>
+                <div class="item" :style="{ height: `${40 * scale}px` }">
+                  <div
+                    class="text"
+                    :style="{
+                      width: `${250 * scale}px`,
+                    }"
+                  >
+                    <div
+                      class="cn"
+                      :style="{
+                        fontSize: `${fontSize - 8}px`,
+                        lineHeight: `${fontSize - 8}px`,
+                      }"
+                    >
+                      特效音量
+                    </div>
+                    <div
+                      class="en"
+                      :style="{
+                        fontSize: `${fontSize - 10}px`,
+                        lineHeight: `${fontSize - 8}px`,
+                      }"
+                    >
+                      Sound Effect Volume
+                    </div>
+                  </div>
+                  <div
+                    class="slider"
+                    :class="{ higtlight: setting.current === 2 }"
+                    :style="{
+                      width: `${300 * scale}px`,
+                      padding: `0 ${5 * scale}px`,
+                    }"
+                    @mouseover="settingMouseOver(2)"
+                  >
+                    <div
+                      v-for="i in 10"
+                      :key="'bgm' + i"
+                      class="block"
+                      :style="{
+                        background: i <= setting.se ? '#fff' : '',
+                        margin: `${5 * scale}px`,
+                      }"
+                      @click="setSe(i)"
+                    ></div>
+                  </div>
+                  <div
+                    class="percent"
+                    :style="{ fontSize: `${fontSize - 8}px` }"
+                  >
+                    {{ se }}%
+                  </div>
+                </div>
+              </div>
+              <div
+                class="back"
+                :style="{
+                  height: `${30 * scale}px`,
+                  fontSize: `${fontSize - 8}px`,
+                  lineHeight: `${fontSize - 8}px`,
+                }"
+              >
+                <div
+                  class="back-btn"
+                  :class="{ higtlight: setting.current === 3 }"
+                  :style="{ padding: `${5 * scale}px` }"
+                  @click="back"
+                  @mouseover="settingMouseOver(3)"
+                >
+                  返回
+                </div>
+              </div>
+            </div>
+          </div>
+        </transition>
+        <transition name="fade">
+          <div
+            class="tip"
+            :style="{
+              padding: `${5 * scale}px ${10 * scale}px ${10 * scale}px ${
+                10 * scale
+              }px`,
+            }"
+            v-if="tip.show"
+          >
+            <div class="en">
+              <div
+                class="word"
+                v-for="(i, index) in tip.en"
+                :key="'en' + index"
+                :style="{
+                  animationDelay: `${(index + 1) * 0.03}s`,
+                  fontSize: `${fontSize - 10}px`,
+                  lineHeight: `${fontSize - 10}px`,
+                }"
+                v-html="i"
+              ></div>
+            </div>
+            <div class="cn">
+              <div
+                class="word"
+                v-for="(i, index) in tip.cn"
+                :key="'en' + index"
+                :style="{
+                  animationDelay: `${(index + 1) * 0.1}s`,
+                  fontSize: `${fontSize - 10}px`,
+                  lineHeight: `${fontSize - 10}px`,
+                  paddingTop: `${2 * scale}px`,
+                }"
+                v-html="i"
+              ></div>
+            </div>
+          </div>
+        </transition>
       </div>
-      <transition name="slide-up" appear>
-        <div class="btn-list" v-if="menu.show">
-          <template v-for="(item, index) in menu.list">
-            <div
-              v-if="item.show"
-              class="btn"
-              :class="{
-                'menu-higtlight': item.cn === menu.list[menu.current].cn,
-              }"
-              :style="{
-                flexDirection: item.multiline ? 'column' : '',
-                alignItems: item.multiline ? 'normal' : '',
-                padding: `${5 * scale}px ${35 * scale}px ${5 * scale}px ${
-                  5 * scale
-                }px`,
-                height: `${28 * scale}px`,
-                fontSize: `${fontSize - 12}px`,
-                background: `linear-gradient(233deg, transparent ${
-                  25 * scale
-                }px, #666 0) top right`,
-              }"
-              :key="index"
-              @click="click(item.cn)"
-              @mouseover="mouseOver(item.cn)"
-            >
-              <div
-                class="cn"
-                :style="{
-                  fontSize: item.multiline ? `${fontSize - 16}px` : '',
-                  lineHeight: item.multiline ? `${fontSize - 16}px` : '',
-                  margin: `${5 * scale}px ${5 * scale}px 0 ${5 * scale}px`,
-                }"
-              >
-                {{ item.cn }}
-              </div>
-              <div
-                class="en"
-                :style="{
-                  fontSize: item.multiline ? `${fontSize - 18}px` : '',
-                  lineHeight: item.multiline ? `${fontSize - 18}px` : '',
-                  margin: item.multiline
-                    ? `${2 * scale}px ${5 * scale}px 0 ${5 * scale}px`
-                    : `${5 * scale}px ${5 * scale}px 0 0`,
-                }"
-              >
-                {{ item.en }}
-              </div>
-            </div>
-          </template>
-        </div>
-      </transition>
-      <transition name="fade">
-        <div class="setting-wrapper" v-if="setting.show">
-          <div
-            class="vertical-frame"
-            :style="{
-              margin: `0 ${10 * scale}px`,
-              width: `calc(100% - ${20 * scale}px)`,
-              borderWidth: `${5 * scale}px`,
-            }"
-          >
-            <div
-              class="title"
-              :style="{
-                fontSize: `${24 * scale}px`,
-                padding: `${5 * scale}px ${15 * scale}px`,
-                height: `${45 * scale}px`,
-              }"
-            >
-              <div>设置 Setting</div>
-            </div>
-          </div>
-          <div
-            class="horizontal-frame"
-            :style="{
-              bottom: `${15 * scale}px`,
-              padding: `0 ${25 * scale}px`,
-              height: `calc(100% - ${60 * scale}px)`,
-              borderWidth: `${5 * scale}px`,
-            }"
-          >
-            <div class="setting" :style="{ paddingLeft: `${10 * scale}px` }">
-              <div class="item" :style="{ height: `${40 * scale}px` }">
-                <div class="text" :style="{ width: `${250 * scale}px` }">
-                  <div
-                    class="cn"
-                    :style="{
-                      fontSize: `${fontSize - 8}px`,
-                      lineHeight: `${fontSize - 8}px`,
-                    }"
-                  >
-                    持续奔跑
-                  </div>
-                  <div
-                    class="en"
-                    :style="{
-                      fontSize: `${fontSize - 10}px`,
-                      lineHeight: `${fontSize - 8}px`,
-                    }"
-                  >
-                    Keep Running
-                  </div>
-                </div>
-                <div
-                  class="switch"
-                  :class="{ higtlight: setting.current === 0 }"
-                  :style="{
-                    fontSize: `${40 * scale}px`,
-                    lineHeight: `${32 * scale}px`,
-                    width: `${32 * scale}px`,
-                    padding: `${2 * scale}px`,
-                  }"
-                  @mouseover="settingMouseOver(0)"
-                  @click="changeKeepRunning"
-                >
-                  {{ setting.keepRunning ? "○" : "×" }}
-                </div>
-              </div>
-              <div class="item" :style="{ height: `${40 * scale}px` }">
-                <div class="text" :style="{ width: `${250 * scale}px` }">
-                  <div
-                    class="cn"
-                    :style="{
-                      fontSize: `${fontSize - 8}px`,
-                      lineHeight: `${fontSize - 8}px`,
-                    }"
-                  >
-                    背景音量
-                  </div>
-                  <div
-                    class="en"
-                    :style="{
-                      fontSize: `${fontSize - 10}px`,
-                      lineHeight: `${fontSize - 8}px`,
-                    }"
-                  >
-                    BGM Volume
-                  </div>
-                </div>
-                <div
-                  class="slider"
-                  :class="{ higtlight: setting.current === 1 }"
-                  :style="{
-                    width: `${300 * scale}px`,
-                    padding: `0 ${5 * scale}px`,
-                  }"
-                  @mouseover="settingMouseOver(1)"
-                >
-                  <div
-                    v-for="i in 10"
-                    :key="'bgm' + i"
-                    class="block"
-                    :style="{
-                      background: i <= setting.bgm ? '#fff' : '',
-                      margin: `${5 * scale}px`,
-                    }"
-                    @click="setBgm(i)"
-                  ></div>
-                </div>
-                <div class="percent" :style="{ fontSize: `${fontSize - 8}px` }">
-                  {{ bgm }}%
-                </div>
-              </div>
-              <div class="item" :style="{ height: `${40 * scale}px` }">
-                <div
-                  class="text"
-                  :style="{
-                    width: `${250 * scale}px`,
-                  }"
-                >
-                  <div
-                    class="cn"
-                    :style="{
-                      fontSize: `${fontSize - 8}px`,
-                      lineHeight: `${fontSize - 8}px`,
-                    }"
-                  >
-                    特效音量
-                  </div>
-                  <div
-                    class="en"
-                    :style="{
-                      fontSize: `${fontSize - 10}px`,
-                      lineHeight: `${fontSize - 8}px`,
-                    }"
-                  >
-                    Sound Effect Volume
-                  </div>
-                </div>
-                <div
-                  class="slider"
-                  :class="{ higtlight: setting.current === 2 }"
-                  :style="{
-                    width: `${300 * scale}px`,
-                    padding: `0 ${5 * scale}px`,
-                  }"
-                  @mouseover="settingMouseOver(2)"
-                >
-                  <div
-                    v-for="i in 10"
-                    :key="'bgm' + i"
-                    class="block"
-                    :style="{
-                      background: i <= setting.se ? '#fff' : '',
-                      margin: `${5 * scale}px`,
-                    }"
-                    @click="setSe(i)"
-                  ></div>
-                </div>
-                <div class="percent" :style="{ fontSize: `${fontSize - 8}px` }">
-                  {{ se }}%
-                </div>
-              </div>
-            </div>
-            <div
-              class="back"
-              :style="{
-                height: `${30 * scale}px`,
-                fontSize: `${fontSize - 8}px`,
-                lineHeight: `${fontSize - 8}px`,
-              }"
-            >
-              <div
-                class="back-btn"
-                :class="{ higtlight: setting.current === 3 }"
-                :style="{ padding: `${5 * scale}px` }"
-                @click="back"
-                @mouseover="settingMouseOver(3)"
-              >
-                返回
-              </div>
-            </div>
-          </div>
-        </div>
-      </transition>
-      <transition name="fade">
-        <div
-          class="tip"
-          :style="{
-            padding: `${5 * scale}px ${10 * scale}px ${10 * scale}px ${
-              10 * scale
-            }px`,
-          }"
-          v-if="tip.show"
-        >
-          <div class="en">
-            <div
-              class="word"
-              v-for="(i, index) in tip.en"
-              :key="'en' + index"
-              :style="{
-                animationDelay: `${(index + 1) * 0.03}s`,
-                fontSize: `${fontSize - 10}px`,
-                lineHeight: `${fontSize - 10}px`,
-              }"
-              v-html="i"
-            ></div>
-          </div>
-          <div class="cn">
-            <div
-              class="word"
-              v-for="(i, index) in tip.cn"
-              :key="'en' + index"
-              :style="{
-                animationDelay: `${(index + 1) * 0.1}s`,
-                fontSize: `${fontSize - 10}px`,
-                lineHeight: `${fontSize - 10}px`,
-                paddingTop: `${2 * scale}px`,
-              }"
-              v-html="i"
-            ></div>
-          </div>
-        </div>
-      </transition>
-    </div>
+    </transition>
   </div>
 </template>
 
@@ -476,10 +484,16 @@ module.exports = {
             SceneManager.goto(Scene_Map)
             break
           case 1:
-            DataManager.loadGame(1)
-            this.show = false
-            SceneManager.goto(Scene_Map)
-            $gameSystem.onAfterLoad()
+            if (DataManager.loadGame(1)) {
+              this.menu.show = false
+              SceneManager.goto(Scene_Map)
+              $gameSystem.onAfterLoad()
+              setTimeout(() => {
+                this.show = false
+              }, 400)
+            } else {
+              this.setTip('Error', '奇怪的错误', 1500)
+            }
             break
           case 2:
             this.menu.show = false
