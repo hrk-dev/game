@@ -1,9 +1,9 @@
 <template>
-  <div class="menu-wrapper">
+  <div class="main-menu">
     <transition name="fade">
       <div v-if="show">
         <div class="bg">
-          <img src="img/pictures/bg.jpg" alt="" draggable="false" />
+          <img src="img/pictures/bg.jpg" alt draggable="false" />
         </div>
         <transition name="slide-up" appear>
           <div class="btn-list" v-if="menu.show">
@@ -17,14 +17,7 @@
                 :style="{
                   flexDirection: item.multiline ? 'column' : '',
                   alignItems: item.multiline ? 'normal' : '',
-                  padding: `${5 * scale}px ${35 * scale}px ${5 * scale}px ${
-                    5 * scale
-                  }px`,
-                  height: `${28 * scale}px`,
-                  fontSize: `${fontSize - 12}px`,
-                  background: `linear-gradient(233deg, transparent ${
-                    25 * scale
-                  }px, #666 0) top right`,
+                  justifyContent: item.multiline ? 'center' : ''
                 }"
                 :key="index"
                 @click="click(item.cn)"
@@ -33,124 +26,53 @@
                 <div
                   class="cn"
                   :style="{
-                    fontSize: item.multiline ? `${fontSize - 16}px` : '',
-                    lineHeight: item.multiline ? `${fontSize - 16}px` : '',
-                    margin: `${5 * scale}px ${5 * scale}px 0 ${5 * scale}px`,
+                    fontSize: item.multiline ? '14px' : '',
+                    lineHeight: item.multiline ? '14px' : ''
                   }"
-                >
-                  {{ item.cn }}
-                </div>
+                >{{ item.cn }}</div>
                 <div
                   class="en"
                   :style="{
-                    fontSize: item.multiline ? `${fontSize - 18}px` : '',
-                    lineHeight: item.multiline ? `${fontSize - 18}px` : '',
+                    fontSize: item.multiline ? '12px' : '',
+                    lineHeight: item.multiline ? '8px' : '',
                     margin: item.multiline
-                      ? `${2 * scale}px ${5 * scale}px 0 ${5 * scale}px`
-                      : `${5 * scale}px ${5 * scale}px 0 0`,
+                      ? '2px 2px 0 2px'
+                      : '',
                   }"
-                >
-                  {{ item.en }}
-                </div>
+                >{{ item.en }}</div>
               </div>
             </template>
           </div>
         </transition>
         <transition name="fade">
           <div class="setting-wrapper" v-if="setting.show">
-            <div
-              class="vertical-frame"
-              :style="{
-                margin: `0 ${10 * scale}px`,
-                width: `calc(100% - ${20 * scale}px)`,
-                borderWidth: `${5 * scale}px`,
-              }"
-            >
-              <div
-                class="title"
-                :style="{
-                  fontSize: `${24 * scale}px`,
-                  padding: `${5 * scale}px ${15 * scale}px`,
-                  height: `${45 * scale}px`,
-                }"
-              >
+            <div class="vertical-frame">
+              <div class="title">
                 <div>设置 Setting</div>
               </div>
             </div>
-            <div
-              class="horizontal-frame"
-              :style="{
-                bottom: `${15 * scale}px`,
-                padding: `0 ${25 * scale}px`,
-                height: `calc(100% - ${60 * scale}px)`,
-                borderWidth: `${5 * scale}px`,
-              }"
-            >
-              <div class="setting" :style="{ paddingLeft: `${10 * scale}px` }">
-                <div class="item" :style="{ height: `${40 * scale}px` }">
-                  <div class="text" :style="{ width: `${250 * scale}px` }">
-                    <div
-                      class="cn"
-                      :style="{
-                        fontSize: `${fontSize - 8}px`,
-                        lineHeight: `${fontSize - 8}px`,
-                      }"
-                    >
-                      持续奔跑
-                    </div>
-                    <div
-                      class="en"
-                      :style="{
-                        fontSize: `${fontSize - 10}px`,
-                        lineHeight: `${fontSize - 8}px`,
-                      }"
-                    >
-                      Keep Running
-                    </div>
+            <div class="horizontal-frame">
+              <div class="setting">
+                <div class="item">
+                  <div class="text">
+                    <div class="cn">持续奔跑</div>
+                    <div class="en">Keep Running</div>
                   </div>
                   <div
                     class="switch"
                     :class="{ higtlight: setting.current === 0 }"
-                    :style="{
-                      fontSize: `${40 * scale}px`,
-                      lineHeight: `${32 * scale}px`,
-                      width: `${32 * scale}px`,
-                      padding: `${2 * scale}px`,
-                    }"
                     @mouseover="settingMouseOver(0)"
                     @click="changeKeepRunning"
-                  >
-                    {{ setting.keepRunning ? "○" : "×" }}
-                  </div>
+                  >{{ setting.keepRunning ? "○" : "×" }}</div>
                 </div>
-                <div class="item" :style="{ height: `${40 * scale}px` }">
-                  <div class="text" :style="{ width: `${250 * scale}px` }">
-                    <div
-                      class="cn"
-                      :style="{
-                        fontSize: `${fontSize - 8}px`,
-                        lineHeight: `${fontSize - 8}px`,
-                      }"
-                    >
-                      背景音量
-                    </div>
-                    <div
-                      class="en"
-                      :style="{
-                        fontSize: `${fontSize - 10}px`,
-                        lineHeight: `${fontSize - 8}px`,
-                      }"
-                    >
-                      BGM Volume
-                    </div>
+                <div class="item">
+                  <div class="text">
+                    <div class="cn">背景音量</div>
+                    <div class="en">BGM Volume</div>
                   </div>
                   <div
                     class="slider"
                     :class="{ higtlight: setting.current === 1 }"
-                    :style="{
-                      width: `${300 * scale}px`,
-                      padding: `0 ${5 * scale}px`,
-                    }"
                     @mouseover="settingMouseOver(1)"
                   >
                     <div
@@ -159,51 +81,20 @@
                       class="block"
                       :style="{
                         background: i <= setting.bgm ? '#fff' : '',
-                        margin: `${5 * scale}px`,
                       }"
                       @click="setBgm(i)"
                     ></div>
                   </div>
-                  <div
-                    class="percent"
-                    :style="{ fontSize: `${fontSize - 8}px` }"
-                  >
-                    {{ bgm }}%
-                  </div>
+                  <div class="percent">{{ bgm }}%</div>
                 </div>
-                <div class="item" :style="{ height: `${40 * scale}px` }">
-                  <div
-                    class="text"
-                    :style="{
-                      width: `${250 * scale}px`,
-                    }"
-                  >
-                    <div
-                      class="cn"
-                      :style="{
-                        fontSize: `${fontSize - 8}px`,
-                        lineHeight: `${fontSize - 8}px`,
-                      }"
-                    >
-                      特效音量
-                    </div>
-                    <div
-                      class="en"
-                      :style="{
-                        fontSize: `${fontSize - 10}px`,
-                        lineHeight: `${fontSize - 8}px`,
-                      }"
-                    >
-                      Sound Effect Volume
-                    </div>
+                <div class="item">
+                  <div class="text">
+                    <div class="cn">特效音量</div>
+                    <div class="en">Sound Effect Volume</div>
                   </div>
                   <div
                     class="slider"
                     :class="{ higtlight: setting.current === 2 }"
-                    :style="{
-                      width: `${300 * scale}px`,
-                      padding: `0 ${5 * scale}px`,
-                    }"
                     @mouseover="settingMouseOver(2)"
                   >
                     <div
@@ -211,60 +102,34 @@
                       :key="'bgm' + i"
                       class="block"
                       :style="{
-                        background: i <= setting.se ? '#fff' : '',
-                        margin: `${5 * scale}px`,
+                        background: i <= setting.se ? '#fff' : ''
                       }"
                       @click="setSe(i)"
                     ></div>
                   </div>
-                  <div
-                    class="percent"
-                    :style="{ fontSize: `${fontSize - 8}px` }"
-                  >
-                    {{ se }}%
-                  </div>
+                  <div class="percent">{{ se }}%</div>
                 </div>
               </div>
-              <div
-                class="back"
-                :style="{
-                  height: `${30 * scale}px`,
-                  fontSize: `${fontSize - 8}px`,
-                  lineHeight: `${fontSize - 8}px`,
-                }"
-              >
+              <div class="back">
                 <div
                   class="back-btn"
                   :class="{ higtlight: setting.current === 3 }"
-                  :style="{ padding: `${5 * scale}px` }"
                   @click="back"
                   @mouseover="settingMouseOver(3)"
-                >
-                  返回
-                </div>
+                >返回</div>
               </div>
             </div>
           </div>
         </transition>
         <transition name="fade">
-          <div
-            class="tip"
-            :style="{
-              padding: `${5 * scale}px ${10 * scale}px ${10 * scale}px ${
-                10 * scale
-              }px`,
-            }"
-            v-if="tip.show"
-          >
+          <div class="tip" v-if="tip.show">
             <div class="en">
               <div
                 class="word"
                 v-for="(i, index) in tip.en"
                 :key="'en' + index"
                 :style="{
-                  animationDelay: `${(index + 1) * 0.03}s`,
-                  fontSize: `${fontSize - 10}px`,
-                  lineHeight: `${fontSize - 10}px`,
+                  animationDelay: `${(index + 1) * 0.03}s`
                 }"
                 v-html="i"
               ></div>
@@ -276,9 +141,7 @@
                 :key="'en' + index"
                 :style="{
                   animationDelay: `${(index + 1) * 0.1}s`,
-                  fontSize: `${fontSize - 10}px`,
-                  lineHeight: `${fontSize - 10}px`,
-                  paddingTop: `${2 * scale}px`,
+                  paddingTop: '2px'
                 }"
                 v-html="i"
               ></div>
@@ -338,16 +201,16 @@ module.exports = {
       ]
     },
     tip: {
-      show: true,
-      en: 'test',
-      cn: '测试'
+      show: false,
+      en: '',
+      cn: ''
     },
     setting: {
       show: false,
       current: 0,
       keepRunning: false,
-      bgm: 3,
-      se: 5
+      bgm: 0,
+      se: 0
     }
   }),
   computed: {
@@ -373,6 +236,7 @@ module.exports = {
   },
   methods: {
     init() {
+      this.menu.show = true
       this.menu.current = 1
       this.setting.keepRunning = ConfigManager.alwaysDash
       this.setting.bgm = AudioManager.bgmVolume / 10
@@ -480,8 +344,11 @@ module.exports = {
         switch (this.menu.current) {
           case 0:
             DataManager.setupNewGame()
-            this.show = false
+            this.menu.show = false
             SceneManager.goto(Scene_Map)
+            setTimeout(() => {
+              this.show = false
+            }, 400)
             break
           case 1:
             if (DataManager.loadGame(1)) {
@@ -616,7 +483,7 @@ module.exports = {
 </script>
 
 <style scoped lang="stylus">
-.menu-wrapper
+.main-menu
   position relative
   overflow hidden
   width 100%
@@ -647,17 +514,21 @@ module.exports = {
       position relative
       display flex
       align-items center
-      padding 5px 35px 5px 5px
+      padding 0 35px 5px 5px
       background linear-gradient(233deg, transparent 25px, #666 0) top right
       background-repeat no-repeat
       color #fff
-      height 25px
+      height 35px
+      font-size 18px
 
       div
         z-index 2
 
       .cn
-        margin-right 5px
+        margin 2px 2px 0 2px
+      
+      .en
+        margin 2px 2px 0 0
 
   .setting-wrapper
     color #fff
@@ -670,9 +541,9 @@ module.exports = {
 
     .vertical-frame
       box-sizing border-box
+      margin 0 10px
       width calc(100% - 20px)
       height 100%
-      margin 0 10px
       border-width 5px
       border-color #75d6f9
       border-style none solid
@@ -712,20 +583,28 @@ module.exports = {
           display flex
           align-items center
           width 100%
-          height 40px
+          height 45px
 
           .text
-            width 200px
+            width 250px
             display flex
             flex-direction column
             justify-content center
+
+            .cn
+              font-size 22px
+              line-height 22px
+            .en
+              font-size 20px
+              line-height 22px
 
           .switch
             display flex
             align-items center
             justify-content center
-            font-size 40px
-            line-height 32px
+            font-size 60px
+            line-height 45px
+            width 45px
             padding 2px
 
           .slider
@@ -737,17 +616,23 @@ module.exports = {
 
             .block
               box-sizing border-box
-              margin 5px
+              margin 3px
               width 10%
-              height 50%
+              height 55%
               border 1px solid #fff
+
+          .percent
+            margin-left 10px
+            font-size 25px
 
       .back
         height 30px
-        font-size 18px
+        font-size 22px
+        line-height 22px
 
         .back-btn
           display inline-block
+          padding 5px
 
   .tip
     color #fff
@@ -756,13 +641,15 @@ module.exports = {
     top 50%
     background rgba(0, 0, 0, 0.7)
     transform translate(-50%, -50%)
-    padding 10px 15px
+    padding 5px 10px 10px 10px
 
     .en, .cn
       display flex
       justify-content center
 
       .word
+        font-size 20px
+        line-height 20px
         opacity 0
         animation fade 0.2s
         animation-fill-mode forwards
