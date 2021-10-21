@@ -6,9 +6,9 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     show: false,
     width: 1024,
-    height: 726,
+    height: 720 + 30,
     minWidth: 1024,
-    minHeight: 726,
+    minHeight: 720 + 30,
     frame: false,
     fullscreenable: false,
     webPreferences: {
