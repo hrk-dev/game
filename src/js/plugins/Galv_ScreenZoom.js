@@ -274,8 +274,8 @@ Galv.ZOOM = Galv.ZOOM || {};          // Galv's stuff
     if (y2 < y1 && y2 < this.centerY()) {
         $gameMap.scrollUp(y1 - y2);
     }
-		if (zoom && zoom.follow) {
-			Galv.ZOOM.target(0, zoom.scale, 1)
+		if (zoom && zoom.follow && $gameScreen._zoomDuration <= 0) {
+			Galv.ZOOM.target(0, $gameScreen._zoomScale, 1)
 		}
 };
 
