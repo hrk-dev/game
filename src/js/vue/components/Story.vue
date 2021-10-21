@@ -36,7 +36,7 @@ module.exports = {
     scale: Number
   },
   data: () => ({
-    isShow: true,
+    isShow: false,
     list: [
       {
         en: '',
@@ -85,6 +85,7 @@ module.exports = {
 <style lang="stylus" scoped>
 .story-wrapper
   .story
+    box-sizing border-box
     position absolute
     left 5%
     top 5%

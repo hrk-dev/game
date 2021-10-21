@@ -1,6 +1,6 @@
 <div>
   <TitleBar ref="TitleBar" @ipc="ipc" />
-  <VMain :width="main.width" :height="main.height" :margin="main.margin">
+  <VMain :width="main.width" :height="main.height" :margin="main.margin" :scale="main.scale">
     <MainMenu ref="MainMenu" :fontSize="_fontSize" :scale="main.scale" />
     <VVideo ref="video" :scale="main.scale" />
     <Danmu ref="danmu" :height="main.height" :fontSize="_fontSize" />

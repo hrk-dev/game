@@ -1,12 +1,18 @@
 <template>
-  <div id="main" :style="{width: width + 'px', height: height + 'px', margin: margin}">
-    <slot></slot>
+  <div
+    id="main"
+    :style="{ width: width + 'px', height: height + 'px', margin: margin }"
+  >
+    <div class="wrapper" :style="{ transform: `scale(${scale})` }">
+      <slot></slot>
+    </div>
   </div>
 </template>
 
 <script>
 module.exports = {
   props: {
+    scale: Number,
     width: Number,
     height: Number,
     margin: String
@@ -22,6 +28,11 @@ module.exports = {
   z-index 101
   font-size 30px
   line-height 30px
+
+  .wrapper
+    width 1024px
+    height 726px
+    transform-origin left top
 
 .fade-enter, .fade-leave-to
   opacity 0 !important
