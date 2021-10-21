@@ -293,7 +293,7 @@ module.exports = {
     busy: false,
     menu: {
       show: true,
-      current: 0,
+      current: 1,
       restart: true,
       list: [
         {
@@ -365,7 +365,7 @@ module.exports = {
   },
   methods: {
     init() {
-      this.menu.current = 0
+      this.menu.current = 1
       this.setting.keepRunning = ConfigManager.alwaysDash
       this.setting.bgm = AudioManager.bgmVolume / 10
       this.setting.se = AudioManager.seVolume / 10

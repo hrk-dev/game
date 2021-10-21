@@ -40,3 +40,11 @@ VueMain.clearTip = () => {
 VueMain.getTipState = () => {
   return VueMain.app.$refs.tip.show
 }
+
+VueMain.showStory = () => {
+  return VueMain.app.$refs.story.show()
+}
+
+VueMain.hideStory = () => {
+  return VueMain.app.$refs.story.hide()
+}

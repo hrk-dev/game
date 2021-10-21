@@ -9,7 +9,8 @@ VueMain.app = new Vue({
     Ending: VueMain.loadComponent('Ending'),
     Danmu: VueMain.loadComponent('Danmu'),
     Tip: VueMain.loadComponent('Tip'),
-    MoveTip: VueMain.loadComponent('MoveTip')
+    MoveTip: VueMain.loadComponent('MoveTip'),
+    Story: VueMain.loadComponent('Story')
   },
   data: () => ({
     ready: false,
