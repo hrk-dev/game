@@ -407,15 +407,6 @@ module.exports = {
         this.down()
       }
     },
-    save() {
-      $gameSystem.onBeforeSave()
-      if (DataManager.saveGame(1)) {
-        StorageManager.cleanBackup(1)
-        VueMain.showPopup('Save success', '保存成功', 1000)
-      } else {
-        VueMain.showPopup('Save failed', '保存失败', 1000)
-      }
-    },
     onKeydown() {
       if (this.choice.show) return
       switch (this.menu.current) {
@@ -425,7 +416,7 @@ module.exports = {
               this.save()
             })
           } else {
-            this.save()
+            Patch.save()
           }
           break
         case 1:
@@ -435,9 +426,7 @@ module.exports = {
               $gameSystem.onAfterLoad()
               setTimeout(() => {
                 this.show = false
-                if ($gameSystem.tipData) {
-                  VueMain.showTip($gameSystem.tipData.en, $gameSystem.tipData.cn, $gameSystem.tipData.time)
-                }
+                Patch.showTip()
               }, 200)
             } else {
               VueMain.showPopup('Load failed', '读取失败', 1000)
@@ -484,7 +473,7 @@ module.exports = {
 
 <style lang="stylus" scoped>
 .choice
-  z-index 99
+  z-index 20
   color #fff
   position absolute
   left 50%

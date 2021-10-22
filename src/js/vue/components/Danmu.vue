@@ -82,7 +82,7 @@ module.exports = {
     display inline
     word-break keep-all
     white-space nowrap
-    z-index 102
+    z-index 100
     position absolute
     left 100%
     animation danmu 5s linear

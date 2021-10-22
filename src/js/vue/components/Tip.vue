@@ -1,5 +1,5 @@
 <template>
-  <div class="tip-wrapper">
+  <div id="tip">
     <transition name="slide-down">
       <div class="tip" v-if="show">
         <div class="en">{{ enText }}</div>
@@ -70,7 +70,7 @@ module.exports = {
 </script>
 
 <style lang="stylus" scoped>
-.tip-wrapper
+#tip
   .tip
     position absolute
     top 10px

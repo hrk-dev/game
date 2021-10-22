@@ -1,11 +1,9 @@
 <template>
-  <div
-    class="move-tip-wrapper"
-  >
+  <div id="move-tip">
     <transition name="slide-up">
-      <div class="move-tip" :style="{ padding: (10 * scale) + 'px'}" v-if="showTip">
-        <div :style="{ lineHeight: (fontSize - 12) + 'px', fontSize: (fontSize - 10) + 'px' }">{{ en }}</div>
-        <div :style="{ lineHeight: (fontSize - 8) + 'px', fontSize: (fontSize - 6) + 'px' }">{{ cn }}</div>
+      <div class="move-tip" v-if="showTip">
+        <div class="en">{{ en }}</div>
+        <div class="cn">{{ cn }}</div>
       </div>
     </transition>
   </div>
@@ -13,10 +11,6 @@
 
 <script>
 module.exports = {
-  props: {
-    fontSize: Number,
-    scale: Number
-  },
   data: () => ({
     showTip: false,
     cn: '',
@@ -40,23 +34,28 @@ module.exports = {
 </script>
 
 <style lang="stylus" scoped>
-.move-tip-wrapper
-  position absolute
-  bottom 0
-  left 0
-  right 0
-
+#move-tip
   .move-tip
+    z-index 10
     position absolute
     left 0
     bottom 0
     width 100%
+    padding 10px 0 15px 0
     color #fff
     background rgba(0, 0, 0, 0.8)
     display flex
     flex-direction column
     justify-content center
     align-items center
+
+    .en
+      font-size 18px
+      line-height 18px
+
+    .cn
+      font-size 22px
+      line-height 24px
 
 .slide-up-enter, .slide-up-leave-to
   bottom -50px !important

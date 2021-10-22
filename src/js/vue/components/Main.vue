@@ -25,7 +25,7 @@ module.exports = {
   overflow hidden
   position absolute
   inset 0px
-  z-index 101
+  z-index 90
   font-size 30px
   line-height 30px
 

@@ -314,9 +314,7 @@ module.exports = {
               $gameSystem.onAfterLoad()
               setTimeout(() => {
                 this.show = false
-                if ($gameSystem.tipData) {
-                  VueMain.showTip($gameSystem.tipData.en, $gameSystem.tipData.cn, $gameSystem.tipData.time)
-                }
+                Patch.showTip()
               }, 400)
             } else {
               VueMain.showPopup('Error', '奇怪的错误', 1500)
@@ -422,6 +420,7 @@ module.exports = {
 
 <style scoped lang="stylus">
 #main-menu
+  z-index 80
   position relative
   overflow hidden
   width 100%

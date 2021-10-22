@@ -131,7 +131,7 @@ Game_CharacterBase.prototype.moveStraight = function(d) {
 };
 
 	Galv.AI.checkActionIcon = function () {
-	VueMain.app.$refs.movetip.hide()
+	VueMain.app.$refs.Movetip.hide()
 
 	var x2 = $gameMap.roundXWithDirection($gamePlayer._x, $gamePlayer._direction);
     var y2 = $gameMap.roundYWithDirection($gamePlayer._y, $gamePlayer._direction);
@@ -259,11 +259,12 @@ Galv.AI.checkEventForDirection = function(event) {
 };
 
 	const setMoveTip = function (event) {
+		if (!$gamePlayer.canMove()) return
 		const eventTip = Galv.AI.checkEventForTip(event)
 		if (eventTip.cn || eventTip.en) {
-			VueMain.app.$refs.movetip.show(eventTip.cn, eventTip.en)
+			VueMain.app.$refs.Movetip.show(eventTip.cn, eventTip.en)
 		} else {
-			VueMain.app.$refs.movetip.hide()
+			VueMain.app.$refs.Movetip.hide()
 		}
 	}
 
