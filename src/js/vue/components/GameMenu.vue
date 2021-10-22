@@ -25,15 +25,17 @@
         <transition name="fade">
           <div class="menu" v-if="menu.show">
             <div v-for="(item,index) in menu.list" :key="index">
-              <div
-                v-if="item.show"
-                @click="onKeydown"
-                @mouseover="mouseOver(item.cn)"
-                :class="{ highlight: item.cn === menu.list[menu.current].cn }"
-              >
-                <div class="cn">{{ item.cn }}</div>
-                <div class="en">{{ item.en }}</div>
-              </div>
+              <transition name="fade">
+                <div
+                  v-if="item.show"
+                  @click="onKeydown"
+                  @mouseover="mouseOver(item.cn)"
+                  :class="{ highlight: item.cn === menu.list[menu.current].cn }"
+                >
+                  <div class="cn">{{ item.cn }}</div>
+                  <div class="en">{{ item.en }}</div>
+                </div>
+              </transition>
             </div>
           </div>
         </transition>
@@ -191,13 +193,16 @@ module.exports = {
   },
   methods: {
     init() {
-      this.hasSave = fs.existsSync(StorageManager.localFilePath(1))
+      this.checkSave()
       this.menu.current = 0
       this.menu.show = true
       this.setting.show = false
       this.setting.keepRunning = ConfigManager.alwaysDash
       this.setting.bgm = AudioManager.bgmVolume / 10
       this.setting.se = AudioManager.seVolume / 10
+    },
+    checkSave() {
+      this.hasSave = fs.existsSync(StorageManager.localFilePath(1))
     },
     checkInput(buttonName) {
       if (!this.show) return
@@ -414,9 +419,11 @@ module.exports = {
           if (this.hasSave) {
             this.showChoice('Do you wish to overwrite this save file', '是否覆盖存档', () => {
               Patch.save()
+              this.checkSave()
             })
           } else {
             Patch.save()
+            this.checkSave()
           }
           break
         case 1:
