@@ -413,7 +413,7 @@ module.exports = {
         case 0:
           if (this.hasSave) {
             this.showChoice('Do you wish to overwrite this save file', '是否覆盖存档', () => {
-              this.save()
+              Patch.save()
             })
           } else {
             Patch.save()
