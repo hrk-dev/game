@@ -1,7 +1,7 @@
 <template>
   <div id="main-menu">
     <transition name="fade">
-      <div v-if="show">
+      <div class="main-menu" v-if="show">
         <div class="bg">
           <img src="img/pictures/bg.jpg" alt draggable="false" />
         </div>
@@ -420,179 +420,180 @@ module.exports = {
 
 <style scoped lang="stylus">
 #main-menu
-  z-index 80
-  position relative
-  overflow hidden
-  width 100%
-  height 100%
-  user-select none
-
-  .bg
+  .main-menu
+    z-index 80
     position absolute
+    overflow hidden
     width 100%
     height 100%
-    left 0
-    top 0
-    overflow hidden
+    user-select none
 
-    img
-      width 170%
-
-  .btn-list
-    position absolute
-    bottom 0
-    left 0
-    width 100%
-    display flex
-    justify-content space-around
-
-    .btn
-      overflow hidden
-      position relative
-      display flex
-      align-items center
-      padding 0 35px 5px 5px
-      background linear-gradient(233deg, transparent 25px, #666 0) top right
-      background-repeat no-repeat
-      color #fff
-      height 35px
-      font-size 18px
-
-      div
-        z-index 2
-
-      .cn
-        margin 2px 2px 0 2px
-      
-      .en
-        margin 2px 2px 0 0
-
-  .setting-wrapper
-    color #fff
-    position absolute
-    width 80%
-    height 80%
-    left 10%
-    top 10%
-    background rgba(0, 0, 0, 0.7)
-
-    .vertical-frame
-      box-sizing border-box
-      margin 0 10px
-      width calc(100% - 20px)
+    .bg
+      position absolute
+      width 100%
       height 100%
-      border-width 5px
-      border-color #75d6f9
-      border-style none solid
+      left 0
+      top 0
+      overflow hidden
 
-      .title
+      img
+        width 170%
+
+    .btn-list
+      position absolute
+      bottom 0
+      left 0
+      width 100%
+      display flex
+      justify-content space-around
+
+      .btn
+        overflow hidden
+        position relative
+        display flex
+        align-items center
+        padding 0 35px 5px 5px
+        background linear-gradient(233deg, transparent 25px, #666 0) top right
+        background-repeat no-repeat
+        color #fff
+        height 35px
+        font-size 18px
+
+        div
+          z-index 2
+
+        .cn
+          margin 2px 2px 0 2px
+        
+        .en
+          margin 2px 2px 0 0
+
+    .setting-wrapper
+      color #fff
+      position absolute
+      width 80%
+      height 80%
+      left 10%
+      top 10%
+      background rgba(0, 0, 0, 0.7)
+
+      .vertical-frame
         box-sizing border-box
-        font-size 24px
-        line-height 100%
-        padding 5px 15px
-        height 45px
+        margin 0 10px
+        width calc(100% - 20px)
+        height 100%
+        border-width 5px
+        border-color #75d6f9
+        border-style none solid
+
+        .title
+          box-sizing border-box
+          font-size 24px
+          line-height 100%
+          padding 5px 15px
+          height 45px
+          display flex
+          flex-direction column
+          justify-content center
+
+      .horizontal-frame
+        position absolute
+        left 0
+        bottom 15px
+        padding 0 25px
+        box-sizing border-box
+        width 100%
+        height calc(100% - 45px - 15px)
+        border-width 5px
+        border-color #f8c8bf
+        border-style solid none
         display flex
         flex-direction column
+
+        .setting
+          flex 1
+          display flex
+          flex-direction column
+          justify-content space-evenly
+          padding-left 10px
+
+          .item
+            display flex
+            align-items center
+            width 100%
+            height 45px
+
+            .text
+              width 250px
+              display flex
+              flex-direction column
+              justify-content center
+
+              .cn
+                font-size 22px
+                line-height 22px
+              .en
+                font-size 20px
+                line-height 22px
+
+            .switch
+              display flex
+              align-items center
+              justify-content center
+              font-size 60px
+              line-height 45px
+              width 45px
+              padding 2px
+
+            .slider
+              height 100%
+              width 300px
+              padding 0 5px
+              display flex
+              align-items center
+
+              .block
+                box-sizing border-box
+                margin 3px
+                width 10%
+                height 55%
+                border 1px solid #fff
+
+            .percent
+              margin-left 10px
+              font-size 25px
+
+        .back
+          height 30px
+          font-size 22px
+          line-height 22px
+
+          .back-btn
+            display inline-block
+            padding 5px
+
+    .tip
+      color #fff
+      position absolute
+      left 50%
+      top 50%
+      background rgba(0, 0, 0, 0.7)
+      transform translate(-50%, -50%)
+      padding 5px 10px 10px 10px
+
+      .en, .cn
+        display flex
         justify-content center
 
-    .horizontal-frame
-      position absolute
-      left 0
-      bottom 15px
-      padding 0 25px
-      box-sizing border-box
-      width 100%
-      height calc(100% - 45px - 15px)
-      border-width 5px
-      border-color #f8c8bf
-      border-style solid none
-      display flex
-      flex-direction column
+        .word
+          font-size 20px
+          line-height 20px
+          opacity 0
+          animation fade 0.2s
+          animation-fill-mode forwards
 
-      .setting
-        flex 1
-        display flex
-        flex-direction column
-        justify-content space-evenly
-        padding-left 10px
-
-        .item
-          display flex
-          align-items center
-          width 100%
-          height 45px
-
-          .text
-            width 250px
-            display flex
-            flex-direction column
-            justify-content center
-
-            .cn
-              font-size 22px
-              line-height 22px
-            .en
-              font-size 20px
-              line-height 22px
-
-          .switch
-            display flex
-            align-items center
-            justify-content center
-            font-size 60px
-            line-height 45px
-            width 45px
-            padding 2px
-
-          .slider
-            height 100%
-            width 300px
-            padding 0 5px
-            display flex
-            align-items center
-
-            .block
-              box-sizing border-box
-              margin 3px
-              width 10%
-              height 55%
-              border 1px solid #fff
-
-          .percent
-            margin-left 10px
-            font-size 25px
-
-      .back
-        height 30px
-        font-size 22px
-        line-height 22px
-
-        .back-btn
-          display inline-block
-          padding 5px
-
-  .tip
-    color #fff
-    position absolute
-    left 50%
-    top 50%
-    background rgba(0, 0, 0, 0.7)
-    transform translate(-50%, -50%)
-    padding 5px 10px 10px 10px
-
-    .en, .cn
-      display flex
-      justify-content center
-
-      .word
-        font-size 20px
-        line-height 20px
-        opacity 0
-        animation fade 0.2s
-        animation-fill-mode forwards
-
-    .en
-      white-space pre
+      .en
+        white-space pre
 
 .menu-higtlight
   color #000 !important

@@ -3,3 +3,7 @@ body {
   margin: 0;
   font-family: "GAMEFONT";
 }
+
+#ErrorPrinter {
+  pointer-events: none;
+}
