@@ -408,6 +408,7 @@ module.exports = {
       }
     },
     save() {
+      $gameSystem.onBeforeSave()
       if (DataManager.saveGame(1)) {
         StorageManager.cleanBackup(1)
         VueMain.showPopup('Save success', '保存成功', 1000)
