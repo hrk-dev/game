@@ -119,7 +119,6 @@ Graphics._onKeyDown = function (event) {
   }
 };
 
-/** 主菜单监听 */
 Input._onKeyDown = function (event) {
   if (this._shouldPreventDefault(event.keyCode)) {
     event.preventDefault();
