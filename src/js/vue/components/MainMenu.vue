@@ -314,6 +314,9 @@ module.exports = {
               $gameSystem.onAfterLoad()
               setTimeout(() => {
                 this.show = false
+                if ($gameSystem.tipData) {
+                  VueMain.showTip($gameSystem.tipData.en, $gameSystem.tipData.cn, $gameSystem.tipData.time)
+                }
               }, 400)
             } else {
               VueMain.showPopup('Error', '奇怪的错误', 1500)

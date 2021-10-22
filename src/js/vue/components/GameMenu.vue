@@ -435,6 +435,9 @@ module.exports = {
               $gameSystem.onAfterLoad()
               setTimeout(() => {
                 this.show = false
+                if ($gameSystem.tipData) {
+                  VueMain.showTip($gameSystem.tipData.en, $gameSystem.tipData.cn, $gameSystem.tipData.time)
+                }
               }, 200)
             } else {
               VueMain.showPopup('Load failed', '读取失败', 1000)

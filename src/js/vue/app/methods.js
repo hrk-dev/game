@@ -26,19 +26,19 @@ VueMain.stopDanmu = () => {
 }
 
 VueMain.showTip = (en, cn, time, menu) => {
-  VueMain.app.$refs.tip.showTip(en, cn, time, menu)
+  VueMain.app.$refs.Tip.showTip(en, cn, time, menu)
 }
 
 VueMain.hideTip = () => {
-  VueMain.app.$refs.tip.hideTip()
+  VueMain.app.$refs.Tip.hideTip()
 }
 
 VueMain.clearTip = () => {
-  VueMain.app.$refs.tip.clear()
+  VueMain.app.$refs.Tip.clear()
 }
 
 VueMain.getTipState = () => {
-  return VueMain.app.$refs.tip.show
+  return VueMain.app.$refs.Tip.show
 }
 
 VueMain.showStory = () => {
