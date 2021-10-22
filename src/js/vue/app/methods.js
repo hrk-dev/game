@@ -42,9 +42,17 @@ VueMain.getTipState = () => {
 }
 
 VueMain.showStory = () => {
-  return VueMain.app.$refs.story.show()
+  VueMain.app.$refs.story.show()
 }
 
 VueMain.hideStory = () => {
-  return VueMain.app.$refs.story.hide()
+  VueMain.app.$refs.story.hide()
+}
+
+VueMain.showPopup = (en, cn, time) => {
+  return VueMain.app.$refs.Popup.show(en, cn, time)
+}
+
+VueMain.hidePopup = () => {
+  VueMain.app.$refs.Popup.hide()
 }

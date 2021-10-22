@@ -134,6 +134,7 @@ Input._onKeyDown = function (event) {
     this._currentState[buttonName] = true;
   }
   VueMain.app.$refs.MainMenu.checkInput(buttonName)
+  VueMain.app.$refs.GameMenu.checkInput(buttonName)
 }
 
 TouchInput._onMouseDown = function (event) {
@@ -144,5 +145,6 @@ TouchInput._onMouseDown = function (event) {
   } else if (event.button === 2) {
     this._onRightButtonDown(event)
     VueMain.app.$refs.MainMenu.back()
+    VueMain.app.$refs.GameMenu.back()
   }
 }

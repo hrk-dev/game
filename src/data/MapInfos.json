@@ -55,6 +55,6 @@ null,
 {"id":53,"expanded":false,"name":"3-浴室","order":51,"parentId":51,"scrollX":542,"scrollY":304},
 {"id":54,"expanded":false,"name":"3-房间","order":50,"parentId":51,"scrollX":542,"scrollY":304},
 {"id":55,"expanded":true,"name":"第四幕","order":52,"parentId":30,"scrollX":542,"scrollY":304},
-{"id":56,"expanded":false,"name":"4-广场","order":54,"parentId":55,"scrollX":1606.8,"scrollY":1263.6},
+{"id":56,"expanded":false,"name":"4-广场","order":54,"parentId":55,"scrollX":1600,"scrollY":1256},
 {"id":57,"expanded":false,"name":"4-过场","order":53,"parentId":55,"scrollX":542,"scrollY":304}
 ]

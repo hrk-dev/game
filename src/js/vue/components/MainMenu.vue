@@ -1,5 +1,5 @@
 <template>
-  <div class="main-menu">
+  <div id="main-menu">
     <transition name="fade">
       <div v-if="show">
         <div class="bg">
@@ -20,7 +20,7 @@
                   justifyContent: item.multiline ? 'center' : ''
                 }"
                 :key="index"
-                @click="click(item.cn)"
+                @click="onKeydown"
                 @mouseover="mouseOver(item.cn)"
               >
                 <div
@@ -121,33 +121,6 @@
             </div>
           </div>
         </transition>
-        <transition name="fade">
-          <div class="tip" v-if="tip.show">
-            <div class="en">
-              <div
-                class="word"
-                v-for="(i, index) in tip.en"
-                :key="'en' + index"
-                :style="{
-                  animationDelay: `${(index + 1) * 0.03}s`
-                }"
-                v-html="i"
-              ></div>
-            </div>
-            <div class="cn">
-              <div
-                class="word"
-                v-for="(i, index) in tip.cn"
-                :key="'en' + index"
-                :style="{
-                  animationDelay: `${(index + 1) * 0.1}s`,
-                  paddingTop: '2px'
-                }"
-                v-html="i"
-              ></div>
-            </div>
-          </div>
-        </transition>
       </div>
     </transition>
   </div>
@@ -155,10 +128,6 @@
 
 <script>
 module.exports = {
-  props: {
-    fontSize: Number,
-    scale: Number
-  },
   data: () => ({
     show: false,
     busy: false,
@@ -200,11 +169,6 @@ module.exports = {
         }
       ]
     },
-    tip: {
-      show: false,
-      en: '',
-      cn: ''
-    },
     setting: {
       show: false,
       current: 0,
@@ -243,16 +207,9 @@ module.exports = {
       this.setting.se = AudioManager.seVolume / 10
     },
     findIndex(name) {
-      this.menu.current = this.menu.list.findIndex(item => {
+      return this.menu.list.findIndex(item => {
         return item.cn === name
       })
-      return this.menu.current
-    },
-    click(name) {
-      const index = this.findIndex(name)
-      if (index !== -1) {
-        this.onKeydown(index)
-      }
     },
     mouseOver(name) {
       const index = this.findIndex(name)
@@ -359,7 +316,7 @@ module.exports = {
                 this.show = false
               }, 400)
             } else {
-              this.setTip('Error', '奇怪的错误', 1500)
+              VueMain.showPopup('Error', '奇怪的错误', 1500)
             }
             break
           case 2:
@@ -370,7 +327,7 @@ module.exports = {
             this.test()
             break
           case 4:
-            this.setTip('Not finished', '还没做', 1500)
+            VueMain.showPopup('Not finished', '还没做', 1500)
             break
           case 5:
             SceneManager.exit()
@@ -437,14 +394,14 @@ module.exports = {
     test() {
       if (this.menu.restart) {
         this.menu.show = false
-        this.setTip('I think you should restart the game', '我觉得你应该重新开始游戏', 1500)
+        VueMain.showPopup('I think you should restart the game', '我觉得你应该重新开始游戏', 1500)
           .then(() => {
             this.menu.show = true
           })
         this.menu.restart = false
       } else {
         this.menu.show = false
-        this.setTip('Well, that\'ll have to do', '好吧，那只能这样了', 1500)
+        VueMain.showPopup('Well, that\'ll have to do', '好吧，那只能这样了', 1500)
           .then(() => {
             for (const i in this.menu.list) {
               if (i > 0) {
@@ -455,35 +412,13 @@ module.exports = {
             this.menu.show = true
           })
       }
-    },
-    setTip(en, cn, time) {
-      return new Promise(resolve => {
-        if (this.timer) {
-          clearTimeout(this.timer)
-          this.timer = null
-        }
-        this.tip.show = true
-        this.tip.en = en
-        this.tip.cn = cn
-        if (time) {
-          this.timer = setTimeout(() => {
-            this.tip.show = false
-            resolve()
-          }, Math.max(this.tip.en.length * 30, this.tip.cn.length * 100) + time)
-        } else {
-          resolve()
-        }
-      })
     }
-  },
-  created() {
-    this.timer = null
   }
 }
 </script>
 
 <style scoped lang="stylus">
-.main-menu
+#main-menu
   position relative
   overflow hidden
   width 100%
@@ -693,11 +628,4 @@ module.exports = {
 .slide-up-enter-to, .slide-up-leave
   transform translateY(0)
   opacity 1
-
-@keyframes fade
-  from
-    opacity 0
-
-  to
-    opacity 1
 </style>

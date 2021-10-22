@@ -16,7 +16,6 @@ var $plugins =
 {"name":"MPP_ChoiceEX","status":true,"description":"【ver.3.3】選択肢の機能拡張","parameters":{"maxPageRow":"6"}},
 {"name":"blur","status":true,"description":"屏幕截图&模糊 工具","parameters":{"blurLevel":"5"}},
 {"name":"MenuAlignCenter","status":true,"description":"文字居中","parameters":{}},
-{"name":"menu","status":true,"description":"修改游戏菜单","parameters":{}},
 {"name":"Galv_ScreenZoom","status":true,"description":"(v.1.1) Zoom in on a certain part of the screen","parameters":{"Battle Zoom":"1"}},
 {"name":"GALV_ActionIndicators","status":true,"description":"Display an icon when the player is able to interact with an event. View help for comment tag. (经过修改)","parameters":{"Y Offset":"-10","Z Position":"99","Auto Hide":"true","Icon Opacity":"200"}},
 {"name":"MessageTextSound","status":false,"description":"v1.00 - 为事件的“显示文字”动作添加音效。","parameters":{"Text Sound Interval":"4","Text Sound Name":"Cursor1","Text Sound Volume":"50","Text Sound Pitch":"100","Text Sound Pan":"0"}}

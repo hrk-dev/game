@@ -10,7 +10,9 @@ VueMain.app = new Vue({
     Danmu: VueMain.loadComponent('Danmu'),
     Tip: VueMain.loadComponent('Tip'),
     MoveTip: VueMain.loadComponent('MoveTip'),
-    Story: VueMain.loadComponent('Story')
+    Story: VueMain.loadComponent('Story'),
+    GameMenu: VueMain.loadComponent('GameMenu'),
+    Popup: VueMain.loadComponent('Popup')
   },
   data: () => ({
     ready: false,
