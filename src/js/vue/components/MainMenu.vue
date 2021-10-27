@@ -310,6 +310,7 @@ module.exports = {
           case 1:
             if (DataManager.loadGame(1)) {
               this.menu.show = false
+              $gameSwitches.setValue(98, true) // 触发重载
               SceneManager.goto(Scene_Map)
               $gameSystem.onAfterLoad()
               setTimeout(() => {
