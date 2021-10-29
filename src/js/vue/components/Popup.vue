@@ -68,6 +68,7 @@ module.exports = {
 
 <style scoped lang="stylus">
 .tip
+  z-index 123
   color #fff
   position absolute
   left 50%
@@ -75,6 +76,7 @@ module.exports = {
   background rgba(0, 0, 0, 0.7)
   transform translate(-50%, -50%)
   padding 5px 10px 10px 10px
+  pointer-events none
 
   .en, .cn
     display flex
@@ -82,7 +84,7 @@ module.exports = {
 
     .word
       opacity 0
-      animation fade 0.2s
+      animation text-blinks 0.2s
       animation-fill-mode forwards
 
   .en
@@ -90,6 +92,7 @@ module.exports = {
     line-height 16px
     padding-top 2px
     white-space pre
+
   .cn
     font-size 20px
     line-height 20px
@@ -103,7 +106,7 @@ module.exports = {
 .fade-enter-to, .fade-leave
   opacity 1
 
-@keyframes fade
+@keyframes text-blinks
   from
     opacity 0
 
