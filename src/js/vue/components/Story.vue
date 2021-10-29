@@ -10,7 +10,7 @@
           <div
             :style="{
               fontSize: `${16 * scale}px`,
-              lineHeight: `${18 * scale}px`,
+              lineHeight: `${18 * scale}px`
             }"
           >
             {{ item.en }}
@@ -18,7 +18,7 @@
           <div
             :style="{
               fontSize: `${24 * scale}px`,
-              lineHeight: `${26 * scale}px`,
+              lineHeight: `${26 * scale}px`
             }"
           >
             {{ item.cn }}

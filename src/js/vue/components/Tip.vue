@@ -82,31 +82,33 @@ module.exports = {
     border-style solid none
     border-top-color #ffa6ca
     border-bottom-color #ffa6ca
-    background rgba(0,0,0,0.6)
+    background rgba(0, 0, 0, 0.6)
     color #fff
 
   .en
     font-size 20px
     line-height 20px
+
   .cn
     margin-top 5px
     font-size 22px
     line-height 22px
 
   .left
-    position: absolute
-    height: calc(100% + 1px)
-    left: 0
-    top: -0.5px
+    position absolute
+    height calc(100% + 1px)
+    left 0
+    top -0.5px
     width 4px
-    background: #a6d4ff
+    background #a6d4ff
+
   .right
-    position: absolute
-    height: calc(100% + 1px)
-    right: 0
-    top: -0.5px
+    position absolute
+    height calc(100% + 1px)
+    right 0
+    top -0.5px
     width 4px
-    background: #a6d4ff
+    background #a6d4ff
 
 .slide-down-enter, .slide-down-leave-to
   top -50px !important

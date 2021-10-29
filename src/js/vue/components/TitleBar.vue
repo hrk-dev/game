@@ -29,8 +29,8 @@
 module.exports = {
   data: () => ({
     dev: false,
-    title: "Hiiro",
-    color: "",
+    title: 'Hiiro',
+    color: '',
     titleTestIndex: 0
   }),
   methods: {
@@ -39,14 +39,14 @@ module.exports = {
     },
     titleTest() {
       if (this.titleTestIndex > this.titleList.length - 1) {
-        this.titleTestIndex = 0;
+        this.titleTestIndex = 0
       }
       if (this.titleTestIndex === 8) {
-        this.title = this.titleList[this.titleTestIndex] + "irro";
+        this.title = this.titleList[this.titleTestIndex] + 'irro'
       } else {
-        this.title = this.titleList[this.titleTestIndex] + "iiro";
+        this.title = this.titleList[this.titleTestIndex] + 'iiro'
       }
-      ++this.titleTestIndex;
+      ++this.titleTestIndex
     }
   },
   mounted() {
@@ -55,33 +55,33 @@ module.exports = {
     }
 
     this.titleList = [
-      "H",
-      "A",
-      "B",
-      "C",
-      "D",
-      "E",
-      "F",
-      "G",
-      "H",
-      "I",
-      "J",
-      "K",
-      "L",
-      "M",
-      "N",
-      "O",
-      "P",
-      "Q",
-      "R",
-      "S",
-      "T",
-      "U",
-      "V",
-      "W",
-      "X",
-      "Y",
-      "Z",
+      'H',
+      'A',
+      'B',
+      'C',
+      'D',
+      'E',
+      'F',
+      'G',
+      'H',
+      'I',
+      'J',
+      'K',
+      'L',
+      'M',
+      'N',
+      'O',
+      'P',
+      'Q',
+      'R',
+      'S',
+      'T',
+      'U',
+      'V',
+      'W',
+      'X',
+      'Y',
+      'Z'
     ]
     this.titleTest()
   }
