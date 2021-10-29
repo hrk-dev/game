@@ -5,7 +5,7 @@
   "scripts": {
     "watch": "cross-env NODE_ENV=development nodemon --watch build --watch src --exec electron .",
     "start": "cross-env NODE_ENV=development electron .",
-    "build": "electron-packager src Hiiro --overwrite --icon=src/icon/icon.ico --asar --out=dist",
+    "build": "electron-packager src Hiiro --overwrite --icon=src/icon/icon.ico --out=dist --ignore=\"(icu$|temp$|Game.rpgproject$)\" --asar.unpackDir=\"**/{audio,img}*\"",
     "build:src": "electron-packager src Hiiro --overwrite --icon=src/icon/icon.ico --out=dist --ignore=\"(icu$|temp$|Game.rpgproject$)\""
   },
   "author": "Blacktunes",
