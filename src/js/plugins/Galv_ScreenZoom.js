@@ -99,6 +99,7 @@ Galv.ZOOM = Galv.ZOOM || {};          // Galv's stuff
 		}
 		var x = target.screenX();
 		var y = target.screenY() - 12 - scale;
+		$gameScreen._zoomScaleTargetID = id
 		$gameScreen.startZoom(x, y, scale, duration);
 	};
 
@@ -275,7 +276,7 @@ Galv.ZOOM = Galv.ZOOM || {};          // Galv's stuff
         $gameMap.scrollUp(y1 - y2);
     }
 		if (zoom && zoom.follow && $gameScreen._zoomDuration <= 0) {
-			Galv.ZOOM.target(0, $gameScreen._zoomScale, 1)
+			Galv.ZOOM.target($gameScreen._zoomScaleTargetID, $gameScreen._zoomScale, 1)
 		}
 };
 
