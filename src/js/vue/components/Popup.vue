@@ -1,6 +1,6 @@
 <template>
   <div id="popup">
-    <transition name="fade">
+    <transition :name="animation">
       <div class="tip" v-if="isShow">
         <div class="en">
           <div
@@ -34,10 +34,12 @@ module.exports = {
   data: () => ({
     isShow: false,
     en: '',
-    cn: ''
+    cn: '',
+    animation: 'fade'
   }),
   methods: {
     show(en, cn, time) {
+      this.animation = 'fade'
       return new Promise(resolve => {
         if (this.timer) {
           clearTimeout(this.timer)
@@ -57,6 +59,7 @@ module.exports = {
       })
     },
     hide() {
+      this.animation = ''
       this.isShow = false
     }
   },

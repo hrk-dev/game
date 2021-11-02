@@ -120,6 +120,7 @@ module.exports = {
   watch: {
     show() {
       if (this.show) {
+        VueMain.hidePopup()
         this.init()
       }
     },

@@ -62,7 +62,7 @@ module.exports = {
       current: true,
       en: '',
       cn: '',
-      fn: () => { }
+      fn: () => {}
     },
     menu: {
       show: true,
@@ -88,7 +88,7 @@ module.exports = {
           cn: '退出',
           en: 'Exit'
         }
-      ],
+      ]
     }
   }),
   watch: {
@@ -112,6 +112,10 @@ module.exports = {
     },
     checkInput(buttonName) {
       if (!this.show) return
+      if (buttonName === 'escape') {
+        this.back()
+        return
+      }
       if (this.choice.show) {
         switch (buttonName) {
           case 'left':
@@ -128,9 +132,6 @@ module.exports = {
             break
           case 'ok':
             this.choiceKeyDown()
-            break
-          case 'escape':
-            this.back()
             break
         }
       } else if (this.$refs.Setting.show) {
@@ -150,9 +151,6 @@ module.exports = {
           case 'ok':
             this.settingKeyDown()
             break
-          case 'escape':
-            this.back()
-            break
         }
       } else {
         switch (buttonName) {
@@ -170,9 +168,6 @@ module.exports = {
             break
           case 'ok':
             this.onKeydown(this.menu.current)
-            break
-          case 'escape':
-            SceneManager.pop()
             break
         }
       }
@@ -196,10 +191,10 @@ module.exports = {
       if (this.choice.current) {
         this.back()
         this.choice.fn()
-        this.choice.fn = () => { }
+        this.choice.fn = () => {}
       } else {
         this.back()
-        this.choice.fn = () => { }
+        this.choice.fn = () => {}
       }
     },
     // 设置
@@ -294,28 +289,38 @@ module.exports = {
       switch (this.menu.current) {
         case 0:
           if (this.hasSave) {
-            this.showChoice('Do you wish to overwrite this save file', '是否覆盖存档', () => {
-              Patch.save()
-              this.checkSave()
-            })
+            this.showChoice(
+              'Do you wish to overwrite this save file',
+              '是否覆盖存档',
+              () => {
+                Patch.save()
+                this.checkSave()
+              }
+            )
           } else {
             Patch.save()
             this.checkSave()
           }
           break
         case 1:
-          this.showChoice('Do you wish to load this save file', '是否读取存档', () => {
-            if (DataManager.loadGame(1)) {
-              SceneManager.goto(Scene_Map)
-              $gameSystem.onAfterLoad()
-              setTimeout(() => {
-                this.show = false
-                Patch.showTip()
-              }, 200)
-            } else {
-              VueMain.showPopup('Load failed', '读取失败', 1000)
+          this.showChoice(
+            'Do you wish to load this save file',
+            '是否读取存档',
+            () => {
+              if (DataManager.loadGame(1)) {
+                $gameSwitches.setValue(96, true)
+                $gameSwitches.setValue(98, true)
+                SceneManager.goto(Scene_Map)
+                $gameSystem.onAfterLoad()
+                setTimeout(() => {
+                  this.show = false
+                  Patch.showTip()
+                }, 200)
+              } else {
+                VueMain.showPopup('Load failed', '读取失败', 1000)
+              }
             }
-          })
+          )
           break
         case 2:
           this.menu.show = false
@@ -333,6 +338,7 @@ module.exports = {
     back() {
       if (this.show) {
         if (this.choice.show) {
+          VueMain.hidePopup()
           this.choice.show = false
           this.choice.current = true
           return

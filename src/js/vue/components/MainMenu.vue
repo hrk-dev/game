@@ -66,6 +66,10 @@ module.exports = {
   data: () => ({
     show: false,
     busy: false,
+    loop: {
+      restart: false,
+      next: 0
+    },
     menu: {
       animation: 'slide-left',
       show: true,
@@ -87,11 +91,6 @@ module.exports = {
           show: true,
           cn: '设置',
           en: 'Setting'
-        },
-        {
-          show: true,
-          cn: '测试',
-          en: 'Test'
         },
         {
           show: true,
@@ -133,11 +132,27 @@ module.exports = {
   },
   methods: {
     init() {
+      for (const i in this.menu.list) {
+        if (i > 0) {
+          this.menu.list[i].show = true
+        }
+      }
+      const data = DataManager.loadGlobalInfo() || [{}]
+      if (data[0].loop) {
+        if (data[0].loop.lock) {
+          VueMain.showPopup('', '这是一段解锁动画，还没做', 2000)
+          data[0].loop.lock = false
+        }
+        this.loop.restart = data[0].loop.restart
+        this.loop.next = data[0].loop.next
+        if (data[0].loop.load === false) this.menu.list[1].show = false
+      }
+      DataManager.saveGlobalInfo(data)
       this.menu.show = true
       this.menu.current = 1
     },
     getLastItem() {
-      const isLast = (key) => {
+      const isLast = key => {
         if (key === 0) return 0
         return this.menu.list[key].show ? key : isLast(key - 1)
       }
@@ -234,25 +249,54 @@ module.exports = {
       if (this.menu.show) {
         switch (this.menu.current) {
           case 0:
-            DataManager.setupNewGame()
-            this.menu.show = false
-            SceneManager.goto(Scene_Map)
-            setTimeout(() => {
-              this.show = false
-            }, 400)
-            break
-          case 1:
-            if (DataManager.loadGame(1)) {
+            if (this.loop.next === 0) {
+              DataManager.setupNewGame()
               this.menu.show = false
-              $gameSwitches.setValue(98, true) // 触发重载
               SceneManager.goto(Scene_Map)
-              $gameSystem.onAfterLoad()
               setTimeout(() => {
                 this.show = false
-                Patch.showTip()
               }, 400)
             } else {
-              VueMain.showPopup('Error', '奇怪的错误', 1500)
+              if (DataManager.loadGame(1)) {
+                this.menu.show = false
+                $gameVariables.setValue(1, this.loop.next)
+                $gameSwitches.setValue(97, true)
+                $gameSwitches.setValue(98, true) // 触发重载
+                VueMain.clearTip()
+                $gameSystem.onBeforeSave()
+                if (DataManager.saveGame(1)) {
+                  StorageManager.cleanBackup(1)
+                }
+                Patch.addGlobalInfo('loop', {
+                  restart: false,
+                  load: true
+                })
+                SceneManager.goto(Scene_Map)
+                $gameSystem.onAfterLoad()
+                setTimeout(() => {
+                  this.show = false
+                }, 400)
+              } else {
+                VueMain.showPopup('Error', '奇怪的错误', 1500)
+              }
+            }
+            break
+          case 1:
+            if (this.loop.restart) {
+              this.test()
+            } else {
+              if (DataManager.loadGame(1)) {
+                this.menu.show = false
+                $gameSwitches.setValue(98, true) // 触发重载
+                SceneManager.goto(Scene_Map)
+                $gameSystem.onAfterLoad()
+                setTimeout(() => {
+                  this.show = false
+                  Patch.showTip()
+                }, 400)
+              } else {
+                VueMain.showPopup('Error', '奇怪的错误', 1500)
+              }
             }
             break
           case 2:
@@ -260,12 +304,9 @@ module.exports = {
             this.$refs.Setting.show = true
             break
           case 3:
-            this.test()
-            break
-          case 4:
             VueMain.showPopup('Not finished', '还没做', 1500)
             break
-          case 5:
+          case 4:
             SceneManager.exit()
             break
         }
@@ -305,23 +346,30 @@ module.exports = {
     test() {
       if (this.menu.restart) {
         this.menu.show = false
-        VueMain.showPopup('I think you should restart the game', '我觉得你应该重新开始游戏', 1500)
-          .then(() => {
-            this.menu.show = true
-          })
+        VueMain.showPopup(
+          'I think you should restart the game',
+          '我觉得你应该重新开始游戏',
+          1500
+        ).then(() => {
+          this.menu.show = true
+        })
         this.menu.restart = false
       } else {
         this.menu.show = false
-        VueMain.showPopup('Well, that\'ll have to do', '好吧，那只能这样了', 1500)
-          .then(() => {
-            for (const i in this.menu.list) {
-              if (i > 0) {
-                this.menu.list[i].show = false
-              }
+        VueMain.showPopup(
+          "Well, that'll have to do",
+          '好吧，那只能这样了',
+          1500
+        ).then(() => {
+          for (const i in this.menu.list) {
+            if (i > 0) {
+              this.menu.list[i].show = false
             }
-            this.menu.current = 0
-            this.menu.show = true
-          })
+          }
+          this.menu.current = 0
+          this.menu.show = true
+          Patch.setGlobalInfo('loop', 'load', false)
+        })
       }
     }
   }
