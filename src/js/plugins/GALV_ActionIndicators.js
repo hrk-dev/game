@@ -131,11 +131,14 @@ Game_CharacterBase.prototype.moveStraight = function(d) {
 };
 
 	Galv.AI.checkActionIcon = function () {
-	VueMain.app.$refs.Movetip.hide()
-
-	var x2 = $gameMap.roundXWithDirection($gamePlayer._x, $gamePlayer._direction);
-    var y2 = $gameMap.roundYWithDirection($gamePlayer._y, $gamePlayer._direction);
-	var action = null;
+		
+		var x2 = $gameMap.roundXWithDirection($gamePlayer._x, $gamePlayer._direction);
+		var y2 = $gameMap.roundYWithDirection($gamePlayer._y, $gamePlayer._direction);
+		var action = null;
+		
+		if ($gameMap.eventsXy($gamePlayer._x, $gamePlayer._y).length < 1) {
+			VueMain.app.$refs.Movetip.hide()
+		}
 	
 	// CHECK EVENT STANDING ON
 	$gameMap.eventsXy($gamePlayer._x, $gamePlayer._y).forEach(function(event) {
@@ -145,6 +148,7 @@ Game_CharacterBase.prototype.moveStraight = function(d) {
 			const playerDirection = $gamePlayer.direction()
 			if (eventDirection !== playerDirection) {
 				action = {'eventId': 0, 'iconId': 0};
+				VueMain.app.$refs.Movetip.hide()
 			} else {
 				setMoveTip(event)
 			}
