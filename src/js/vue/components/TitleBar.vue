@@ -50,7 +50,7 @@ module.exports = {
     }
   },
   mounted() {
-    if (process.env.NODE_ENV === 'development') {
+    if (dev) {
       this.dev = true
     }
 

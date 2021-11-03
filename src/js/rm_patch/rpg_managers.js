@@ -54,3 +54,61 @@ SceneManager.onKeyDown = function (event) {
     }
   }
 }
+
+ImageManager.loadBitmap = function (folder, filename, hue, smooth) {
+  if (filename) {
+    const _filename = dev ? (encodeURIComponent(filename) + '.png') : md5(filename + '.png')
+    var path = md5Url(folder) + _filename
+    var bitmap = this.loadNormalBitmap(path, hue || 0)
+    bitmap.smooth = smooth
+    return bitmap
+  } else {
+    return this.loadEmptyBitmap()
+  }
+}
+
+ImageManager.reserveBitmap = function (folder, filename, hue, smooth, reservationId) {
+  if (filename) {
+    const _filename = dev ? (encodeURIComponent(filename) + '.png') : md5(filename + '.png')
+    var path = md5Url(folder) + _filename
+    var bitmap = this.reserveNormalBitmap(path, hue || 0, reservationId || this._defaultReservationId)
+    bitmap.smooth = smooth
+    return bitmap
+  } else {
+    return this.loadEmptyBitmap()
+  }
+}
+
+ImageManager.requestBitmap = function (folder, filename, hue, smooth) {
+  if (filename) {
+    const _filename = dev ? (encodeURIComponent(filename) + '.png') : md5(filename + '.png')
+    var path = md5Url(folder) + _filename
+    var bitmap = this.requestNormalBitmap(path, hue || 0)
+    bitmap.smooth = smooth
+    return bitmap
+  } else {
+    return this.loadEmptyBitmap()
+  }
+}
+
+AudioManager._path = dev ? 'audio/' : `${md5('audio')}/`
+AudioManager.playEncryptedBgm = function (bgm, pos) {
+  var ext = this.audioFileExt()
+  const filename = dev ? (encodeURIComponent(bgm.name) + ext) : md5(bgm.name + ext)
+  var url = this._path + (dev ? 'bgm/' : `${md5('bgm')}/`) + (dev ? filename : md5(filename))
+  url = Decrypter.extToEncryptExt(url)
+  Decrypter.decryptHTML5Audio(url, bgm, pos)
+}
+AudioManager.createBuffer = function (folder, name) {
+  var ext = this.audioFileExt()
+  const filename = dev ? (encodeURIComponent(name) + ext) : md5(name + ext)
+  var url = this._path + (dev ? folder : md5(folder)) + '/' + filename
+  const key = dev ? 'bgm' : md5('bgm')
+  if (this.shouldUseHtml5Audio() && folder === key) {
+    if (this._blobUrl) Html5Audio.setup(this._blobUrl)
+    else Html5Audio.setup(url)
+    return Html5Audio
+  } else {
+    return new WebAudio(url)
+  }
+}

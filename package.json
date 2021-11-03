@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "main": "src/main.js",
   "scripts": {
-    "watch": "cross-env NODE_ENV=development nodemon --watch build --watch src --exec electron .",
-    "start": "cross-env NODE_ENV=development electron .",
-    "build": "electron-packager src Hiiro --overwrite --icon=src/icon/icon.ico --out=dist --ignore=\"(icu$|temp$|Game.rpgproject$)\" --asar.unpackDir=\"**/{audio,img}*\"",
-    "build:src": "electron-packager src Hiiro --overwrite --icon=src/icon/icon.ico --out=dist --ignore=\"(icu$|temp$|Game.rpgproject$)\""
+    "start": "electron .",
+    "dist": "node scripts/encryption.js",
+    "build": "node scripts/encryption.js && node scripts/packager.js",
+    "build:test": "electron-packager src Hiiro --overwrite --icon=src/icon/icon.ico --out=build --ignore=\"(temp$|icu$)\""
   },
   "author": "Blacktunes",
   "repository": {
@@ -25,7 +25,9 @@
     "cross-env": "^7.0.3",
     "electron": "^12.0.7",
     "electron-packager": "^15.2.0",
-    "nodemon": "^2.0.7"
+    "nodemon": "^2.0.7",
+    "fs-extra": "^10.0.0",
+    "md5-js": "^0.0.3"
   },
   "prettier": {
     "trailingComma": "none",

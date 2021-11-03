@@ -4,6 +4,7 @@
       <div class="main-menu" v-if="show">
         <div class="bg">
           <img src="img/pictures/bg.jpg" alt draggable="false" />
+          <img :src="bg" alt draggable="false" />
         </div>
         <transition name="slide-up" appear>
           <div class="btn-list" v-if="menu.show">
@@ -64,6 +65,7 @@ module.exports = {
     Setting: VueMain.loadComponent('common/Setting')
   },
   data: () => ({
+    bg: md5Url('img/pictures/bg.jpg'),
     show: false,
     busy: false,
     loop: {
