@@ -140,6 +140,7 @@ module.exports = {
         }
       }
       const data = DataManager.loadGlobalInfo() || [{}]
+      const data = DataManager.loadGlobalInfo()
       if (data[0].loop) {
         if (data[0].loop.lock) {
           VueMain.showPopup('', '这是一段解锁动画，还没做', 2000)

@@ -14,12 +14,12 @@ const Patch = class {
 
   /** 获取全局存档数据 */
   static getGlobalInfo() {
-    return (DataManager.loadGlobalInfo() || [{}])[0]
+    return DataManager.loadGlobalInfo()[0]
   }
 
   /** 增加全局存档数据 */
   static addGlobalInfo(name, data) {
-    const globalInfo = DataManager.loadGlobalInfo() || [{}]
+    const globalInfo = DataManager.loadGlobalInfo()
     if (!globalInfo[0]) globalInfo[0] = {}
     globalInfo[0][name] = {...globalInfo[0][name], ...data}
 
@@ -28,7 +28,7 @@ const Patch = class {
 
   /** 修改全局存档数据属性 */
   static setGlobalInfo(name, key, data) {
-    const globalInfo = DataManager.loadGlobalInfo() || [{}]
+    const globalInfo = DataManager.loadGlobalInfo()
     if (!globalInfo[0]) globalInfo[0] = {}
     if (!globalInfo[0][name]) globalInfo[0][name] = {}
     globalInfo[0][name][key] = data
@@ -38,7 +38,7 @@ const Patch = class {
 
   /** 清空周目数据 */
   static delLoop() {
-    const globalInfo = DataManager.loadGlobalInfo() || [{}]
+    const globalInfo = DataManager.loadGlobalInfo()
     if (!globalInfo[0]) globalInfo[0] = {}
     globalInfo[0]['loop'] = {}
 

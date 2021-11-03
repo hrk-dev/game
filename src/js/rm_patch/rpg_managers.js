@@ -3,8 +3,6 @@ StorageManager.isLocalMode = function () {
 }
 
 StorageManager.localFileDirectoryPath = function () {
-  var path = require('path')
-
   const base = __dirname.replace(path.sep + 'app.asar', '')
   return path.join(base, 'icu/')
 }
@@ -36,6 +34,29 @@ DataManager.makeSavefileInfo = function () {
   // 周目信息
   info.loop = $gameSystem.loop
   return info
+}
+
+DataManager.loadGlobalInfo = function () {
+  var json
+  try {
+    json = StorageManager.load(0)
+  } catch (e) {
+    console.error(e)
+    return [{}]
+  }
+  if (json) {
+    var globalInfo = JSON.parse(json)
+    for (var i = 0; i <= this.maxSavefiles(); i++) {
+      if (i === 0) {
+        if (!globalInfo[i]) globalInfo[i] = {}
+      } else if (!StorageManager.exists(i)) {
+        delete globalInfo[i]
+      }
+    }
+    return globalInfo
+  } else {
+    return [{}]
+  }
 }
 
 SceneManager.onKeyDown = function (event) {
