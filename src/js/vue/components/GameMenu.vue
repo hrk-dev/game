@@ -308,8 +308,8 @@ module.exports = {
             '是否读取存档',
             () => {
               if (DataManager.loadGame(1)) {
-                $gameSwitches.setValue(96, true)
-                $gameSwitches.setValue(98, true)
+                // $gameSwitches.setValue(96, true)
+                // $gameSwitches.setValue(98, true)
                 SceneManager.goto(Scene_Map)
                 $gameSystem.onAfterLoad()
                 setTimeout(() => {

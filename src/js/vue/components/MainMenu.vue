@@ -3,7 +3,6 @@
     <transition name="fade">
       <div class="main-menu" v-if="show">
         <div class="bg">
-          <img src="img/pictures/bg.jpg" alt draggable="false" />
           <img :src="bg" alt draggable="false" />
         </div>
         <transition name="slide-up" appear>
@@ -139,7 +138,6 @@ module.exports = {
           this.menu.list[i].show = true
         }
       }
-      const data = DataManager.loadGlobalInfo() || [{}]
       const data = DataManager.loadGlobalInfo()
       if (data[0].loop) {
         if (data[0].loop.lock) {
@@ -252,7 +250,7 @@ module.exports = {
       if (this.menu.show) {
         switch (this.menu.current) {
           case 0:
-            if (this.loop.next === 0) {
+            if (!this.loop.next) {
               DataManager.setupNewGame()
               this.menu.show = false
               SceneManager.goto(Scene_Map)
@@ -290,7 +288,16 @@ module.exports = {
             } else {
               if (DataManager.loadGame(1)) {
                 this.menu.show = false
-                $gameSwitches.setValue(98, true) // 触发重载
+
+                const version = JSON.parse(fs.readFileSync(path.join(__dirname, 'package.json'))).version
+                if ($gameSystem.version !== version) {
+                  $gameSwitches.setValue(98, true) // 触发重载
+                  $gameSystem.version = version
+                  if (DataManager.saveGame(1)) {
+                    StorageManager.cleanBackup(1)
+                  }
+                }
+                
                 SceneManager.goto(Scene_Map)
                 $gameSystem.onAfterLoad()
                 setTimeout(() => {
