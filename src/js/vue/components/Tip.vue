@@ -118,6 +118,9 @@ module.exports = {
   top 10px !important
   opacity 1 !important
 
-.slide-down-enter-active, .slide-down-leave-active
+.slide-down-enter-active
+  transition all 0.3s ease-out
+  transition-delay 1s
+.slide-down-leave-active
   transition all 0.3s ease-out
 </style>

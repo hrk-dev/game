@@ -1,5 +1,8 @@
 <template>
   <div id="game-menu">
+    <transition name="fade2">
+      <div class="loading" v-if="loading">Loading···</div>
+    </transition>
     <transition name="fade">
       <div v-if="show">
         <transition name="fade">
@@ -56,6 +59,7 @@ module.exports = {
   },
   data: () => ({
     show: false,
+    loading: false,
     hasSave: false,
     choice: {
       show: false,
@@ -307,18 +311,23 @@ module.exports = {
             'Do you wish to load this save file',
             '是否读取存档',
             () => {
-              if (DataManager.loadGame(1)) {
-                // $gameSwitches.setValue(96, true)
-                // $gameSwitches.setValue(98, true)
-                SceneManager.goto(Scene_Map)
-                $gameSystem.onAfterLoad()
-                setTimeout(() => {
-                  this.show = false
-                  Patch.showTip()
-                }, 200)
-              } else {
-                VueMain.showPopup('Load failed', '读取失败', 1000)
-              }
+              this.loading = true
+              setTimeout(() => {
+                if (DataManager.loadGame(1)) {
+                  this.menu.show = false
+                  // $gameSwitches.setValue(96, true)
+                  // $gameSwitches.setValue(98, true)
+                  SceneManager.goto(Scene_Map)
+                  $gameSystem.onAfterLoad()
+                  setTimeout(() => {
+                    this.loading = false
+                    this.show = false
+                    Patch.showTip()
+                  }, 300)
+                } else {
+                  VueMain.showPopup('Load failed', '读取失败', 1000)
+                }
+              }, 300)
             }
           )
           break
@@ -363,6 +372,16 @@ module.exports = {
 </script>
 
 <style lang="stylus" scoped>
+.loading
+  z-index 110
+  display flex
+  justify-content center
+  align-items center
+  position absolute
+  inset 0
+  color #fff
+  background #000
+
 .choice
   z-index 20
   color #fff
@@ -418,6 +437,16 @@ module.exports = {
 
 .fade-enter-active, .fade-leave-active
   transition opacity 0.2s
+
+.fade2-enter, .fade2-leave-to
+  opacity 0
+
+.fade2-enter-to, .fade2-leave
+  opacity 1
+
+.fade2-enter-active, .fade2-leave-active
+  transition opacity 0.2s linear
+
 
 .switch-enter-active, .switch-leave-active
   transition all 0.3s
