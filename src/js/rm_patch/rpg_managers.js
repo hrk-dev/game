@@ -1,3 +1,15 @@
+SceneManager.run = function(sceneClass) {
+  try {
+      this.initialize()
+      this.goto(sceneClass)
+      this.requestUpdate()
+      VueMain.app.$refs.Main.wrapper.width = Graphics.width
+      VueMain.app.$refs.Main.wrapper.height = Graphics.height
+  } catch (e) {
+      this.catchException(e)
+  }
+}
+
 StorageManager.isLocalMode = function () {
   return true
 }
