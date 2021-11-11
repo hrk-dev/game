@@ -132,6 +132,7 @@ AudioManager.playEncryptedBgm = function (bgm, pos) {
   url = Decrypter.extToEncryptExt(url)
   Decrypter.decryptHTML5Audio(url, bgm, pos)
 }
+
 AudioManager.createBuffer = function (folder, name) {
   var ext = this.audioFileExt()
   const filename = dev ? (encodeURIComponent(name) + ext) : md5(name + ext)

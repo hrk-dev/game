@@ -12,7 +12,8 @@ VueMain.app = new Vue({
     MoveTip: VueMain.loadComponent('MoveTip'),
     Story: VueMain.loadComponent('Story'),
     GameMenu: VueMain.loadComponent('GameMenu'),
-    Popup: VueMain.loadComponent('Popup')
+    Popup: VueMain.loadComponent('Popup'),
+    Message: VueMain.loadComponent('Message')
   },
   data: () => ({
     ready: false,

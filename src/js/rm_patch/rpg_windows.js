@@ -8,3 +8,18 @@ Window_Base.prototype.standardFontFace = function () {
     return 'GameFont'
   }
 }
+
+Window_Message.prototype.windowWidth = function () {
+  return 0
+}
+
+Window_Message.prototype.updateShowFast = function () {
+  if (this._showFast) return
+  this._showFast = true
+}
+
+Window_ChoiceList.prototype.start = function () {
+  this.x = -10
+  this.open()
+  this.activate()
+}

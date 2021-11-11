@@ -22,6 +22,37 @@ Game_Interpreter.prototype.update = function () {
   }
 }
 
+Game_Interpreter.prototype.command101 = function () {
+  if (!$gameMessage.isBusy()) {
+    $gameMessage.setFaceImage(this._params[0], this._params[1])
+    $gameMessage.setBackground(this._params[2])
+    $gameMessage.setPositionType(this._params[3])
+    while (this.nextEventCode() === 401) {  // Text data
+      this._index++
+      VueMain.app.$refs.Message.add(401, this.currentCommand().parameters[0])
+      $gameMessage.add(this.currentCommand().parameters[0])
+    }
+    switch (this.nextEventCode()) {
+      case 102:  // Show Choices
+        this._index++
+        this.setupChoices(this.currentCommand().parameters)
+        break
+      case 103:  // Input Number
+        this._index++
+        this.setupNumInput(this.currentCommand().parameters)
+        break
+      case 104:  // Select Item
+        this._index++
+        this.setupItemChoice(this.currentCommand().parameters)
+        break
+    }
+    this._index++
+    this.setWaitMode('message')
+    VueMain.app.$refs.Message.showMsg()
+  }
+  return false
+}
+
 Game_Interpreter.prototype.command201 = function () {
   if (!$gameParty.inBattle() && !$gameMessage.isBusy()) {
     var mapId, x, y
@@ -40,4 +71,31 @@ Game_Interpreter.prototype.command201 = function () {
     VueMain.app.$refs.Movetip.hide()
   }
   return false
+}
+
+Game_Interpreter.prototype.setupChoices = function (params) {
+  var choices = params[0].clone()
+  var cancelType = params[1]
+  var defaultType = params.length > 2 ? params[2] : 0
+  var positionType = params.length > 3 ? params[3] : 2
+  var background = params.length > 4 ? params[4] : 0
+  if (cancelType >= choices.length) {
+    cancelType = -2
+  }
+  $gameMessage.setChoices(choices, defaultType, cancelType)
+  VueMain.app.$refs.Message.setChoices(choices, defaultType, cancelType)
+  $gameMessage.setChoiceBackground(background)
+  $gameMessage.setChoicePositionType(positionType)
+  $gameMessage.setChoiceCallback(function (n) {
+    this._branch[this._indent] = n
+  }.bind(this))
+}
+
+Game_Message.prototype.isBusy = function () {
+  const busy = (this.hasText() || this.isChoice() ||
+    this.isNumberInput() || this.isItemChoice())
+  if (!busy) {
+    VueMain.app.$refs.Message.reset()
+  }
+  return busy
 }

@@ -134,22 +134,18 @@ Input._onKeyDown = function (event) {
   }
   VueMain.app.$refs.MainMenu.checkInput(buttonName)
   VueMain.app.$refs.GameMenu.checkInput(buttonName)
+  VueMain.app.$refs.Message.checkInput(buttonName)
 }
 
-TouchInput._onMouseDown = function (event) {
-  if (event.button === 0) {
-    this._onLeftButtonDown(event)
-  } else if (event.button === 1) {
-    this._onMiddleButtonDown(event)
-  } else if (event.button === 2) {
-    this._onRightButtonDown(event)
-    VueMain.app.$refs.MainMenu.back()
-    VueMain.app.$refs.GameMenu.back()
-  }
-}
+/**
+ * @static
+ * @method _setupEventHandlers
+ * @private
+ */
+TouchInput._setupEventHandlers = function () { }
 
 Decrypter._ignoreList = [
-  dev ?  "img/system/Window.png" : `${md5('img')}/${md5('system')}/${md5('Window.png')}`
+  dev ? 'img/system/Window.png' : `${md5('img')}/${md5('system')}/${md5('Window.png')}`
 ]
 
 /**
@@ -158,7 +154,53 @@ Decrypter._ignoreList = [
  * @static
  * @method setLoadingImage
  */
- Graphics.setLoadingImage = function (src) {
+Graphics.setLoadingImage = function (src) {
   this._loadingImage = new Image()
   this._loadingImage.src = md5Url(src)
+}
+
+/**
+ * @method _createAllParts
+ * @private
+ */
+Window.prototype._createAllParts = function () {
+  this._windowSpriteContainer = new PIXI.Container()
+  this._windowBackSprite = new Sprite()
+  this._windowCursorSprite = new Sprite()
+  this._windowFrameSprite = new Sprite()
+  this._windowContentsSprite = new Sprite()
+  this._downArrowSprite = new Sprite()
+  this._upArrowSprite = new Sprite()
+  this._windowBackSprite.bitmap = new Bitmap(1, 1)
+  this._windowBackSprite.alpha = 192 / 255
+  this.addChild(this._windowSpriteContainer)
+  this._windowSpriteContainer.addChild(this._windowBackSprite)
+  this._windowSpriteContainer.addChild(this._windowFrameSprite)
+  this.addChild(this._windowCursorSprite)
+  this.addChild(this._windowContentsSprite)
+  this.addChild(this._downArrowSprite)
+  this.addChild(this._upArrowSprite)
+}
+
+/**
+ * @method _refreshAllParts
+ * @private
+ */
+ Window.prototype._refreshAllParts = function () {
+  this._refreshBack()
+  this._refreshFrame()
+  this._refreshCursor()
+  this._refreshContents()
+  this._refreshArrows()
+}
+
+/**
+ * @method updateTransform
+ * @private
+ */
+ Window.prototype.updateTransform = function () {
+  this._updateCursor()
+  this._updateArrows()
+  this._updateContents()
+  PIXI.Container.prototype.updateTransform.call(this)
 }
