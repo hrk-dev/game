@@ -12,40 +12,14 @@
                 v-if="item.show"
                 class="btn"
                 :class="{
-                  'text-highlight': item.cn === menu.list[menu.current].cn
-                }"
-                :style="{
-                  flexDirection: item.multiline ? 'column' : '',
-                  alignItems: item.multiline ? 'normal' : '',
-                  justifyContent: item.multiline ? 'center' : ''
+                  highlight: item.cn === menu.list[menu.current].cn
                 }"
                 :key="index"
-                @click="onKeydown"
-                @mouseover="mouseOver(item.cn)"
               >
-                <transition :name="menu.animation">
-                  <div
-                    class="highlight"
-                    v-if="item.cn === menu.list[menu._current].cn"
-                  ></div>
-                </transition>
-                <div
-                  class="cn"
-                  :style="{
-                    fontSize: item.multiline ? '14px' : '',
-                    lineHeight: item.multiline ? '14px' : ''
-                  }"
-                >
+                <div class="cn">
                   {{ item.cn }}
                 </div>
-                <div
-                  class="en"
-                  :style="{
-                    fontSize: item.multiline ? '12px' : '',
-                    lineHeight: item.multiline ? '8px' : '',
-                    margin: item.multiline ? '2px 2px 0 2px' : ''
-                  }"
-                >
+                <div class="en">
                   {{ item.en }}
                 </div>
               </div>
@@ -64,7 +38,7 @@ module.exports = {
     Setting: VueMain.loadComponent('common/Setting')
   },
   data: () => ({
-    bg: md5Url('img/pictures/bg.jpg'),
+    bg: md5Url('img/pictures/menu.png'),
     show: false,
     busy: false,
     loop: {
@@ -75,7 +49,6 @@ module.exports = {
       animation: 'slide-left',
       show: true,
       current: 1,
-      _current: 1,
       restart: true,
       list: [
         {
@@ -95,9 +68,8 @@ module.exports = {
         },
         {
           show: true,
-          cn: '制作人名单',
-          en: 'Production Team',
-          multiline: true
+          cn: '制作组',
+          en: 'Credits'
         },
         {
           show: true,
@@ -107,28 +79,11 @@ module.exports = {
       ]
     }
   }),
-  computed: {
-    menuCurrent() {
-      return this.menu.current
-    }
-  },
   watch: {
     show() {
       if (this.show) {
         this.init()
       }
-    },
-    menuCurrent(newVal, oldVal) {
-      if (oldVal === 0 && newVal === this.getLastItem()) {
-        this.menu.animation = 'slide-left'
-      } else if (oldVal === this.getLastItem() && newVal === 0) {
-        this.menu.animation = 'slide-right'
-      } else {
-        this.menu.animation = newVal > oldVal ? 'slide-right' : 'slide-left'
-      }
-      this.$nextTick(() => {
-        this.menu._current = this.menu.current
-      })
     }
   },
   methods: {
@@ -163,12 +118,6 @@ module.exports = {
       return this.menu.list.findIndex(item => {
         return item.cn === name
       })
-    },
-    mouseOver(name) {
-      const index = this.findIndex(name)
-      if (index !== -1) {
-        this.menu.current = index
-      }
     },
     checkInput(buttonName) {
       if (!this.show || this.busy) return
@@ -250,6 +199,7 @@ module.exports = {
       if (this.menu.show) {
         switch (this.menu.current) {
           case 0:
+            VueMain.hidePopup()
             if (!this.loop.next) {
               DataManager.setupNewGame()
               this.menu.show = false
@@ -283,13 +233,16 @@ module.exports = {
             }
             break
           case 1:
+            VueMain.hidePopup()
             if (this.loop.restart) {
               this.test()
             } else {
               if (DataManager.loadGame(1)) {
                 this.menu.show = false
 
-                const version = JSON.parse(fs.readFileSync(path.join(__dirname, 'package.json'))).version
+                const version = JSON.parse(
+                  fs.readFileSync(path.join(__dirname, 'package.json'))
+                ).version
                 if ($gameSystem.version !== version) {
                   $gameSwitches.setValue(98, true) // 触发重载
                   $gameSystem.version = version
@@ -297,7 +250,7 @@ module.exports = {
                     StorageManager.cleanBackup(1)
                   }
                 }
-                
+
                 SceneManager.goto(Scene_Map)
                 $gameSystem.onAfterLoad()
                 setTimeout(() => {
@@ -405,50 +358,51 @@ module.exports = {
       overflow hidden
 
       img
-        width 170%
+        height 100%
 
     .btn-list
       position absolute
-      bottom 0
+      bottom 60px
       left 0
       width 100%
       display flex
       justify-content space-around
+      background rgba(0, 0, 0, 0.5)
 
       .btn
         overflow hidden
         position relative
         display flex
+        flex-direction column
         align-items center
-        padding 0 35px 5px 5px
-        // background linear-gradient(233deg, transparent 25px, #666 0) top right
-        // background-repeat no-repeat
-        background #666
-        clip-path polygon(0 0, calc(100% - 30px) 0, 100% 100%, 0% 100%)
+        justify-content center
+        padding 0 10px
         color #fff
-        height 35px
-        font-size 18px
-        transition color 0.5s
+        height 50px
 
         div
           z-index 2
 
         .highlight
           position absolute
-          width calc(100% - 35px)
-          height calc(100% - 5px)
-          bottom 0
-          left 5px
-          background #ddd
+          width calc(100% - 10px)
+          height calc(100% - 10px)
+          bottom 2.5px
+          left 2.5px
+          border 2px solid #fff
 
         .cn
-          margin 2px 2px 0 2px
+          font-size 20px
+          line-height 20px
+          margin-top 5px
 
         .en
-          margin 2px 2px 0 0
+          font-size 16px
+          line-height 16px
 
-.text-highlight
-  color #000 !important
+.highlight
+  & > *
+    text-shadow #ed9c94 0px 0 2px, #ed9c94 0px 0 2px, #ed9c94 0px 0 2px, #ed9c94 0px 0 2px
 
 .fade-enter-active, .fade-leave-active
   transition opacity 0.5s
@@ -463,51 +417,10 @@ module.exports = {
   transition all 0.3s
 
 .slide-up-enter, .slide-up-leave-to
-  transform translateY(100%)
+  bottom -50px !important
   opacity 0
 
 .slide-up-enter-to, .slide-up-leave
-  transform translateY(0)
+  bottom 60px !important
   opacity 1
-
-.slide-down-enter-active, .slide-down-leave-active
-  transition all 0.3s
-
-.slide-down-enter, .slide-down-leave-to
-  transform translateY(-100%)
-  opacity 0
-
-.slide-down-enter-to, .slide-down-leave
-  transform translateY(0)
-  opacity 1
-
-.slide-left-enter-active, .slide-left-leave-active
-  transition all 0.3s
-
-.slide-left-enter
-  left 100% !important
-
-.slide-left-enter-to
-  left 5px !important
-
-.slide-left-leave
-  left 5px !important
-
-.slide-left-leave-to
-  left -100% !important
-
-.slide-right-enter-active, .slide-right-leave-active
-  transition all 0.3s
-
-.slide-right-enter
-  left -100% !important
-
-.slide-right-enter-to
-  left 5px !important
-
-.slide-right-leave
-  left 5px !important
-
-.slide-right-leave-to
-  left 100% !important
 </style>
