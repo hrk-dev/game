@@ -105,7 +105,6 @@ module.exports = {
   line-height 30px
   transition background-color 0.2s
   font-family auto
-  animation down 0.5s forwards
 
 .title-icon-text
   display flex
@@ -141,11 +140,4 @@ module.exports = {
 
   &:active
     background #f5b7bb
-
-@keyframes down
-  from
-    transform translateY(-100%)
-
-  to
-    transform translateY(0)
 </style>
