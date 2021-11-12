@@ -3,8 +3,7 @@ SceneManager.run = function(sceneClass) {
       this.initialize()
       this.goto(sceneClass)
       this.requestUpdate()
-      VueMain.app.$refs.Main.wrapper.width = Graphics.width
-      VueMain.app.$refs.Main.wrapper.height = Graphics.height
+      VueMain.app.$refs.Main.setup(Graphics.width, Graphics.height)
   } catch (e) {
       this.catchException(e)
   }
@@ -80,9 +79,7 @@ SceneManager.onKeyDown = function (event) {
         }
         break
       case 123:   // F12
-        if (electron && process.env.NODE_ENV !== 'development') {
           electron.ipcRenderer.send('app:dev')
-        }
         break
     }
   }

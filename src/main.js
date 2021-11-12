@@ -12,15 +12,13 @@ function createWindow() {
     frame: false,
     fullscreenable: false,
     webPreferences: {
-      preload: join(__dirname, 'preload.js'),
+      devTools: !app.isPackaged,
       nodeIntegration: true,
       contextIsolation: false
     }
   })
 
   mainWindow.loadFile(join(__dirname, 'index.html'))
-
-  // mainWindow.webContents.openDevTools()
 }
 
 app.whenReady().then(() => {

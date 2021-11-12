@@ -1,5 +1,5 @@
 <template>
-  <div class="title" :style="{ background: color }">
+  <div id="title-bar" :style="{ background: color }">
     <div class="title-icon-text">
       <div class="title-icon">
         <img style="height: 60%" src="./icon/icon.ico" />
@@ -89,7 +89,7 @@ module.exports = {
 </script>
 
 <style lang="stylus" scoped>
-.title
+#title-bar
   display flex
   justify-content space-between
   align-items flex-start
@@ -105,6 +105,7 @@ module.exports = {
   line-height 30px
   transition background-color 0.2s
   font-family auto
+  animation down 0.5s forwards
 
 .title-icon-text
   display flex
@@ -140,4 +141,11 @@ module.exports = {
 
   &:active
     background #f5b7bb
+
+@keyframes down
+  from
+    transform translateY(-100%)
+
+  to
+    transform translateY(0)
 </style>

@@ -13,14 +13,15 @@ VueMain.app = new Vue({
     Story: VueMain.loadComponent('Story'),
     GameMenu: VueMain.loadComponent('GameMenu'),
     Popup: VueMain.loadComponent('Popup'),
-    Message: VueMain.loadComponent('Message')
+    Message: VueMain.loadComponent('Message'),
+    Logo: VueMain.loadComponent('Logo')
   },
   data: () => ({
     ready: false,
     main: {
       scale: 1,
       width: 1024,
-      height: 726,
+      height: 720,
       margin: 'auto',
     }
   }),
@@ -32,12 +33,15 @@ VueMain.app = new Vue({
   methods: {
     ipc(type) {
       electron.ipcRenderer.send(type)
+    },
+    setReady() {
+      this.ready = true
+      VueMain.app.$refs.Logo.start()
     }
   },
   mounted() {
     setTimeout(() => {
       this.ipc('vue:ready')
-      this.ready = true
     }, 50)
   }
 })

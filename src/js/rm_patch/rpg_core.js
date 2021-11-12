@@ -132,6 +132,7 @@ Input._onKeyDown = function (event) {
   } else if (buttonName) {
     this._currentState[buttonName] = true
   }
+  VueMain.app.$refs.Logo.checkInput()
   VueMain.app.$refs.MainMenu.checkInput(buttonName)
   VueMain.app.$refs.GameMenu.checkInput(buttonName)
   VueMain.app.$refs.Message.checkInput(buttonName)

@@ -1,6 +1,7 @@
-<div>
+<div v-show="ready">
   <TitleBar ref="TitleBar" @ipc="ipc" />
-  <VMain ref="Main" :width="main.width" :height="main.height" :margin="main.margin" :scale="main.scale">
+  <VMain ref="Main" :width="main.width" :height="main.height" :margin="main.margin" :scale="main.scale" @ready="setReady">
+    <Logo ref="Logo" />
     <MainMenu ref="MainMenu" />
     <GameMenu ref="GameMenu" />
     <MoveTip ref="Movetip" />

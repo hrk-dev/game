@@ -3,7 +3,14 @@
     id="main"
     :style="{ width: width + 'px', height: height + 'px', margin: margin }"
   >
-    <div class="wrapper" :style="{ width: wrapper.width + 'px', height: wrapper.height + 'px', transform: `scale(${scale})` }">
+    <div
+      class="wrapper"
+      :style="{
+        width: wrapper.width + 'px',
+        height: wrapper.height + 'px',
+        transform: `scale(${scale})`
+      }"
+    >
       <slot></slot>
     </div>
   </div>
@@ -22,7 +29,16 @@ module.exports = {
       width: 1024,
       height: 720
     }
-  })
+  }),
+  methods: {
+    setup(width, height) {
+      this.wrapper.width = width
+      this.wrapper.height = height
+      this.$nextTick(() => {
+        this.$emit('ready')
+      })
+    }
+  }
 }
 </script>
 

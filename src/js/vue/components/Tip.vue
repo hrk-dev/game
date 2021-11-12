@@ -120,7 +120,7 @@ module.exports = {
 
 .slide-down-enter-active
   transition all 0.3s ease-out
-  transition-delay 1s
+  transition-delay 0.2s
 .slide-down-leave-active
   transition all 0.3s ease-out
 </style>

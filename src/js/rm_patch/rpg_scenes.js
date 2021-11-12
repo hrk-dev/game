@@ -1,7 +1,8 @@
-/** 禁用鼠标移动 */
-Scene_Map.prototype.isMapTouchOk = function () {
-  // return (this.isActive() && $gamePlayer.canMove()) && !($gameSystem._savedZoom && $gameSystem._savedZoom.follow)
-  return false
+Scene_Boot.prototype.start = function () {
+  Scene_Base.prototype.start.call(this)
+  SoundManager.preloadImportantSounds()
+  this.checkPlayerLocation()
+  DataManager.setupNewGame()
 }
 
 /** VUE主菜单适配 */
