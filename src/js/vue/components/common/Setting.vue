@@ -1,7 +1,7 @@
 <template>
   <div>
     <transition name="fade">
-      <div class="setting-wrapper" v-if="show" @mouseup="mouseUp">
+      <div class="setting-wrapper" v-if="show">
         <div class="setting-frame">
           <div class="vertical-frame">
             <div class="title">
@@ -18,8 +18,6 @@
                 <div
                   class="switch"
                   :class="{ highlight: current === 0 }"
-                  @mouseover="mouseOver(0)"
-                  @click="changeKeepRunning"
                 >
                   <transition name="switch">
                     <div v-if="keepRunning">
@@ -41,8 +39,6 @@
                 <div
                   class="slider"
                   :class="{ highlight: current === 1 }"
-                  @mouseover="mouseOver(1)"
-                  @mousedown="mouseDown(1)"
                 >
                   <div
                     v-for="i in 10"
@@ -51,8 +47,6 @@
                     :style="{
                       background: i <= bgm ? '#fff' : '',
                     }"
-                    @click="setBgm(i)"
-                    @mouseover="blockMouseOver(1, i)"
                   ></div>
                 </div>
                 <div class="percent">{{ _bgm }}%</div>
@@ -65,8 +59,6 @@
                 <div
                   class="slider"
                   :class="{ highlight: current === 2 }"
-                  @mouseover="mouseOver(2)"
-                  @mousedown="mouseDown(2)"
                 >
                   <div
                     v-for="i in 10"
@@ -75,8 +67,6 @@
                     :style="{
                       background: i <= se ? '#fff' : '',
                     }"
-                    @click="setSe(i)"
-                    @mouseover="blockMouseOver(2, i)"
                   ></div>
                 </div>
                 <div class="percent">{{ _se }}%</div>
@@ -86,8 +76,6 @@
               <div
                 class="back-btn"
                 :class="{ highlight: current === 3 }"
-                @click="back"
-                @mouseover="mouseOver(3)"
               >
                 返回
               </div>
@@ -136,25 +124,6 @@ module.exports = {
       this.keepRunning = ConfigManager.alwaysDash
       this.bgm = AudioManager.bgmVolume / 10
       this.se = AudioManager.seVolume / 10
-    },
-    mouseOver(id) {
-      this.current = id
-    },
-    mouseDown(id) {
-      this.keydown = id
-    },
-    mouseUp() {
-      this.keydown = 0
-    },
-    blockMouseOver(id, vol) {
-      if (this.keydown === id) {
-        if (id === 1) {
-          this.setBgm(vol)
-        }
-        if (id === 2) {
-          this.setSe(vol)
-        }
-      }
     },
     changeKeepRunning() {
       this.keepRunning = !this.keepRunning

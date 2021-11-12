@@ -13,16 +13,12 @@
               <div
                 class="key"
                 :class="{ highlight: choice.current }"
-                @mouseover="chpiceMouseOver(true)"
-                @click="choiceKeyDown"
               >
                 Yes
               </div>
               <div
                 class="key"
                 :class="{ highlight: !choice.current }"
-                @mouseover="chpiceMouseOver(false)"
-                @click="choiceKeyDown"
               >
                 No
               </div>
@@ -35,8 +31,6 @@
               <transition name="fade">
                 <div
                   v-if="item.show"
-                  @click="onKeydown"
-                  @mouseover="mouseOver(item.cn)"
                   :class="{ highlight: item.cn === menu.list[menu.current].cn }"
                 >
                   <div class="cn">{{ item.cn }}</div>
@@ -188,9 +182,6 @@ module.exports = {
     changeChoice() {
       this.choice.current = !this.choice.current
     },
-    chpiceMouseOver(flag) {
-      this.choice.current = flag
-    },
     choiceKeyDown() {
       if (this.choice.current) {
         this.back()
@@ -260,13 +251,6 @@ module.exports = {
       return this.menu.list.findIndex(item => {
         return item.cn === name
       })
-    },
-    mouseOver(name) {
-      if (this.choice.show) return
-      const index = this.findIndex(name)
-      if (index !== -1) {
-        this.menu.current = index
-      }
     },
     up() {
       if (this.menu.current === 0) {
