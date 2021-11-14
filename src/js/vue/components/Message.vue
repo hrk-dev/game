@@ -1,8 +1,8 @@
 <template>
   <div id="message">
     <transition name="fade">
-      <div class="message-wrapper" :class="[_pos, _bg]" v-if="message.show">
-        <div class="text" :class="[_align, _size]">
+      <div class="message-wrapper" :class="_pos" v-if="message.show">
+        <div class="text" :class="[_align, _size, _bg]">
           <div
             class="name"
             :class="_nameAlign"
@@ -14,8 +14,32 @@
           <div class="cn" v-html="message.cn"></div>
           <div class="next" v-show="!choice.show"></div>
         </div>
-        <div class="avatar" v-show="message.avatar && message.pos == 0">
-          <img :src="_avatar" />
+        <div class="character" v-show="_showCharacter">
+          <transition name="fade" appear>
+            <img
+              class="img"
+              v-if="message.character.list.shio"
+              :src="getUrl(message.character.list.shio)"
+              :class="{
+                'shio-left':
+                  this.message.character.list.shio &&
+                  this.message.character.list.other,
+                lowlight:
+                  message.character.current !== message.character.list.shio
+              }"
+            />
+          </transition>
+          <transition name="fade" appear>
+            <img
+              class="img"
+              v-if="message.character.list.other"
+              :src="getUrl(message.character.list.other)"
+              :class="{
+                lowlight:
+                  message.character.current !== message.character.list.other
+              }"
+            />
+          </transition>
         </div>
       </div>
     </transition>
@@ -23,7 +47,7 @@
       <div class="choice-wrapper" :class="_choicePos" v-show="choice.show">
         <template v-for="(item, index) in choice.list">
           <div
-            v-if="item.show"
+            v-show="item.show"
             class="item"
             :class="{
               highlight: choice.index == index
@@ -53,10 +77,17 @@ module.exports = {
       bg: 0,
       // 0-正常字号 1-大一寸字号
       size: 0,
-      name: 'hiiro',
-      avatar: 'Hiiro_1',
-      en: 'A strange voice is keep coming across my ears, but I’m not sure when it has begun',
-      cn: '不知道是从什么时候开始，有阵异样的声音一直在传到我的耳边'
+      name: '',
+      character: {
+        show: false,
+        list: {
+          shio: '',
+          other: ''
+        },
+        current: ''
+      },
+      en: '',
+      cn: ''
     },
     choice: {
       show: false,
@@ -65,11 +96,6 @@ module.exports = {
     }
   }),
   computed: {
-    _avatar() {
-      return this.message.avatar
-        ? md5Url(`img/pictures/${this.message.avatar}.png`)
-        : null
-    },
     _pos() {
       if (this.message.pos == 2) {
         return 'top'
@@ -99,6 +125,15 @@ module.exports = {
         return 'choice-lower-middle'
       }
       return 'choice-center'
+    },
+    _showCharacter() {
+      return this.message.show && this.message.pos == 0
+    },
+    _shioLeft() {
+      return this.message.character.list.shio &&
+        this.message.character.list.other
+        ? 'shio-left'
+        : ''
     }
   },
   methods: {
@@ -117,8 +152,18 @@ module.exports = {
       this.message.bg = temp[0][2] || 0
       this.message.size = temp[0][3] || 0
 
-      this.message.name = this.getNmme(temp[1])
-      this.message.avatar = temp[2] || ''
+      this.message.name = this.getName(temp[1])
+
+      const character = temp[2] || ''
+      if (this.isShio(character)) {
+        this.message.character.list.shio = character
+      } else {
+        this.message.character.list.other = character
+      }
+      if (character) {
+        this.message.character.current = character
+        this.message.character.show = true
+      }
 
       this.message.en = this.message.list[1]
       this.message.cn = this.message.list[2]
@@ -188,7 +233,6 @@ module.exports = {
         this.message.bg = 0
         this.message.size = 0
         this.message.name = ''
-        this.message.avatar = ''
         this.message.en = ''
         this.message.cn = ''
         this.message.show = false
@@ -199,8 +243,20 @@ module.exports = {
         this.choice.show = false
       }
     },
-    getNmme(id) {
-      if (!id && id !== 0) return ''
+    resetCharacter() {
+      if (this.message.character.show) {
+        this.message.character.list.shio = ''
+        this.message.character.list.other = ''
+        this.message.character.current = ''
+        this.message.character.show = false
+      }
+    },
+    getUrl(str) {
+      return str ? md5Url(`img/pictures/${str}.png`) : null
+    },
+    getName(id) {
+      id = Number(id)
+      if (id != 0 && !id) return ''
       switch (id) {
         case 0:
           return '汐 Shio'
@@ -209,10 +265,10 @@ module.exports = {
         default:
           return id
       }
+    },
+    isShio(name) {
+      return name.includes('汐')
     }
-  },
-  created() {
-    this.message.name = this.getNmme(0)
   }
 }
 </script>
@@ -227,11 +283,11 @@ module.exports = {
     position absolute
 
     .text
+      z-index 1
       flex 1
       position relative
       box-sizing border-box
-      padding 10px 0 15px 10px
-      margin-left 10px
+      padding 10px 10px 15px 10px
 
       .name
         position absolute
@@ -246,9 +302,10 @@ module.exports = {
         margin-bottom 10px
 
       .next
+        z-index 9
         position absolute
         bottom 5px
-        right 20px
+        right 10px
         width 0
         height 0
         border-left 10px solid transparent
@@ -256,12 +313,19 @@ module.exports = {
         border-top 10px solid #fff
         animation fade 1s ease infinite alternate
 
-    .avatar
-      width 30%
+    .character
+      position absolute
+      bottom 0
+      left 0
+      width 100%
 
-      img
-        width 100%
+      .img
+        position absolute
+        bottom 0
+        right 0
         vertical-align bottom
+        width 400px
+        transition all 0.35s
 
   .choice-wrapper
     font-size 20px
@@ -291,7 +355,6 @@ module.exports = {
   right 0
 
   .text
-    overflow hidden
     height 180px
 
 .center
@@ -357,6 +420,13 @@ module.exports = {
 .highlight
   background #fff
   color #000
+
+.lowlight
+  filter brightness(0.5)
+
+.shio-left
+  right 100% !important
+  transform translateX(100%)
 
 .choice-center
   top 50%
