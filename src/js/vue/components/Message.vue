@@ -1,6 +1,6 @@
 <template>
   <div id="message">
-    <transition name="fade">
+    <transition :name="_transition">
       <div class="message-wrapper" :class="_pos" v-if="message.show">
         <div class="text" :class="[_align, _size, _bg]">
           <div
@@ -15,7 +15,7 @@
           <div class="next" v-show="!choice.show"></div>
         </div>
         <div class="character" v-show="_showCharacter">
-          <transition name="fade" appear>
+          <transition name="slide-up">
             <img
               class="img"
               v-if="message.character.list.shio"
@@ -29,7 +29,7 @@
               }"
             />
           </transition>
-          <transition name="fade" appear>
+          <transition name="slide-up">
             <img
               class="img"
               v-if="message.character.list.other"
@@ -68,6 +68,7 @@ module.exports = {
   data: () => ({
     message: {
       show: false,
+      hide: false,
       list: [],
       // 0-下 1-中 2-上
       pos: 0,
@@ -96,6 +97,9 @@ module.exports = {
     }
   }),
   computed: {
+    _transition() {
+      return this.message.pos == 0 ? 'slide-up' : 'fade'
+    },
     _pos() {
       if (this.message.pos == 2) {
         return 'top'
@@ -147,12 +151,12 @@ module.exports = {
     showMsg() {
       const temp = (this.message.list[0] || '').split('|')
 
-      this.message.pos = temp[0][0] || 0
-      this.message.align = temp[0][1] || 0
-      this.message.bg = temp[0][2] || 0
-      this.message.size = temp[0][3] || 0
+      this.message.pos = Number(temp[0][0]) || 0
+      this.message.align = Number(temp[0][1]) || 0
+      this.message.bg = Number(temp[0][2]) || 0
+      this.message.size = Number(temp[0][3]) || 0
 
-      this.message.name = this.getName(temp[1])
+      this.message.name = this.getName(Number(temp[1]))
 
       const character = temp[2] || ''
       if (this.isShio(character)) {
@@ -235,7 +239,9 @@ module.exports = {
         this.message.name = ''
         this.message.en = ''
         this.message.cn = ''
-        this.message.show = false
+        if (!this.message.hide) {
+          this.message.show = false
+        }
       }
       if (this.choice.show) {
         this.choice.list.length = 0
@@ -255,7 +261,6 @@ module.exports = {
       return str ? md5Url(`img/pictures/${str}.png`) : null
     },
     getName(id) {
-      id = Number(id)
       if (id != 0 && !id) return ''
       switch (id) {
         case 0:
@@ -449,4 +454,15 @@ module.exports = {
 
   to
     opacity 1
+
+.slide-up-enter-active, .slide-up-leave-active
+  transition all 0.3s
+
+.slide-up-enter-to, .slide-up-leave
+  transform translateY(0)
+  opacity 1
+
+.slide-up-enter, .slide-up-leave-to
+  transform translateY(100%)
+  opacity 0
 </style>

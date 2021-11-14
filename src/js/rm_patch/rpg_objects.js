@@ -45,6 +45,11 @@ Game_Interpreter.prototype.command101 = function () {
         this._index++
         this.setupItemChoice(this.currentCommand().parameters)
         break
+      case 119:
+        Components.Message.message.hide = true
+        break
+      default:
+        Components.Message.message.hide = false
     }
     this._index++
     this.setWaitMode('message')
@@ -100,7 +105,7 @@ Game_Message.prototype.isBusy = function () {
   return busy
 }
 
-Game_Map.prototype.isEventRunning = function() {
+Game_Map.prototype.isEventRunning = function () {
   const eventRunning = this._interpreter.isRunning() || this.isAnyEventStarting()
   if (!eventRunning) Components.Message.resetCharacter()
   return eventRunning
