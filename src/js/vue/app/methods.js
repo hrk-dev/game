@@ -1,58 +1,60 @@
-VueMain.setTitleColor = (color) => {
-  VueMain.app.$refs.TitleBar.color = color
-}
+global.Methods = class {
+  static setTitleColor(color) {
+    Components.TitleBar.color = color
+  }
 
-VueMain.setTitle = (title) => {
-  VueMain.app.$refs.TitleBar.title = title
-}
+  static setTitle(title) {
+    Components.TitleBar.title = title
+  }
 
-/** test */
-VueMain.titleTest = () => {
-  VueMain.app.$refs.TitleBar.titleTest()
-}
+  /** test */
+  static titleTest() {
+    Components.TitleBar.titleTest()
+  }
 
-VueMain.startEnding = () => {
-  VueMain.app.$refs.ending.startEnding()
-}
+  static startEnding() {
+    Components.ending.startEnding()
+  }
 
-/** test */
-VueMain.showDanmu = () => {
-  VueMain.app.$refs.danmu.showDanmu()
-}
+  /** test */
+  static showDanmu() {
+    Components.danmu.showDanmu()
+  }
 
-/** test */
-VueMain.stopDanmu = () => {
-  VueMain.app.$refs.danmu.stopDanmu()
-}
+  /** test */
+  static stopDanmu() {
+    Components.danmu.stopDanmu()
+  }
 
-VueMain.showTip = (en, cn, time, menu) => {
-  VueMain.app.$refs.Tip.showTip(en, cn, time, menu)
-}
+  static showTip(en, cn, time, menu) {
+    Components.Tip.showTip(en, cn, time, menu)
+  }
 
-VueMain.hideTip = () => {
-  VueMain.app.$refs.Tip.hideTip()
-}
+  static hideTip() {
+    Components.Tip.hideTip()
+  }
 
-VueMain.clearTip = () => {
-  VueMain.app.$refs.Tip.clear()
-}
+  static clearTip() {
+    Components.Tip.clear()
+  }
 
-VueMain.getTipState = () => {
-  return VueMain.app.$refs.Tip.show
-}
+  static getTipState() {
+    return Components.Tip.show
+  }
 
-VueMain.showStory = () => {
-  VueMain.app.$refs.story.show()
-}
+  static showStory() {
+    Components.story.show()
+  }
 
-VueMain.hideStory = () => {
-  VueMain.app.$refs.story.hide()
-}
+  static hideStory() {
+    Components.story.hide()
+  }
 
-VueMain.showPopup = (en, cn, time) => {
-  return VueMain.app.$refs.Popup.show(en, cn, time)
-}
+  static showPopup(en, cn, time) {
+    return Components.Popup.show(en, cn, time)
+  }
 
-VueMain.hidePopup = () => {
-  VueMain.app.$refs.Popup.hide()
+  static hidePopup() {
+    Components.Popup.hide()
+  }
 }

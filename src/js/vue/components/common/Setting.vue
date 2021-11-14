@@ -108,7 +108,7 @@ module.exports = {
   watch: {
     show() {
       if (this.show) {
-        VueMain.hidePopup()
+        Methods.hidePopup()
         this.init()
       }
     },

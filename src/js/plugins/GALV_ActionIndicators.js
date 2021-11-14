@@ -137,7 +137,7 @@ Game_CharacterBase.prototype.moveStraight = function(d) {
 		var action = null;
 		
 		if ($gameMap.eventsXy($gamePlayer._x, $gamePlayer._y).length < 1) {
-			VueMain.app.$refs.Movetip.hide()
+			Components.Movetip.hide()
 		}
 	
 	// CHECK EVENT STANDING ON
@@ -148,7 +148,7 @@ Game_CharacterBase.prototype.moveStraight = function(d) {
 			const playerDirection = $gamePlayer.direction()
 			if (eventDirection !== playerDirection) {
 				action = {'eventId': 0, 'iconId': 0};
-				VueMain.app.$refs.Movetip.hide()
+				Components.Movetip.hide()
 			} else {
 				setMoveTip(event)
 			}
@@ -266,9 +266,9 @@ Galv.AI.checkEventForDirection = function(event) {
 		if (!$gamePlayer.canMove()) return
 		const eventTip = Galv.AI.checkEventForTip(event)
 		if (eventTip.cn || eventTip.en) {
-			VueMain.app.$refs.Movetip.show(eventTip.cn, eventTip.en)
+			Components.Movetip.show(eventTip.cn, eventTip.en)
 		} else {
-			VueMain.app.$refs.Movetip.hide()
+			Components.Movetip.hide()
 		}
 	}
 

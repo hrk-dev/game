@@ -15,12 +15,12 @@ Graphics._playVideo = function (src) {
   this._video.load()
   this._videoLoading = true
   if (VueMain.app) {
-    VueMain.app.$refs.video.show = true
+    Components.video.show = true
     this._video.oncanplay = () => {
-      VueMain.app.$refs.video.duration = this._video.duration | 0
+      Components.video.duration = this._video.duration | 0
     }
     this._video.ontimeupdate = () => {
-      VueMain.app.$refs.video.current = this._video.currentTime | 0
+      Components.video.current = this._video.currentTime | 0
     }
   }
 }
@@ -104,7 +104,7 @@ Graphics._centerElement = function (element) {
 /** 视频播放结束隐藏VUE层 */
 Graphics._onVideoEnd = function () {
   if (VueMain.app) {
-    VueMain.app.$refs.video.show = false
+    Components.video.show = false
   }
   this._updateVisibility(false)
 }
@@ -132,10 +132,10 @@ Input._onKeyDown = function (event) {
   } else if (buttonName) {
     this._currentState[buttonName] = true
   }
-  VueMain.app.$refs.Logo.checkInput()
-  VueMain.app.$refs.MainMenu.checkInput(buttonName)
-  VueMain.app.$refs.GameMenu.checkInput(buttonName)
-  VueMain.app.$refs.Message.checkInput(buttonName)
+  Components.Logo.checkInput()
+  Components.MainMenu.checkInput(buttonName)
+  Components.GameMenu.checkInput(buttonName)
+  Components.Message.checkInput(buttonName)
 }
 
 /**

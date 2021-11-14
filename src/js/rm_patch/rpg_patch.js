@@ -49,15 +49,15 @@ const Patch = class {
     $gameSystem.onBeforeSave()
     if (DataManager.saveGame(1)) {
       StorageManager.cleanBackup(1)
-      VueMain.showPopup('Save success', '保存成功', 1000)
+      Methods.showPopup('Save success', '保存成功', 1000)
     } else {
-      VueMain.showPopup('Save failed', '保存失败', 1000)
+      Methods.showPopup('Save failed', '保存失败', 1000)
     }
   }
 
   static showTip() {
     if ($gameSystem.tipData) {
-      VueMain.showTip($gameSystem.tipData.en, $gameSystem.tipData.cn, $gameSystem.tipData.time)
+      Methods.showTip($gameSystem.tipData.en, $gameSystem.tipData.cn, $gameSystem.tipData.time)
     }
   }
 }

@@ -309,7 +309,7 @@ module.exports = {
                     Patch.showTip()
                   }, 300)
                 } else {
-                  VueMain.showPopup('Load failed', '读取失败', 1000)
+                  Methods.showPopup('Load failed', '读取失败', 1000)
                 }
               }, 300)
             }
@@ -331,13 +331,13 @@ module.exports = {
     back() {
       if (this.show) {
         if (this.choice.show) {
-          VueMain.hidePopup()
+          Methods.hidePopup()
           this.choice.show = false
           this.choice.current = true
           return
         }
         if (this.menu.show) {
-          VueMain.hidePopup()
+          Methods.hidePopup()
           SceneManager.pop()
           return
         }

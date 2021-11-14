@@ -36,7 +36,7 @@ VueMain.app = new Vue({
     },
     setReady() {
       this.ready = true
-      VueMain.app.$refs.Logo.start()
+      Components.Logo.start()
     }
   },
   mounted() {

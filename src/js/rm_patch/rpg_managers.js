@@ -3,7 +3,7 @@ SceneManager.run = function(sceneClass) {
       this.initialize()
       this.goto(sceneClass)
       this.requestUpdate()
-      VueMain.app.$refs.Main.setup(Graphics.width, Graphics.height)
+      Components.Main.setup(Graphics.width, Graphics.height)
   } catch (e) {
       this.catchException(e)
   }

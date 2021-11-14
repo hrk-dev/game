@@ -29,7 +29,7 @@ Game_Interpreter.prototype.command101 = function () {
     $gameMessage.setPositionType(this._params[3])
     while (this.nextEventCode() === 401) {  // Text data
       this._index++
-      VueMain.app.$refs.Message.add(401, this.currentCommand().parameters[0])
+      Components.Message.add(401, this.currentCommand().parameters[0])
       $gameMessage.add(this.currentCommand().parameters[0])
     }
     switch (this.nextEventCode()) {
@@ -48,7 +48,7 @@ Game_Interpreter.prototype.command101 = function () {
     }
     this._index++
     this.setWaitMode('message')
-    VueMain.app.$refs.Message.showMsg()
+    Components.Message.showMsg()
   }
   return false
 }
@@ -68,7 +68,7 @@ Game_Interpreter.prototype.command201 = function () {
     $gamePlayer.reserveTransfer(mapId, x, y, this._params[4], this._params[5])
     this.setWaitMode('transfer')
     this._index++
-    VueMain.app.$refs.Movetip.hide()
+    Components.Movetip.hide()
   }
   return false
 }
@@ -83,7 +83,7 @@ Game_Interpreter.prototype.setupChoices = function (params) {
     cancelType = -2
   }
   $gameMessage.setChoices(choices, defaultType, cancelType)
-  VueMain.app.$refs.Message.setChoices(choices, defaultType, cancelType)
+  Components.Message.setChoices(choices, defaultType, cancelType)
   $gameMessage.setChoiceBackground(background)
   $gameMessage.setChoicePositionType(positionType)
   $gameMessage.setChoiceCallback(function (n) {
@@ -95,7 +95,13 @@ Game_Message.prototype.isBusy = function () {
   const busy = (this.hasText() || this.isChoice() ||
     this.isNumberInput() || this.isItemChoice())
   if (!busy) {
-    VueMain.app.$refs.Message.reset()
+    Components.Message.reset()
   }
   return busy
+}
+
+Game_Map.prototype.isEventRunning = function() {
+  const eventRunning = this._interpreter.isRunning() || this.isAnyEventStarting()
+  if (!eventRunning) Components.Message.resetCharacter()
+  return eventRunning
 }

@@ -12,7 +12,7 @@
                 v-if="item.show"
                 class="btn"
                 :class="{
-                  highlight: item.cn === menu.list[menu.current].cn
+                  'menu-highlight': item.cn === menu.list[menu.current].cn
                 }"
                 :key="index"
               >
@@ -96,7 +96,7 @@ module.exports = {
       const data = DataManager.loadGlobalInfo()
       if (data[0].loop) {
         if (data[0].loop.lock) {
-          VueMain.showPopup('', '这是一段解锁动画，还没做', 2000)
+          Methods.showPopup('', '这是一段解锁动画，还没做', 2000)
           data[0].loop.lock = false
         }
         this.loop.restart = data[0].loop.restart
@@ -199,7 +199,7 @@ module.exports = {
       if (this.menu.show) {
         switch (this.menu.current) {
           case 0:
-            VueMain.hidePopup()
+            Methods.hidePopup()
             if (!this.loop.next) {
               DataManager.setupNewGame()
               this.menu.show = false
@@ -213,7 +213,7 @@ module.exports = {
                 $gameVariables.setValue(1, this.loop.next)
                 $gameSwitches.setValue(97, true)
                 $gameSwitches.setValue(98, true) // 触发重载
-                VueMain.clearTip()
+                Methods.clearTip()
                 $gameSystem.onBeforeSave()
                 if (DataManager.saveGame(1)) {
                   StorageManager.cleanBackup(1)
@@ -228,12 +228,12 @@ module.exports = {
                   this.show = false
                 }, 400)
               } else {
-                VueMain.showPopup('Error', '奇怪的错误', 1500)
+                Methods.showPopup('Error', '奇怪的错误', 1500)
               }
             }
             break
           case 1:
-            VueMain.hidePopup()
+            Methods.hidePopup()
             if (this.loop.restart) {
               this.test()
             } else {
@@ -258,7 +258,7 @@ module.exports = {
                   Patch.showTip()
                 }, 400)
               } else {
-                VueMain.showPopup('Error', '奇怪的错误', 1500)
+                Methods.showPopup('Error', '奇怪的错误', 1500)
               }
             }
             break
@@ -267,7 +267,7 @@ module.exports = {
             this.$refs.Setting.show = true
             break
           case 3:
-            VueMain.showPopup('Not finished', '还没做', 1500)
+            Methods.showPopup('Not finished', '还没做', 1500)
             break
           case 4:
             SceneManager.exit()
@@ -309,7 +309,7 @@ module.exports = {
     test() {
       if (this.menu.restart) {
         this.menu.show = false
-        VueMain.showPopup(
+        Methods.showPopup(
           'I think you should restart the game',
           '我觉得你应该重新开始游戏',
           1500
@@ -319,7 +319,7 @@ module.exports = {
         this.menu.restart = false
       } else {
         this.menu.show = false
-        VueMain.showPopup(
+        Methods.showPopup(
           "Well, that'll have to do",
           '好吧，那只能这样了',
           1500
@@ -400,7 +400,7 @@ module.exports = {
           font-size 16px
           line-height 16px
 
-.highlight
+.menu-highlight
   & > *
     text-shadow #ed9c94 0px 0 2px, #ed9c94 0px 0 2px, #ed9c94 0px 0 2px, #ed9c94 0px 0 2px
 
