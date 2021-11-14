@@ -21,6 +21,7 @@ const VueMain = class {
   static setup = () => {
     require(VueMain.getAppPath('app.js'))
     require(VueMain.getAppPath('methods.js'))
+    this.Components = VueMain.app.$refs
   }
 }
 
