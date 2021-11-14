@@ -335,10 +335,13 @@ module.exports = {
     left 50%
     text-align center
     padding 10px
-    background rgba(0, 0, 0, 0.5)
 
     .item
-      padding 2px 5px
+      padding 5px 25px
+      background linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.8) 5%, rgba(0, 0, 0, 0.8) 95%, transparent 100%)
+      // border-radius 25px
+      margin 10px auto
+      min-width 250px
 
       .en
         font-size 16px
@@ -418,7 +421,7 @@ module.exports = {
     line-height 35px
 
 .highlight
-  background #fff
+  background linear-gradient(to right, transparent 0%, rgba(255, 255, 255, 0.8) 5%, rgba(255, 255, 255, 0.8) 95%, transparent 100%) !important
   color #000
 
 .lowlight
