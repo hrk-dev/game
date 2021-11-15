@@ -46,10 +46,10 @@ Game_Interpreter.prototype.command101 = function () {
         this.setupItemChoice(this.currentCommand().parameters)
         break
       case 119:
-        Components.Message.message.hide = true
+        Components.Message.message._noHide = true
         break
       default:
-        Components.Message.message.hide = false
+        Components.Message.message._noHide = false
     }
     this._index++
     this.setWaitMode('message')

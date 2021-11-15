@@ -22,7 +22,7 @@ module.exports = {
     },
     tip: {
       show: false,
-      bg: md5Url('img/system/loading.png')
+      bg: md5Url('img/system/Loading.png')
     }
   }),
   methods: {

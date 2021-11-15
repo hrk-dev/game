@@ -2,7 +2,7 @@
   <div id="message">
     <transition :name="_transition">
       <div class="message-wrapper" :class="_pos" v-if="message.show">
-        <div class="text" :class="[_align, _size, _bg]">
+        <div class="text" :class="[_align, _size, _bg, _color]">
           <div
             class="name"
             :class="_nameAlign"
@@ -12,7 +12,7 @@
           </div>
           <div class="en" v-html="message.en"></div>
           <div class="cn" v-html="message.cn"></div>
-          <div class="next" v-show="!choice.show"></div>
+          <div class="next" :class="_iconColor" v-show="!choice.show"></div>
         </div>
         <div class="character" v-show="_showCharacter">
           <transition name="slide-up">
@@ -38,6 +38,7 @@
                 lowlight:
                   message.character.current !== message.character.list.other
               }"
+              @error="otherCharacterError"
             />
           </transition>
         </div>
@@ -68,7 +69,8 @@ module.exports = {
   data: () => ({
     message: {
       show: false,
-      hide: false,
+      noHide: false,
+      _noHide: false,
       list: [],
       // 0-下 1-中 2-上
       pos: 0,
@@ -78,6 +80,8 @@ module.exports = {
       bg: 0,
       // 0-正常字号 1-大一寸字号
       size: 0,
+      // 0-白色 1-黑色
+      color: 0,
       name: '',
       character: {
         show: false,
@@ -121,6 +125,12 @@ module.exports = {
     _size() {
       return this.message.size == 1 ? 'large-text' : 'normal-text'
     },
+    _color() {
+      return this.message.color == 1 ? 'black-text' : 'white-text'
+    },
+    _iconColor() {
+      return this.message.color == 1 ? 'black-icon' : 'white-icon'
+    },
     _choicePos() {
       if (this.message.pos == 2) {
         return 'choice-bottom'
@@ -141,6 +151,9 @@ module.exports = {
     }
   },
   methods: {
+    otherCharacterError(e) {
+      this.message.character.list.other = ''
+    },
     add(code, msg) {
       switch (code) {
         case 401:
@@ -149,14 +162,17 @@ module.exports = {
       }
     },
     showMsg() {
+      Components.Movetip.hide()
+
       const temp = (this.message.list[0] || '').split('|')
 
       this.message.pos = Number(temp[0][0]) || 0
       this.message.align = Number(temp[0][1]) || 0
       this.message.bg = Number(temp[0][2]) || 0
       this.message.size = Number(temp[0][3]) || 0
+      this.message.color = Number(temp[0][4]) || 0
 
-      this.message.name = this.getName(Number(temp[1]))
+      this.message.name = this.getName(temp[1])
 
       const character = temp[2] || ''
       if (this.isShio(character)) {
@@ -236,10 +252,11 @@ module.exports = {
         this.message.align = 0
         this.message.bg = 0
         this.message.size = 0
+        this.message.color = 0
         this.message.name = ''
         this.message.en = ''
         this.message.cn = ''
-        if (!this.message.hide) {
+        if (!this.message._noHide && !this.message.noHide) {
           this.message.show = false
         }
       }
@@ -261,15 +278,13 @@ module.exports = {
       return str ? md5Url(`img/pictures/${str}.png`) : null
     },
     getName(id) {
-      if (id != 0 && !id) return ''
-      switch (id) {
-        case 0:
-          return '汐 Shio'
-        case 1:
-          return '塔库亚 Takuya'
-        default:
-          return id
+      if (id === 0 || id === '0') {
+        return '汐 Shio'
       }
+      if (id === 1 || id === '1') {
+        return '塔库亚 Takuya'
+      }
+      return id
     },
     isShio(name) {
       return name.includes('汐')
@@ -315,7 +330,6 @@ module.exports = {
         height 0
         border-left 10px solid transparent
         border-right 10px solid transparent
-        border-top 10px solid #fff
         animation fade 1s ease infinite alternate
 
     .character
@@ -333,6 +347,7 @@ module.exports = {
         transition all 0.35s
 
   .choice-wrapper
+    z-index 1
     font-size 20px
     line-height 25px
     display inline-block
@@ -406,6 +421,18 @@ module.exports = {
 
 .no-bg
   background none
+
+.white-text
+  color #fff
+
+.black-text
+  color #000
+
+.white-icon
+  border-top 10px solid #fff
+
+.black-icon
+  border-top 10px solid #000
 
 .normal-text
   .en
