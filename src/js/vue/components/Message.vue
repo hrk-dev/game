@@ -27,6 +27,7 @@
                 lowlight:
                   message.character.current !== message.character.list.shio
               }"
+              @error="characterError"
             />
           </transition>
           <transition name="slide-up">
@@ -92,7 +93,12 @@ module.exports = {
         current: ''
       },
       en: '',
-      cn: ''
+      cn: '',
+      temp: {
+        en: '',
+        cn: '',
+        character: ''
+      }
     },
     choice: {
       show: false,
@@ -101,6 +107,9 @@ module.exports = {
     }
   }),
   computed: {
+    _choiceIndex() {
+      return this.choice.index
+    },
     _transition() {
       return this.message.pos == 0 ? 'slide-up' : 'fade'
     },
@@ -150,8 +159,42 @@ module.exports = {
         : ''
     }
   },
+  watch: {
+    _choiceIndex() {
+      if (
+        this.choice.show &&
+        this.choice.index != -1 &&
+        this.choice.list[this.choice.index].show
+      ) {
+        if (
+          this.choice.list[this.choice.index].msgEn ||
+          this.choice.list[this.choice.index].msgCn
+        ) {
+          this.message.temp.en = this.message.en
+          this.message.temp.cn = this.message.cn
+          this.message.temp.character = this.message.character.list.other
+          this.message.en = this.choice.list[this.choice.index].msgEn
+          this.message.cn = this.choice.list[this.choice.index].msgCn
+          this.message.character.list.other =
+            this.choice.list[this.choice.index].character
+          this.message.character.current =
+            this.choice.list[this.choice.index].character
+        } else {
+          if (this.message.temp.en || this.message.temp.cn) {
+            this.message.en = this.message.temp.en
+            this.message.cn = this.message.temp.cn
+            this.message.character.list.other = this.message.temp.character
+            this.message.character.current = this.message.temp.character
+          }
+        }
+      }
+    }
+  },
   methods: {
-    otherCharacterError(e) {
+    characterError() {
+      this.message.character.list.shio = ''
+    },
+    otherCharacterError() {
       this.message.character.list.other = ''
     },
     add(code, msg) {
@@ -180,10 +223,8 @@ module.exports = {
       } else {
         this.message.character.list.other = character
       }
-      if (character) {
-        this.message.character.current = character
-        this.message.character.show = true
-      }
+      this.message.character.current = character
+      this.message.character.show = this.message.character.list.shio || this.message.character.list.other
 
       this.message.en = this.message.list[1]
       this.message.cn = this.message.list[2]
@@ -191,11 +232,18 @@ module.exports = {
       this.message.show = true
     },
     setChoices(choices, defaultType) {
-      ;(choices || []).forEach(item => {
+      choices.forEach(item => {
+        /**
+         * 选项英文|选项中文|开关ID|选择时对话框显示的英文|选择时对话框显示的中文|选择时对话框显示的立绘
+         */
+        const temp = item.split('|')
         this.choice.list.push({
-          en: 'test',
-          cn: item,
-          show: true
+          en: temp[0] || '',
+          cn: temp[1] || '',
+          show: temp[2] ? $gameSwitches.value(temp[2]) : true,
+          msgEn: temp[3] || '',
+          msgCn: temp[4] || '',
+          character: temp[5] || ''
         })
       })
       this.choice.index = defaultType
