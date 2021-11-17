@@ -508,8 +508,7 @@ module.exports = {
   filter brightness(0.5)
 
 .shio-left
-  right 100% !important
-  transform translateX(100%)
+  right calc(100% - 400px) !important
 
 .choice-center
   top 50%

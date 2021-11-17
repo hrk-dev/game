@@ -211,8 +211,8 @@ module.exports = {
               if (DataManager.loadGame(1)) {
                 this.menu.show = false
                 $gameVariables.setValue(1, this.loop.next)
-                $gameSwitches.setValue(97, true)
-                $gameSwitches.setValue(98, true) // 触发重载
+                $gameTemp.reserveCommonEvent(97)
+                $gameTemp.reserveCommonEvent(98) // 触发重载
                 Methods.clearTip()
                 $gameSystem.onBeforeSave()
                 if (DataManager.saveGame(1)) {
@@ -239,18 +239,7 @@ module.exports = {
             } else {
               if (DataManager.loadGame(1)) {
                 this.menu.show = false
-
-                const version = JSON.parse(
-                  fs.readFileSync(path.join(__dirname, 'package.json'))
-                ).version
-                if ($gameSystem.version !== version) {
-                  $gameSwitches.setValue(98, true) // 触发重载
-                  $gameSystem.version = version
-                  if (DataManager.saveGame(1)) {
-                    StorageManager.cleanBackup(1)
-                  }
-                }
-
+                $gameTemp.reserveCommonEvent(98)
                 SceneManager.goto(Scene_Map)
                 $gameSystem.onAfterLoad()
                 setTimeout(() => {

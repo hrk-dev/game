@@ -299,8 +299,7 @@ module.exports = {
               setTimeout(() => {
                 if (DataManager.loadGame(1)) {
                   this.menu.show = false
-                  // $gameSwitches.setValue(96, true)
-                  // $gameSwitches.setValue(98, true)
+                  // $gameTemp.reserveCommonEvent(98)
                   SceneManager.goto(Scene_Map)
                   $gameSystem.onAfterLoad()
                   setTimeout(() => {
