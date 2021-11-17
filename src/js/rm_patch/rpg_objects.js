@@ -105,6 +105,22 @@ Game_Message.prototype.isBusy = function () {
   return busy
 }
 
+Game_Map.prototype.setup = function (mapId) {
+  if (!$dataMap) {
+    throw new Error('The map data is not available')
+  }
+  this._mapId = mapId
+  this._tilesetId = $dataMap.tilesetId == 7 ? 8 : $dataMap.tilesetId
+  this._displayX = 0
+  this._displayY = 0
+  this.refereshVehicles()
+  this.setupEvents()
+  this.setupScroll()
+  this.setupParallax()
+  this.setupBattleback()
+  this._needsRefresh = false
+}
+
 Game_Map.prototype.isEventRunning = function () {
   const eventRunning = this._interpreter.isRunning() || this.isAnyEventStarting()
   if (!eventRunning) Components.Message.resetCharacter()

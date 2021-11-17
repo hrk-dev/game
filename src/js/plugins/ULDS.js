@@ -191,21 +191,36 @@ void function() {
     var ct = Spriteset_Map.prototype.createTilemap;
     Spriteset_Map.prototype.createTilemap = function() {
         ct.call(this);
-        $dataMap.note.replace(RE, function(_match, settings) {
-            var isValid = false;
-            try {
-                settings = JSON.parse(settings);
-                isValid = typeof(settings) === 'object';
-                if (!isValid) {
-                    throw 'ULDS settings should be an object';
+        if ($dataMap.parallaxName && !$dataMap.note) {
+            const name = $dataMap.parallaxName.split('_')[0]
+            this._tilemap.addChild(ULDS({
+                name: name + "_0",
+                x: "this.rx(0)",
+                y: "this.ry(0)"
+            }));
+            this._tilemap.addChild(ULDS({
+                name: name + "_1",
+                x: "this.rx(0)",
+                y: "this.ry(0)",
+                z: "5"
+            }));
+        } else {
+            $dataMap.note.replace(RE, function(_match, settings) {
+                var isValid = false;
+                try {
+                    settings = JSON.parse(settings);
+                    isValid = typeof(settings) === 'object';
+                    if (!isValid) {
+                        throw 'ULDS settings should be an object';
+                    }
+                } catch (e) {
+                    console.error(e);
+                    console.log(settings);
                 }
-            } catch (e) {
-                console.error(e);
-                console.log(settings);
-            }
-            if (isValid) {
-                this._tilemap.addChild(ULDS(settings));
-            }
-        }.bind(this));
+                if (isValid) {
+                    this._tilemap.addChild(ULDS(settings));
+                }
+            }.bind(this));
+        }
     };
 }();
