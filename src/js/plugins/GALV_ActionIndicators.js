@@ -52,10 +52,8 @@ Galv.AI = Galv.AI || {};      // Galv's plugin stuff
  * event that has the below code in a 'comment' command anywhere in the active
  * event page.
  *
- *   <actionIcon: id>       // The code to use in a COMMENT within and event.
+ *   <icon: id>       // The code to use in a COMMENT within and event.
  *                          // id = the icon ID to use for the indicator.
- * 
- *   <direction: 8/2/4/6>   // 方向
  *
  * ----------------------------------------------------------------------------
  *  PLUGIN COMMANDS
@@ -143,18 +141,6 @@ Game_CharacterBase.prototype.moveStraight = function(d) {
 	// CHECK EVENT STANDING ON
 	$gameMap.eventsXy($gamePlayer._x, $gamePlayer._y).forEach(function(event) {
 		action = Galv.AI.checkEventForIcon(event);
-		const eventDirection = Galv.AI.checkEventForDirection(event)
-		if ([2,4,6,8].includes(eventDirection)) {
-			const playerDirection = $gamePlayer.direction()
-			if (eventDirection !== playerDirection) {
-				action = {'eventId': 0, 'iconId': 0};
-				Components.Movetip.hide()
-			} else {
-				setMoveTip(event)
-			}
-		} else {
-			setMoveTip(event)
-		}
 	});
 	
 	// CHECK EVENT IN FRONT
@@ -162,6 +148,11 @@ Game_CharacterBase.prototype.moveStraight = function(d) {
 		$gameMap.eventsXy(x2, y2).forEach(function(event) {
 			if (event.isNormalPriority()) {
 				action = Galv.AI.checkEventForIcon(event);
+				if (action.iconId == 255) {
+					setMoveTip(event)
+				} else {
+					Components.Movetip.hide()
+				}
 			};
 		});
 
@@ -188,10 +179,15 @@ Game_CharacterBase.prototype.moveStraight = function(d) {
 		$gameMap.eventsXy(x3, y3).forEach(function(event) {
 			if (event.isNormalPriority()) {
 				action = Galv.AI.checkEventForIcon(event);
+				if (action.iconId == 255) {
+					setMoveTip(event)
+				} else {
+					Components.Movetip.hide()
+				}
 			};
 		});
 	};
-	action = action || {'eventId': 0, 'iconId': 0};
+	action = action || {'eventId': -1, 'iconId': 0};
 
 	$gamePlayer.actionIconTarget = action;
 };
@@ -206,34 +202,45 @@ Galv.AI.checkEventForIcon = function(event) {
 		
 		for (var i = 0; i < listCount; i++) {
 			if (event.page().list[i].code === 108) {
-				var iconCheck = event.page().list[i].parameters[0].match(/<actionIcon: (.*)>/i);
+				var iconCheck = event.page().list[i].parameters[0].match(/<icon: (.*)>/i);
 				if (iconCheck) {
 					// create target object
-					return {'eventId': event._eventId,'iconId': Number(iconCheck[1])};
+					const _action = {'eventId': event._eventId, 'iconId': 0}
+					if (iconCheck[1] == 'move') {
+						_action.eventId = 0
+						_action.iconId = 255
+					} else if (iconCheck[1] == 'talk') {
+						_action.iconId = 254
+					} else if (iconCheck[1] == 'check') {
+						_action.iconId = 253
+					} else {
+						_action.iconId = Number(iconCheck[1])
+					}
+					return _action
 					break;
 				};
 			};
 		};
 	};
-	return null;
+	return {'eventId': -1, 'iconId': 0};
 };
 
-Galv.AI.checkEventForDirection = function(event) {
-	if (event.page()) {
-		var listCount = event.page().list.length;
+// Galv.AI.checkEventForDirection = function(event) {
+// 	if (event.page()) {
+// 		var listCount = event.page().list.length;
 		
-		for (var i = 0; i < listCount; i++) {
-			if (event.page().list[i].code === 108 || event.page().list[i].code === 408) {
-				var check = event.page().list[i].parameters[0].match(/<direction: (.*)>/i)
-				if (check) {
-					return Number(check[1])
-					break;
-				};
-			};
-		};
-	};
-	return null;
-};
+// 		for (var i = 0; i < listCount; i++) {
+// 			if (event.page().list[i].code === 108 || event.page().list[i].code === 408) {
+// 				var check = event.page().list[i].parameters[0].match(/<direction: (.*)>/i)
+// 				if (check) {
+// 					return Number(check[1])
+// 					break;
+// 				};
+// 			};
+// 		};
+// 	};
+// 	return null;
+// };
 	
 	Galv.AI.checkEventForTip = function (event) {
 	let res = {cn: '', en: ''}
@@ -299,7 +306,7 @@ Sprite_ActionIcon.prototype.constructor = Sprite_ActionIcon;
 
 Sprite_ActionIcon.prototype.initialize = function() {
     Sprite.prototype.initialize.call(this);
-	$gamePlayer.actionIconTarget = $gamePlayer.actionIconTarget || {'eventId': 0, 'iconId': 0}; 
+	$gamePlayer.actionIconTarget = $gamePlayer.actionIconTarget || {'eventId': -1, 'iconId': 0}; 
 	this._iconIndex = 0;
 	this.z = Galv.AI.z;
 	this.changeBitmap();
@@ -314,7 +321,7 @@ Sprite_ActionIcon.prototype.initialize = function() {
 };
 
 Sprite_ActionIcon.prototype.changeBitmap = function() {
-	if ($gamePlayer.actionIconTarget.eventId <= 0) {
+	if ($gamePlayer.actionIconTarget.eventId < 0) {
 		this._iconIndex = 0;
 	} else {
 		this._iconIndex = $gamePlayer.actionIconTarget.iconId;
@@ -368,8 +375,8 @@ Sprite_ActionIcon.prototype.update = function() {
 	if (this._iconIndex <= 0) return;
 
 	
-	this.x = $gameMap.event($gamePlayer.actionIconTarget.eventId).screenX() + this._offsetX;
-	this.y = $gameMap.event($gamePlayer.actionIconTarget.eventId).screenY() + this._offsetY + this._float;
+	this.x = ($gamePlayer.actionIconTarget.eventId === 0 ? $gamePlayer : $gameMap.event($gamePlayer.actionIconTarget.eventId)).screenX() + this._offsetX;
+	this.y = ($gamePlayer.actionIconTarget.eventId === 0 ? $gamePlayer : $gameMap.event($gamePlayer.actionIconTarget.eventId)).screenY() + this._offsetY + this._float;
 
 	this.scale.y = Math.min(this.scale.y + 0.1,1);
 	
