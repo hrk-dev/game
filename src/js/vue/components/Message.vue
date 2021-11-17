@@ -224,7 +224,8 @@ module.exports = {
         this.message.character.list.other = character
       }
       this.message.character.current = character
-      this.message.character.show = this.message.character.list.shio || this.message.character.list.other
+      this.message.character.show =
+        this.message.character.list.shio || this.message.character.list.other
 
       this.message.en = this.message.list[1]
       this.message.cn = this.message.list[2]
@@ -344,6 +345,7 @@ module.exports = {
 <style scoped lang="stylus">
 #message
   color #fff
+  text-shadow 0 0 1px black, 0 0 1px black, 0 0 1px black
 
   .message-wrapper
     display flex
@@ -475,6 +477,7 @@ module.exports = {
 
 .black-text
   color #000
+  text-shadow none
 
 .white-icon
   border-top 10px solid #fff
