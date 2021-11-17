@@ -141,6 +141,7 @@ Game_CharacterBase.prototype.moveStraight = function(d) {
 	// CHECK EVENT STANDING ON
 	$gameMap.eventsXy($gamePlayer._x, $gamePlayer._y).forEach(function(event) {
 		action = Galv.AI.checkEventForIcon(event);
+		setMoveTip(event)
 	});
 	
 	// CHECK EVENT IN FRONT
@@ -148,11 +149,7 @@ Game_CharacterBase.prototype.moveStraight = function(d) {
 		$gameMap.eventsXy(x2, y2).forEach(function(event) {
 			if (event.isNormalPriority()) {
 				action = Galv.AI.checkEventForIcon(event);
-				if (action.iconId == 255) {
-					setMoveTip(event)
-				} else {
-					Components.Movetip.hide()
-				}
+				setMoveTip(event)
 			};
 		});
 
@@ -179,11 +176,7 @@ Game_CharacterBase.prototype.moveStraight = function(d) {
 		$gameMap.eventsXy(x3, y3).forEach(function(event) {
 			if (event.isNormalPriority()) {
 				action = Galv.AI.checkEventForIcon(event);
-				if (action.iconId == 255) {
-					setMoveTip(event)
-				} else {
-					Components.Movetip.hide()
-				}
+				setMoveTip(event)
 			};
 		});
 	};
@@ -207,7 +200,6 @@ Galv.AI.checkEventForIcon = function(event) {
 					// create target object
 					const _action = {'eventId': event._eventId, 'iconId': 0}
 					if (iconCheck[1] == 'move') {
-						_action.eventId = 0
 						_action.iconId = 255
 					} else if (iconCheck[1] == 'talk') {
 						_action.iconId = 254
@@ -216,6 +208,7 @@ Galv.AI.checkEventForIcon = function(event) {
 					} else {
 						_action.iconId = Number(iconCheck[1])
 					}
+					if (_action.iconId == 255) _action.eventId = 0
 					return _action
 					break;
 				};
