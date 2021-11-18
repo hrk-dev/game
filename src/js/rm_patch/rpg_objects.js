@@ -71,6 +71,7 @@ Game_Interpreter.prototype.command201 = function () {
       y = $gameVariables.value(this._params[3])
     }
     $gamePlayer.reserveTransfer(mapId, x, y, this._params[4], this._params[5])
+    Components.Message.resetCharacter()
     this.setWaitMode('transfer')
     this._index++
     Components.Movetip.hide()

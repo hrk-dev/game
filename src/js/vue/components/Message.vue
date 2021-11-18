@@ -221,7 +221,7 @@ module.exports = {
       if (this.isShio(character)) {
         this.message.character.list.shio = character
       } else {
-        this.message.character.list.other = character
+        if (character) this.message.character.list.other = character
       }
       this.message.character.current = character
       this.message.character.show =
