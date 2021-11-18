@@ -157,7 +157,7 @@ Game_CharacterBase.prototype.moveStraight = function(d) {
 	});
 	
 	// CHECK EVENT IN FRONT
-	if (!action) {
+	if (!action || action.eventId == -1) {
 		$gameMap.eventsXy(x2, y2).forEach(function(event) {
 			if (event.isNormalPriority()) {
 				action = Galv.AI.checkEventForIcon(event);
@@ -181,7 +181,7 @@ Game_CharacterBase.prototype.moveStraight = function(d) {
 	};
 	
 	// CHECK COUNTER
-	if (!action && $gameMap.isCounter(x2, y2)) {
+	if ((!action || action.eventId == -1) && $gameMap.isCounter(x2, y2)) {
 		var direction = $gamePlayer.direction();
 		var x3 = $gameMap.roundXWithDirection(x2, direction);
         var y3 = $gameMap.roundYWithDirection(y2, direction);
