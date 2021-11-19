@@ -163,7 +163,8 @@ module.exports = {
     _choiceIndex() {
       if (
         this.choice.show &&
-        this.choice.index != -1 &&
+        this.choice.index > 0 &&
+        this.choice.list[this.choice.index] &&
         this.choice.list[this.choice.index].show
       ) {
         if (
@@ -272,7 +273,7 @@ module.exports = {
     },
     up() {
       if (this.choice.list.length < 1) return
-      if (this.choice.index == 0) {
+      if (this.choice.index <= 0) {
         this.choice.index = this.choice.list.length
         this.up()
         return
