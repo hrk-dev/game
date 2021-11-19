@@ -124,6 +124,11 @@ Game_Map.prototype.setup = function (mapId) {
 
 Game_Map.prototype.isEventRunning = function () {
   const eventRunning = this._interpreter.isRunning() || this.isAnyEventStarting()
-  if (!eventRunning) Components.Message.resetCharacter()
+  if (!eventRunning) {
+    Components.Message.resetCharacter()
+    $gameSystem.showEventNames()
+  } else {
+    $gameSystem.hideEventNames()
+  }
   return eventRunning
 }

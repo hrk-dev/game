@@ -6,9 +6,9 @@ var $plugins =
 {"name":"TerraxLighting","status":true,"description":"v1.5.1 Creates an extra layer that darkens a map and adds lightsources!","parameters":{"Player radius":"50","Add to options":"No","Option menu entry":"Lighting effects","Reset Lights":"No","Save DaynightHours":"0","Save DaynightMinutes":"0","Save DaynightSeconds":"0","Flashlight offset":"0","Screensize X":"1024","Screensize Y":"726","Kill Switch":"No"}},
 {"name":"TS_Debug","status":true,"description":"","parameters":{}},
 {"name":"Community_Basic","status":true,"description":"Plugin used to set basic parameters.","parameters":{"cacheLimit":"10","screenWidth":"1024","screenHeight":"720","changeWindowWidthTo":"1024","changeWindowHeightTo":"720","renderingMode":"auto","alwaysDash":"off"}},
-{"name":"Namepop","status":false,"description":"Namepop Ver 1.03 NPC名称显示","parameters":{}},
 {"name":"UTA_MessageSkip","status":true,"description":"Skip message on pressing a particular key.","parameters":{"Skip Key":"control","Show Trace":"false"}},
 {"name":"blur","status":true,"description":"屏幕截图&模糊 工具","parameters":{"blurLevel":"5"}},
 {"name":"Galv_ScreenZoom","status":true,"description":"(v.1.1) Zoom in on a certain part of the screen","parameters":{"Battle Zoom":"1"}},
-{"name":"GALV_ActionIndicators","status":true,"description":"Display an icon when the player is able to interact with an event. View help for comment tag. (经过修改)","parameters":{"Y Offset":"-10","Z Position":"99","Auto Hide":"true","Icon Opacity":"200"}}
+{"name":"GALV_ActionIndicators","status":true,"description":"Display an icon when the player is able to interact with an event. View help for comment tag. (经过修改)","parameters":{"Y Offset":"-10","Z Position":"99","Auto Hide":"true","Icon Opacity":"200"}},
+{"name":"MrTS_EventNames","status":true,"description":"Allows events to show their names above them.","parameters":{"Default Range":"5","Font Size":"24","Font Name":"GameFont","Fade":"True","Fade Timer":"30"}}
 ];
