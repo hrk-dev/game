@@ -169,7 +169,7 @@ void function() {
     ULDS.TilingSprite = function(bitmap) {
         TilingSprite.call(this, bitmap);
         bitmap.addLoadListener(function() {
-            this.move(0, 0, bitmap.width, bitmap.height);
+            this.move(0, 0, bitmap.width + 16, bitmap.height);
         }.bind(this));
     };
 
