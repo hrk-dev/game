@@ -298,14 +298,16 @@ module.exports = {
               this.loading = true
               setTimeout(() => {
                 if (DataManager.loadGame(1)) {
+                  Patch.startWait()
                   this.menu.show = false
                   // $gameTemp.reserveCommonEvent(98)
                   SceneManager.goto(Scene_Map)
                   $gameSystem.onAfterLoad()
                   setTimeout(() => {
-                    this.loading = false
                     this.show = false
                     Patch.showTip()
+                    Patch.stopWait()
+                    this.loading = false
                   }, 300)
                 } else {
                   Methods.showPopup('Load failed', '读取失败', 1000)

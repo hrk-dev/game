@@ -88,6 +88,7 @@ module.exports = {
   },
   methods: {
     init() {
+      AudioManager.stopAll()
       for (const i in this.menu.list) {
         if (i > 0) {
           this.menu.list[i].show = true
