@@ -2,7 +2,7 @@
   <div id="message">
     <transition :name="_transition">
       <div class="message-wrapper" :class="_pos" v-if="message.show">
-        <div class="text" :class="[_align, _size, _bg, _color]">
+        <div class="text" :class="[_align, _size, _bg, _color]" ref="text">
           <div
             class="name"
             :class="_nameAlign"
@@ -10,8 +10,24 @@
           >
             {{ message.name }}
           </div>
-          <div class="en" v-html="message.en"></div>
-          <div class="cn" v-html="message.cn"></div>
+          <template v-if="message.pos == 2">
+            <div ref="multiline">
+              <transition-group name="fade">
+                <div
+                  class="multiline"
+                  v-for="(item, index) in message.multiline"
+                  :key="'msg' + index"
+                >
+                  <div class="en" v-html="item.en"></div>
+                  <div class="cn" v-html="item.cn"></div>
+                </div>
+              </transition-group>
+            </div>
+          </template>
+          <template v-else>
+            <div class="en" v-html="message.en"></div>
+            <div class="cn" v-html="message.cn"></div>
+          </template>
           <div class="next" :class="_iconColor" v-show="!choice.show"></div>
         </div>
         <div class="character" v-show="_showCharacter">
@@ -73,6 +89,7 @@ module.exports = {
       noHide: false,
       _noHide: false,
       list: [],
+      multiline: [],
       // 0-下 1-中 2-上
       pos: 0,
       // 0-左对齐 1-居中
@@ -211,25 +228,47 @@ module.exports = {
       const temp = (this.message.list[0] || '').split('|')
 
       this.message.pos = Number(temp[0][0]) || 0
-      this.message.align = Number(temp[0][1]) || 0
-      this.message.bg = Number(temp[0][2]) || 0
-      this.message.size = Number(temp[0][3]) || 0
-      this.message.color = Number(temp[0][4]) || 0
 
-      this.message.name = this.getName(temp[1])
-
-      const character = temp[2] || ''
-      if (this.isShio(character)) {
-        this.message.character.list.shio = character
+      const variables = this.message.list[1].match(/<var: (.*)>/i)
+      if (variables && Number(variables[1])) {
+        const temp2 = ($gameVariables.value(variables[1]) || '').split('|')
+        this.message.en = temp2[0]
+        this.message.cn = temp2[1]
       } else {
-        if (character) this.message.character.list.other = character
+        this.message.en = this.message.list[1]
+        this.message.cn = this.message.list[2]
       }
-      this.message.character.current = character
-      this.message.character.show =
-        this.message.character.list.shio || this.message.character.list.other
+      if (this.message.pos == 2) {
+        this.message.multiline.push({
+          en: this.message.en,
+          cn: this.message.cn
+        })
+        if (this.$refs.text && this.$refs.multiline) {
+          if (
+            this.$refs.text.offsetHeight - this.$refs.multiline.scrollHeight <
+            this.$refs.text.offsetHeight / 3
+          ) {
+            this.message.multiline = [this.message.multiline.pop()]
+          }
+        }
+      } else {
+        this.message.align = Number(temp[0][1]) || 0
+        this.message.bg = Number(temp[0][2]) || 0
+        this.message.size = Number(temp[0][3]) || 0
+        this.message.color = Number(temp[0][4]) || 0
 
-      this.message.en = this.message.list[1]
-      this.message.cn = this.message.list[2]
+        this.message.name = this.getName(temp[1])
+
+        const character = temp[2] || ''
+        if (this.isShio(character)) {
+          this.message.character.list.shio = character
+        } else {
+          if (character) this.message.character.list.other = character
+        }
+        this.message.character.current = character
+        this.message.character.show =
+          this.message.character.list.shio || this.message.character.list.other
+      }
 
       this.message.show = true
     },
@@ -297,6 +336,10 @@ module.exports = {
     },
     reset() {
       if (this.message.show) {
+        if (this.message.pos != 2) {
+          this.message.multiline = []
+        }
+
         this.message.list.length = 0
         this.message.pos = 0
         this.message.align = 0
@@ -306,6 +349,7 @@ module.exports = {
         this.message.name = ''
         this.message.en = ''
         this.message.cn = ''
+
         if (!this.message._noHide && !this.message.noHide) {
           this.message.show = false
         }
@@ -321,6 +365,9 @@ module.exports = {
         this.message.character.list.shio = ''
         this.message.character.list.other = ''
         this.message.character.current = ''
+        this.message.temp.en = ''
+        this.message.temp.cn = ''
+        this.message.temp.character = ''
         this.message.character.show = false
       }
     },
@@ -368,6 +415,10 @@ module.exports = {
         text-underline-offset 5px
         text-decoration-line underline
         text-decoration-thickness 2px
+
+      .multiline
+        margin-top 15px
+        text-indent 40px
 
       .en
         margin-bottom 10px
@@ -445,6 +496,18 @@ module.exports = {
   top 0
   left 0
   right 0
+
+  .text
+    display flex
+    flex-direction column
+
+    .en
+      margin-bottom 3px !important
+
+    .next
+      position unset !important
+      align-self flex-end
+      margin-top 5px
 
   .text
     height 100%
