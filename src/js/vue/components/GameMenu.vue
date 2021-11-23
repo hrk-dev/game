@@ -10,18 +10,8 @@
             <div class="en">{{ choice.en }}</div>
             <div class="cn">{{ choice.cn }}</div>
             <div class="key-list">
-              <div
-                class="key"
-                :class="{ highlight: choice.current }"
-              >
-                Yes
-              </div>
-              <div
-                class="key"
-                :class="{ highlight: !choice.current }"
-              >
-                No
-              </div>
+              <div class="key" :class="{ highlight: choice.current }">Yes</div>
+              <div class="key" :class="{ highlight: !choice.current }">No</div>
             </div>
           </div>
         </transition>
@@ -69,22 +59,78 @@ module.exports = {
         {
           show: true,
           cn: '保存',
-          en: 'Save'
+          en: 'Save',
+          fn() {
+            if (this.hasSave) {
+              this.showChoice(
+                'Do you wish to overwrite this save file',
+                '是否覆盖存档',
+                () => {
+                  Patch.save()
+                  this.checkSave()
+                }
+              )
+            } else {
+              Patch.save()
+              this.checkSave()
+            }
+          }
         },
         {
           show: false,
           cn: '读取',
-          en: 'Load'
+          en: 'Load',
+          fn() {
+            this.showChoice(
+              'Do you wish to load this save file',
+              '是否读取存档',
+              () => {
+                this.loading = true
+                setTimeout(() => {
+                  if (DataManager.loadGame(1)) {
+                    Patch.startWait()
+                    this.menu.show = false
+                    // $gameTemp.reserveCommonEvent(98)
+                    SceneManager.goto(Scene_Map)
+                    $gameSystem.onAfterLoad()
+                    setTimeout(() => {
+                      this.show = false
+                      Patch.showTip()
+                      Patch.stopWait()
+                      this.loading = false
+                    }, 300)
+                  } else {
+                    Methods.showPopup('Load failed', '读取失败', 1000)
+                  }
+                }, 300)
+              }
+            )
+          }
         },
         {
           show: true,
           cn: '设置',
-          en: 'Setting'
+          en: 'Setting',
+          fn() {
+            this.menu.show = false
+            this.$refs.Setting.show = true
+          }
         },
         {
           show: true,
           cn: '退出',
-          en: 'Exit'
+          en: 'Exit',
+          fn() {
+            this.showChoice(
+              'Do you wish back to title',
+              '是否返回主菜单',
+              () => {
+                AudioManager.stopBgm()
+                AudioManager.stopBgs()
+                SceneManager.goto(Scene_Title)
+              }
+            )
+          }
         }
       ]
     }
@@ -133,23 +179,7 @@ module.exports = {
             break
         }
       } else if (this.$refs.Setting.show) {
-        switch (buttonName) {
-          case 'left':
-            this.settingLeft()
-            break
-          case 'right':
-            this.settingRight()
-            break
-          case 'up':
-            this.settingUp()
-            break
-          case 'down':
-            this.settingDown()
-            break
-          case 'ok':
-            this.settingKeyDown()
-            break
-        }
+        this.$refs.Setting.checkInput(buttonName)
       } else {
         switch (buttonName) {
           case 'left':
@@ -165,7 +195,8 @@ module.exports = {
             this.down()
             break
           case 'ok':
-            this.onKeydown(this.menu.current)
+            if (this.choice.show) return
+            this.menu.list[this.menu.current].fn.call(this)
             break
         }
       }
@@ -190,60 +221,6 @@ module.exports = {
       } else {
         this.back()
         this.choice.fn = () => {}
-      }
-    },
-    // 设置
-    settingUp() {
-      if (!this.$refs.Setting.show) return
-      if (this.$refs.Setting.current === 0) {
-        this.$refs.Setting.current = 3
-      } else {
-        --this.$refs.Setting.current
-      }
-    },
-    settingDown() {
-      if (this.$refs.Setting.current === 3) {
-        this.$refs.Setting.current = 0
-      } else {
-        ++this.$refs.Setting.current
-      }
-    },
-    settingLeft() {
-      if (this.$refs.Setting.current === 1) {
-        this.$refs.Setting.bgmDown()
-      } else if (this.$refs.Setting.current === 2) {
-        this.$refs.Setting.seDown()
-      }
-    },
-    settingRight() {
-      if (this.$refs.Setting.current === 1) {
-        this.$refs.Setting.bgmUp()
-      } else if (this.$refs.Setting.current === 2) {
-        this.$refs.Setting.seUp()
-      }
-    },
-    settingKeyDown() {
-      switch (this.$refs.Setting.current) {
-        case 0:
-          this.$refs.Setting.changeKeepRunning()
-          break
-        case 1:
-          if (this.$refs.Setting.bgm === 10) {
-            this.$refs.Setting.bgm = 0
-          } else {
-            ++this.$refs.Setting.bgm
-          }
-          break
-        case 2:
-          if (this.$refs.Setting.se === 10) {
-            this.$refs.Setting.se = 0
-          } else {
-            ++this.$refs.Setting.se
-          }
-          break
-        case 3:
-          this.back()
-          break
       }
     },
     // 通常
@@ -272,63 +249,6 @@ module.exports = {
         this.down()
       }
     },
-    onKeydown() {
-      if (this.choice.show) return
-      switch (this.menu.current) {
-        case 0:
-          if (this.hasSave) {
-            this.showChoice(
-              'Do you wish to overwrite this save file',
-              '是否覆盖存档',
-              () => {
-                Patch.save()
-                this.checkSave()
-              }
-            )
-          } else {
-            Patch.save()
-            this.checkSave()
-          }
-          break
-        case 1:
-          this.showChoice(
-            'Do you wish to load this save file',
-            '是否读取存档',
-            () => {
-              this.loading = true
-              setTimeout(() => {
-                if (DataManager.loadGame(1)) {
-                  Patch.startWait()
-                  this.menu.show = false
-                  // $gameTemp.reserveCommonEvent(98)
-                  SceneManager.goto(Scene_Map)
-                  $gameSystem.onAfterLoad()
-                  setTimeout(() => {
-                    this.show = false
-                    Patch.showTip()
-                    Patch.stopWait()
-                    this.loading = false
-                  }, 300)
-                } else {
-                  Methods.showPopup('Load failed', '读取失败', 1000)
-                }
-              }, 300)
-            }
-          )
-          break
-        case 2:
-          this.menu.show = false
-          this.$refs.Setting.show = true
-          break
-        case 3:
-          this.showChoice('Do you wish back to title', '是否返回主菜单', () => {
-            AudioManager.stopBgm()
-            AudioManager.stopBgs()
-            SceneManager.goto(Scene_Title)
-          })
-          break
-      }
-    },
     back() {
       if (this.show) {
         if (this.choice.show) {
@@ -344,7 +264,6 @@ module.exports = {
         }
         if (this.$refs.Setting.show) {
           this.$refs.Setting.back()
-          this.menu.show = true
           return
         }
       }
@@ -431,7 +350,6 @@ module.exports = {
 
 .fade2-enter-active, .fade2-leave-active
   transition opacity 0.2s linear
-
 
 .switch-enter-active, .switch-leave-active
   transition all 0.3s

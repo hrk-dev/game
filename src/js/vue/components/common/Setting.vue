@@ -15,10 +15,7 @@
                   <div class="cn">持续奔跑</div>
                   <div class="en">Keep Running</div>
                 </div>
-                <div
-                  class="switch"
-                  :class="{ highlight: current === 0 }"
-                >
+                <div class="switch" :class="{ highlight: current === 0 }">
                   <transition name="switch">
                     <div v-if="keepRunning">
                       <div>○</div>
@@ -36,16 +33,13 @@
                   <div class="cn">背景音量</div>
                   <div class="en">BGM Volume</div>
                 </div>
-                <div
-                  class="slider"
-                  :class="{ highlight: current === 1 }"
-                >
+                <div class="slider" :class="{ highlight: current === 1 }">
                   <div
                     v-for="i in 10"
                     :key="'bgm' + i"
                     class="block"
                     :style="{
-                      background: i <= bgm ? '#fff' : '',
+                      background: i <= bgm ? '#fff' : ''
                     }"
                   ></div>
                 </div>
@@ -56,16 +50,13 @@
                   <div class="cn">特效音量</div>
                   <div class="en">Sound Effect Volume</div>
                 </div>
-                <div
-                  class="slider"
-                  :class="{ highlight: current === 2 }"
-                >
+                <div class="slider" :class="{ highlight: current === 2 }">
                   <div
                     v-for="i in 10"
                     :key="'bgm' + i"
                     class="block"
                     :style="{
-                      background: i <= se ? '#fff' : '',
+                      background: i <= se ? '#fff' : ''
                     }"
                   ></div>
                 </div>
@@ -73,10 +64,7 @@
               </div>
             </div>
             <div class="back">
-              <div
-                class="back-btn"
-                :class="{ highlight: current === 3 }"
-              >
+              <div class="back-btn" :class="{ highlight: current === 3 }">
                 返回
               </div>
             </div>
@@ -114,9 +102,11 @@ module.exports = {
     },
     bgm() {
       AudioManager.bgmVolume = this._bgm
+      AudioManager.bgsVolume = this._bgm
     },
     se() {
       AudioManager.seVolume = this._se
+      AudioManager.meVolume = this._se
     }
   },
   methods: {
@@ -124,6 +114,69 @@ module.exports = {
       this.keepRunning = ConfigManager.alwaysDash
       this.bgm = AudioManager.bgmVolume / 10
       this.se = AudioManager.seVolume / 10
+    },
+    checkInput(buttonName) {
+      if (!this.show) return
+      switch (buttonName) {
+        case 'left':
+          if (this.current === 1) {
+            this.bgmDown()
+          } else if (this.current === 2) {
+            this.seDown()
+          }
+          break
+        case 'right':
+          if (this.current === 1) {
+            this.bgmUp()
+          } else if (this.current === 2) {
+            this.seUp()
+          }
+          break
+        case 'up':
+          if (this.current === 0) {
+            this.current = 3
+          } else {
+            --this.current
+          }
+          break
+        case 'down':
+          if (this.current === 3) {
+            this.current = 0
+          } else {
+            ++this.current
+          }
+          break
+        case 'ok':
+          this.onKeydown()
+          break
+        case 'escape':
+          this.back()
+          break
+      }
+    },
+    onKeydown() {
+      switch (this.current) {
+        case 0:
+          this.changeKeepRunning()
+          break
+        case 1:
+          if (this.bgm === 10) {
+            this.bgm = 0
+          } else {
+            ++this.bgm
+          }
+          break
+        case 2:
+          if (this.se === 10) {
+            this.se = 0
+          } else {
+            ++this.se
+          }
+          break
+        case 3:
+          this.back()
+          break
+      }
     },
     changeKeepRunning() {
       this.keepRunning = !this.keepRunning

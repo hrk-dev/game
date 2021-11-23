@@ -46,7 +46,6 @@ module.exports = {
       next: 0
     },
     menu: {
-      animation: 'slide-left',
       show: true,
       current: 1,
       restart: true,
@@ -54,27 +53,90 @@ module.exports = {
         {
           show: true,
           cn: '重新开始',
-          en: 'Restart'
+          en: 'Restart',
+          fn() {
+            Methods.hidePopup()
+            if (!this.loop.next) {
+              DataManager.setupNewGame()
+              this.menu.show = false
+              SceneManager.goto(Scene_Map)
+              setTimeout(() => {
+                this.show = false
+              }, 400)
+            } else {
+              if (DataManager.loadGame(1)) {
+                this.menu.show = false
+                $gameVariables.setValue(1, this.loop.next)
+                $gameTemp.reserveCommonEvent(97)
+                $gameTemp.reserveCommonEvent(98) // 触发重载
+                Methods.clearTip()
+                $gameSystem.onBeforeSave()
+                if (DataManager.saveGame(1)) {
+                  StorageManager.cleanBackup(1)
+                }
+                Patch.addGlobalInfo('loop', {
+                  restart: false,
+                  load: true
+                })
+                SceneManager.goto(Scene_Map)
+                $gameSystem.onAfterLoad()
+                setTimeout(() => {
+                  this.show = false
+                }, 400)
+              } else {
+                Methods.showPopup('Error', '奇怪的错误', 1500)
+              }
+            }
+          }
         },
         {
           show: true,
           cn: '继续',
-          en: 'Continue'
+          en: 'Continue',
+          fn() {
+            Methods.hidePopup()
+            if (this.loop.restart) {
+              this.test()
+            } else {
+              if (DataManager.loadGame(1)) {
+                this.menu.show = false
+                $gameTemp.reserveCommonEvent(98)
+                SceneManager.goto(Scene_Map)
+                $gameSystem.onAfterLoad()
+                setTimeout(() => {
+                  this.show = false
+                  Patch.showTip()
+                }, 400)
+              } else {
+                Methods.showPopup('Error', '奇怪的错误', 1500)
+              }
+            }
+          }
         },
         {
           show: true,
           cn: '设置',
-          en: 'Setting'
+          en: 'Setting',
+          fn() {
+            this.menu.show = false
+            this.$refs.Setting.show = true
+          }
         },
         {
           show: true,
           cn: '制作组',
-          en: 'Credits'
+          en: 'Credits',
+          fn() {
+            Methods.showPopup('Not finished', '还没做', 1500)
+          }
         },
         {
           show: true,
           cn: '退出',
-          en: 'Exit'
+          en: 'Exit',
+          fn() {
+            SceneManager.exit()
+          }
         }
       ]
     }
@@ -122,41 +184,31 @@ module.exports = {
     },
     checkInput(buttonName) {
       if (!this.show || this.busy) return
-      switch (buttonName) {
-        case 'left':
-          if (this.$refs.Setting.show) {
-            if (this.$refs.Setting.current === 1) {
-              this.$refs.Setting.bgmDown()
-            } else if (this.$refs.Setting.current === 2) {
-              this.$refs.Setting.seDown()
-            }
-          } else {
+      if (this.$refs.Setting.show) {
+        this.$refs.Setting.checkInput(buttonName)
+      } else if (this.menu.show) {
+        switch (buttonName) {
+          case 'left':
             this.up()
-          }
-          break
-        case 'right':
-          if (this.$refs.Setting.show) {
-            if (this.$refs.Setting.current === 1) {
-              this.$refs.Setting.bgmUp()
-            } else if (this.$refs.Setting.current === 2) {
-              this.$refs.Setting.seUp()
-            }
-          } else {
+            break
+          case 'right':
             this.down()
-          }
-          break
-        case 'up':
-          this.up()
-          break
-        case 'down':
-          this.down()
-          break
-        case 'ok':
-          this.onKeydown()
-          break
-        case 'escape':
-          this.back()
-          break
+            break
+          case 'up':
+            this.up()
+            break
+          case 'down':
+            this.down()
+            break
+          case 'ok':
+            if (this.menu.list[this.menu.current].show) {
+              this.menu.list[this.menu.current].fn.call(this)
+            }
+            break
+          case 'escape':
+            this.back()
+            break
+        }
       }
     },
     up() {
@@ -169,13 +221,6 @@ module.exports = {
         if (!this.menu.list[this.menu.current].show) {
           this.up()
         }
-      } else if (this.$refs.Setting.show) {
-        if (!this.$refs.Setting.show) return
-        if (this.$refs.Setting.current === 0) {
-          this.$refs.Setting.current = 3
-        } else {
-          --this.$refs.Setting.current
-        }
       }
     },
     down() {
@@ -187,104 +232,6 @@ module.exports = {
         }
         if (!this.menu.list[this.menu.current].show) {
           this.down()
-        }
-      } else if (this.$refs.Setting.show) {
-        if (this.$refs.Setting.current === 3) {
-          this.$refs.Setting.current = 0
-        } else {
-          ++this.$refs.Setting.current
-        }
-      }
-    },
-    onKeydown() {
-      if (this.menu.show) {
-        switch (this.menu.current) {
-          case 0:
-            Methods.hidePopup()
-            if (!this.loop.next) {
-              DataManager.setupNewGame()
-              this.menu.show = false
-              SceneManager.goto(Scene_Map)
-              setTimeout(() => {
-                this.show = false
-              }, 400)
-            } else {
-              if (DataManager.loadGame(1)) {
-                this.menu.show = false
-                $gameVariables.setValue(1, this.loop.next)
-                $gameTemp.reserveCommonEvent(97)
-                $gameTemp.reserveCommonEvent(98) // 触发重载
-                Methods.clearTip()
-                $gameSystem.onBeforeSave()
-                if (DataManager.saveGame(1)) {
-                  StorageManager.cleanBackup(1)
-                }
-                Patch.addGlobalInfo('loop', {
-                  restart: false,
-                  load: true
-                })
-                SceneManager.goto(Scene_Map)
-                $gameSystem.onAfterLoad()
-                setTimeout(() => {
-                  this.show = false
-                }, 400)
-              } else {
-                Methods.showPopup('Error', '奇怪的错误', 1500)
-              }
-            }
-            break
-          case 1:
-            Methods.hidePopup()
-            if (this.loop.restart) {
-              this.test()
-            } else {
-              if (DataManager.loadGame(1)) {
-                this.menu.show = false
-                $gameTemp.reserveCommonEvent(98)
-                SceneManager.goto(Scene_Map)
-                $gameSystem.onAfterLoad()
-                setTimeout(() => {
-                  this.show = false
-                  Patch.showTip()
-                }, 400)
-              } else {
-                Methods.showPopup('Error', '奇怪的错误', 1500)
-              }
-            }
-            break
-          case 2:
-            this.menu.show = false
-            this.$refs.Setting.show = true
-            break
-          case 3:
-            Methods.showPopup('Not finished', '还没做', 1500)
-            break
-          case 4:
-            SceneManager.exit()
-            break
-        }
-      } else if (this.$refs.Setting.show) {
-        switch (this.$refs.Setting.current) {
-          case 0:
-            this.$refs.Setting.changeKeepRunning()
-            break
-          case 1:
-            if (this.$refs.Setting.bgm === 10) {
-              this.$refs.Setting.bgm = 0
-            } else {
-              ++this.$refs.Setting.bgm
-            }
-            break
-          case 2:
-            if (this.$refs.Setting.se === 10) {
-              this.$refs.Setting.se = 0
-            } else {
-              ++this.$refs.Setting.se
-            }
-            break
-          case 3:
-            this.back()
-            break
         }
       }
     },
