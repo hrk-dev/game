@@ -3,6 +3,14 @@
     <transition name="fade2">
       <div class="loading" v-if="loading">Loading···</div>
     </transition>
+    <transition name="slide-down">
+      <div class="tip" v-if="tipShow">
+        <div class="en">{{ tip.en }}</div>
+        <div class="cn">{{ tip.cn }}</div>
+        <div class="left"></div>
+        <div class="right"></div>
+      </div>
+    </transition>
     <transition name="fade">
       <div v-if="show">
         <transition name="fade">
@@ -15,13 +23,15 @@
             </div>
           </div>
         </transition>
-        <transition name="fade">
+        <transition name="slide-up" appear>
           <div class="menu" v-if="menu.show">
-            <div v-for="(item, index) in menu.list" :key="index">
+            <div v-for="(item, index) in menu.list" :key="index" class="btn">
               <transition name="fade">
                 <div
                   v-if="item.show"
-                  :class="{ highlight: item.cn === menu.list[menu.current].cn }"
+                  :class="{
+                    'menu-highlight': item.cn === menu.list[menu.current].cn
+                  }"
                 >
                   <div class="cn">{{ item.cn }}</div>
                   <div class="en">{{ item.en }}</div>
@@ -45,6 +55,10 @@ module.exports = {
     show: false,
     loading: false,
     hasSave: false,
+    tip: {
+      en: '',
+      cn: ''
+    },
     choice: {
       show: false,
       current: true,
@@ -53,7 +67,7 @@ module.exports = {
       fn: () => {}
     },
     menu: {
-      show: true,
+      show: false,
       current: 0,
       list: [
         {
@@ -135,6 +149,11 @@ module.exports = {
       ]
     }
   }),
+  computed: {
+    tipShow() {
+      return this.show && this.menu.show && (this.tip.en || this.tip.cn)
+    }
+  },
   watch: {
     show() {
       if (this.show) {
@@ -148,6 +167,10 @@ module.exports = {
   methods: {
     init() {
       this.checkSave()
+      if ($gameSystem && $gameSystem.tipData) {
+        this.tip.en = $gameSystem.tipData.en
+        this.tip.cn = $gameSystem.tipData.cn
+      }
       this.menu.current = 0
       this.menu.show = true
     },
@@ -259,7 +282,10 @@ module.exports = {
         }
         if (this.menu.show) {
           Methods.hidePopup()
-          SceneManager.pop()
+          this.menu.show = false
+          setTimeout(() => {
+            SceneManager.pop()
+          }, 200)
           return
         }
         if (this.$refs.Setting.show) {
@@ -285,6 +311,45 @@ module.exports = {
   inset 0
   color #fff
   background #000
+
+.tip
+  position absolute
+  top 10px
+  left 50%
+  padding 5px 10px
+  transform translateX(-50%)
+  text-align center
+  border-width 4px
+  border-style solid none
+  border-top-color #ffa6ca
+  border-bottom-color #ffa6ca
+  background rgba(0, 0, 0, 0.6)
+  color #fff
+
+  .en
+    font-size 20px
+    line-height 20px
+
+  .cn
+    margin-top 5px
+    font-size 22px
+    line-height 22px
+
+  .left
+    position absolute
+    height calc(100% + 1px)
+    left 0
+    top -0.5px
+    width 4px
+    background #a6d4ff
+
+  .right
+    position absolute
+    height calc(100% + 1px)
+    right 0
+    top -0.5px
+    width 4px
+    background #a6d4ff
 
 .choice
   z-index 20
@@ -317,21 +382,74 @@ module.exports = {
 
 .menu
   position absolute
-  top 50%
-  left 50%
-  transform translate(-50%, -50%)
-  width 50%
-  height 50%
+  bottom 60px
+  left 0
+  width 100%
+  display flex
+  justify-content space-around
   background rgba(255, 255, 255, 0.5)
 
-  .cn, .en
-    display inline-block
-    font-size 24px
-    line-height 24px
-    padding 5px 0
+  .btn
+    overflow hidden
+    position relative
+    display flex
+    flex-direction column
+    align-items center
+    justify-content center
+    padding 0 10px
+    color #000
+    height 50px
+    text-align center
+
+    div
+      z-index 2
+
+    .highlight
+      position absolute
+      width calc(100% - 10px)
+      height calc(100% - 10px)
+      bottom 2.5px
+      left 2.5px
+      border 2px solid #fff
+
+    .cn
+      font-size 20px
+      line-height 20px
+      margin-top 5px
+
+    .en
+      font-size 16px
+      line-height 16px
 
 .highlight
   background rgba(0, 0, 0, 0.5)
+
+.menu-highlight
+  & > *
+    color #fff
+    text-shadow #000 0px 0 2px, #000 0px 0 2px, #000 0px 0 2px, #000 0px 0 2px
+
+.slide-down-enter, .slide-down-leave-to
+  top -50px !important
+  opacity 0 !important
+
+.slide-down-enter-to, .slide-down-leave
+  top 10px !important
+  opacity 1 !important
+
+.slide-up-enter-active, .slide-up-leave-active
+  transition all 0.3s
+
+.slide-up-enter, .slide-up-leave-to
+  bottom -50px !important
+  opacity 0.5
+
+.slide-up-enter-to, .slide-up-leave
+  bottom 60px !important
+  opacity 1
+
+.slide-down-enter-active, .slide-down-leave-active
+  transition all 0.3s ease-out
 
 .fade-enter, .fade-leave-to
   opacity 0

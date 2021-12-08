@@ -16,12 +16,8 @@
                 }"
                 :key="index"
               >
-                <div class="cn">
-                  {{ item.cn }}
-                </div>
-                <div class="en">
-                  {{ item.en }}
-                </div>
+                <div class="cn">{{ item.cn }}</div>
+                <div class="en">{{ item.en }}</div>
               </div>
             </template>
           </div>
@@ -100,13 +96,17 @@ module.exports = {
             } else {
               if (DataManager.loadGame(1)) {
                 this.menu.show = false
-                $gameTemp.reserveCommonEvent(98)
-                SceneManager.goto(Scene_Map)
-                $gameSystem.onAfterLoad()
+                Patch.startWait()
                 setTimeout(() => {
-                  this.show = false
-                  Patch.showTip()
-                }, 400)
+                  $gameTemp.reserveCommonEvent(98)
+                  SceneManager.goto(Scene_Map)
+                  $gameSystem.onAfterLoad()
+                  setTimeout(() => {
+                    this.show = false
+                    Patch.showTip()
+                    Patch.stopWait()
+                  }, 500)
+                }, 200)
               } else {
                 Methods.showPopup('Error', '奇怪的错误', 1500)
               }
@@ -355,7 +355,7 @@ module.exports = {
 
 .slide-up-enter, .slide-up-leave-to
   bottom -50px !important
-  opacity 0
+  opacity 0.5
 
 .slide-up-enter-to, .slide-up-leave
   bottom 60px !important
