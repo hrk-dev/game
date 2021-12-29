@@ -82,6 +82,15 @@
 </template>
 
 <script>
+const NAME = {
+  0: '汐 Shio',
+  1: '塔库亚 Takuya',
+  2: '西卡 Ceka',
+  3: '晏城 YanCheng',
+  4: '雅莉 Ari',
+  5: '菲林 Freelyn'
+}
+
 module.exports = {
   data: () => ({
     message: {
@@ -180,7 +189,7 @@ module.exports = {
     _choiceIndex() {
       if (
         this.choice.show &&
-        this.choice.index > 0 &&
+        this.choice.index >= 0 &&
         this.choice.list[this.choice.index] &&
         this.choice.list[this.choice.index].show
       ) {
@@ -213,6 +222,7 @@ module.exports = {
       this.message.character.list.shio = ''
     },
     otherCharacterError() {
+      console.warn(`立绘不存在: ${this.message.character.list.other} `)
       this.message.character.list.other = ''
     },
     add(code, msg) {
@@ -375,13 +385,7 @@ module.exports = {
       return str ? md5Url(`img/pictures/${str}.png`) : null
     },
     getName(id) {
-      if (id === 0 || id === '0') {
-        return '汐 Shio'
-      }
-      if (id === 1 || id === '1') {
-        return '塔库亚 Takuya'
-      }
-      return id
+      return NAME[id] || id
     },
     isShio(name) {
       return name.includes('汐')
