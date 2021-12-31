@@ -57,4 +57,8 @@ global.Methods = class {
   static hidePopup() {
     Components.Popup.hide()
   }
+
+  static showChoice(en, cn, fn, cb) {
+    Components.Choice.showChoice(en, cn, fn, cb)
+  }
 }

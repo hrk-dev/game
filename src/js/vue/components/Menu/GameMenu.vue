@@ -10,16 +10,6 @@
     </transition>
     <transition name="fade">
       <div v-if="show">
-        <transition name="fade">
-          <div class="choice" v-if="choice.show">
-            <div class="en">{{ choice.en }}</div>
-            <div class="cn">{{ choice.cn }}</div>
-            <div class="key-list">
-              <div class="key" :class="{ highlight: choice.current }">Yes</div>
-              <div class="key" :class="{ highlight: !choice.current }">No</div>
-            </div>
-          </div>
-        </transition>
         <transition name="slide-up" appear>
           <div class="menu" v-if="menu.show">
             <div v-for="(item, index) in menu.list" :key="index" class="btn">
@@ -55,13 +45,6 @@ module.exports = {
       en: '',
       cn: ''
     },
-    choice: {
-      show: false,
-      current: true,
-      en: '',
-      cn: '',
-      fn: () => {}
-    },
     menu: {
       show: false,
       current: 0,
@@ -72,7 +55,7 @@ module.exports = {
           en: 'Save',
           fn() {
             if (this.hasSave) {
-              this.showChoice(
+              Methods.showChoice(
                 'Do you wish to overwrite this save file',
                 '是否覆盖存档',
                 () => {
@@ -91,7 +74,7 @@ module.exports = {
           cn: '读取',
           en: 'Load',
           fn() {
-            this.showChoice(
+            Methods.showChoice(
               'Do you wish to load this save file',
               '是否读取存档',
               () => {
@@ -131,7 +114,7 @@ module.exports = {
           cn: '退出',
           en: 'Exit',
           fn() {
-            this.showChoice(
+            Methods.showChoice(
               'Do you wish back to title',
               '是否返回主菜单',
               () => {
@@ -179,24 +162,8 @@ module.exports = {
         this.back()
         return
       }
-      if (this.choice.show) {
-        switch (buttonName) {
-          case 'left':
-            this.changeChoice()
-            break
-          case 'right':
-            this.changeChoice()
-            break
-          case 'up':
-            this.changeChoice()
-            break
-          case 'down':
-            this.changeChoice()
-            break
-          case 'ok':
-            this.choiceKeyDown()
-            break
-        }
+      if (Components.Choice.show) {
+        Components.Choice.checkInput(buttonName)
       } else if (this.$refs.Setting.show) {
         this.$refs.Setting.checkInput(buttonName)
       } else {
@@ -214,32 +181,10 @@ module.exports = {
             this.down()
             break
           case 'ok':
-            if (this.choice.show) return
+            if (Components.Choice.show) return
             this.menu.list[this.menu.current].fn.call(this)
             break
         }
-      }
-    },
-    showChoice(en, cn, fn) {
-      if ((en || cn) && fn) {
-        this.choice.en = en
-        this.choice.cn = cn
-        this.choice.fn = fn
-        this.choice.show = true
-      }
-    },
-    // 选择框
-    changeChoice() {
-      this.choice.current = !this.choice.current
-    },
-    choiceKeyDown() {
-      if (this.choice.current) {
-        this.back()
-        this.choice.fn()
-        this.choice.fn = () => {}
-      } else {
-        this.back()
-        this.choice.fn = () => {}
       }
     },
     // 通常
@@ -270,10 +215,9 @@ module.exports = {
     },
     back() {
       if (this.show) {
-        if (this.choice.show) {
+        if (Components.Choice.show) {
           Methods.hidePopup()
-          this.choice.show = false
-          this.choice.current = true
+          Components.Choice.reset()
           return
         }
         if (this.menu.show) {
@@ -336,35 +280,6 @@ module.exports = {
     top -0.5px
     width 4px
     background #a6d4ff
-
-.choice
-  z-index 20
-  color #fff
-  position absolute
-  left 50%
-  top 50%
-  background rgba(0, 0, 0, 0.7)
-  transform translate(-50%, -50%)
-  padding 5px
-  text-align center
-
-  .en
-    font-size 16px
-    line-height 16px
-    padding-top 2px
-    white-space pre
-
-  .cn
-    font-size 20px
-    line-height 20px
-
-  .key-list
-    margin-top 5px
-
-    .key
-      padding 5px
-      font-size 14px
-      line-height 14px
 
 .menu
   position absolute

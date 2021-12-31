@@ -11,6 +11,7 @@ VueMain.app = new Vue({
     MoveTip: VueMain.loadComponent('Popup/MoveTip'),
     Tip: VueMain.loadComponent('Popup/Tip'),
     Popup: VueMain.loadComponent('Popup/Popup'),
+    Choice: VueMain.loadComponent('Popup/Choice'),
     Message: VueMain.loadComponent('Popup/Message'),
     VVideo: VueMain.loadComponent('Temp/Video'),
     Ending: VueMain.loadComponent('Temp/Ending'),
