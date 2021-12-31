@@ -49,7 +49,7 @@
 <script>
 module.exports = {
   components: {
-    Setting: VueMain.loadComponent('common/Setting')
+    Setting: VueMain.loadComponent('Common/Setting')
   },
   data: () => ({
     show: false,

@@ -2,19 +2,19 @@ VueMain.app = new Vue({
   el: '#app',
   template: VueMain.loadTemplate('app'),
   components: {
-    MainMenu: VueMain.loadComponent('MainMenu'),
     TitleBar: VueMain.loadComponent('TitleBar'),
     VMain: VueMain.loadComponent('Main'),
+    Logo: VueMain.loadComponent('Logo'),
+    MainMenu: VueMain.loadComponent('Menu/MainMenu'),
+    GameMenu: VueMain.loadComponent('Menu/GameMenu'),
+    MoveTip: VueMain.loadComponent('Popup/MoveTip'),
+    Tip: VueMain.loadComponent('Popup/Tip'),
+    Popup: VueMain.loadComponent('Popup/Popup'),
+    Message: VueMain.loadComponent('Popup/Message'),
     VVideo: VueMain.loadComponent('Video'),
     Ending: VueMain.loadComponent('Ending'),
     Danmu: VueMain.loadComponent('Danmu'),
-    Tip: VueMain.loadComponent('Tip'),
-    MoveTip: VueMain.loadComponent('MoveTip'),
-    Story: VueMain.loadComponent('Story'),
-    GameMenu: VueMain.loadComponent('GameMenu'),
-    Popup: VueMain.loadComponent('Popup'),
-    Message: VueMain.loadComponent('Message'),
-    Logo: VueMain.loadComponent('Logo')
+    Story: VueMain.loadComponent('Story')
   },
   data: () => ({
     ready: false,

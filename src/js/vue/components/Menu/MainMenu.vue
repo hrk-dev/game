@@ -31,7 +31,7 @@
 <script>
 module.exports = {
   components: {
-    Setting: VueMain.loadComponent('common/Setting')
+    Setting: VueMain.loadComponent('Common/Setting')
   },
   data: () => ({
     bg: md5Url('img/pictures/menu.png'),
