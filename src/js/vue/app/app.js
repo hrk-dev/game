@@ -5,6 +5,7 @@ VueMain.app = new Vue({
     TitleBar: VueMain.loadComponent('Window/TitleBar'),
     VMain: VueMain.loadComponent('Main'),
     Logo: VueMain.loadComponent('View/Logo'),
+    Loading: VueMain.loadComponent('View/Loading'),
     MainMenu: VueMain.loadComponent('Menu/MainMenu'),
     GameMenu: VueMain.loadComponent('Menu/GameMenu'),
     MoveTip: VueMain.loadComponent('Popup/MoveTip'),

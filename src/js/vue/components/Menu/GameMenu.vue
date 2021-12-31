@@ -1,8 +1,5 @@
 <template>
   <div id="game-menu">
-    <transition name="fade2">
-      <div class="loading" v-if="loading">Loading···</div>
-    </transition>
     <transition name="slide-down">
       <div class="tip" v-if="tipShow">
         <div class="en">{{ tip.en }}</div>
@@ -53,7 +50,6 @@ module.exports = {
   },
   data: () => ({
     show: false,
-    loading: false,
     hasSave: false,
     tip: {
       en: '',
@@ -99,7 +95,7 @@ module.exports = {
               'Do you wish to load this save file',
               '是否读取存档',
               () => {
-                this.loading = true
+                Components.Loading.loadingShow()
                 setTimeout(() => {
                   if (DataManager.loadGame(1)) {
                     Patch.startWait()
@@ -111,7 +107,7 @@ module.exports = {
                       this.show = false
                       Patch.showTip()
                       Patch.stopWait()
-                      this.loading = false
+                      Components.Loading.loadingHide()
                     }, 300)
                   } else {
                     Methods.showPopup('Load failed', '读取失败', 1000)
@@ -302,16 +298,6 @@ module.exports = {
 </script>
 
 <style lang="stylus" scoped>
-.loading
-  z-index 110
-  display flex
-  justify-content center
-  align-items center
-  position absolute
-  inset 0
-  color #fff
-  background #000
-
 .tip
   position absolute
   top 10px
@@ -459,15 +445,6 @@ module.exports = {
 
 .fade-enter-active, .fade-leave-active
   transition opacity 0.2s
-
-.fade2-enter, .fade2-leave-to
-  opacity 0
-
-.fade2-enter-to, .fade2-leave
-  opacity 1
-
-.fade2-enter-active, .fade2-leave-active
-  transition opacity 0.2s linear
 
 .switch-enter-active, .switch-leave-active
   transition all 0.3s
