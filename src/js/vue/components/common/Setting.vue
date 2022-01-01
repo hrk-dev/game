@@ -328,6 +328,7 @@ module.exports = {
         height 30px
         font-size 22px
         line-height 22px
+        margin-bottom 5px
 
         .back-btn
           display inline-block

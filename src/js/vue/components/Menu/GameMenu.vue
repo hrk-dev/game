@@ -27,7 +27,8 @@
             </div>
           </div>
         </transition>
-        <Setting ref="Setting" @back="showMenu" />
+        <Item ref="Item"></Item>
+        <Setting ref="Setting" @back="showMenu"></Setting>
       </div>
     </transition>
   </div>
@@ -36,6 +37,7 @@
 <script>
 module.exports = {
   components: {
+    Item: VueMain.loadComponent('Common/ItemList'),
     Setting: VueMain.loadComponent('Common/Setting')
   },
   data: () => ({
@@ -102,6 +104,15 @@ module.exports = {
         },
         {
           show: true,
+          cn: '物品栏',
+          en: 'Item',
+          fn() {
+            this.menu.show = false
+            this.$refs.Item.show()
+          }
+        },
+        {
+          show: true,
           cn: '设置',
           en: 'Setting',
           fn() {
@@ -164,6 +175,8 @@ module.exports = {
       }
       if (Components.Choice.show) {
         Components.Choice.checkInput(buttonName)
+      } else if (this.$refs.Item.isShow) {
+        this.$refs.Item.checkInput(buttonName)
       } else if (this.$refs.Setting.show) {
         this.$refs.Setting.checkInput(buttonName)
       } else {
@@ -226,6 +239,11 @@ module.exports = {
           setTimeout(() => {
             SceneManager.pop()
           }, 200)
+          return
+        }
+        if (this.$refs.Item.isShow) {
+          this.$refs.Item.hide()
+          this.showMenu()
           return
         }
         if (this.$refs.Setting.show) {
@@ -342,7 +360,7 @@ module.exports = {
   transition all 0.3s
 
 .slide-up-enter, .slide-up-leave-to
-  bottom -50px !important
+  bottom -70px !important
   opacity 0.5
 
 .slide-up-enter-to, .slide-up-leave

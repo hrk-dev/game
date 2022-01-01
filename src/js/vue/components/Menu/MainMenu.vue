@@ -22,7 +22,7 @@
             </template>
           </div>
         </transition>
-        <Setting ref="Setting" @back="showMenu" />
+        <Setting ref="Setting" @back="showMenu"></Setting>
       </div>
     </transition>
   </div>
@@ -354,7 +354,7 @@ module.exports = {
   transition all 0.3s
 
 .slide-up-enter, .slide-up-leave-to
-  bottom -50px !important
+  bottom -70px !important
   opacity 0.5
 
 .slide-up-enter-to, .slide-up-leave
