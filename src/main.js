@@ -6,7 +6,7 @@ process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true'
 let mainWindow
 function createWindow() {
   mainWindow = new BrowserWindow({
-    show: true,
+    show: false,
     width: 1024,
     height: 720 + 30,
     minWidth: 1024,
@@ -44,15 +44,6 @@ ipcMain.on('app:reload', () => {
   mainWindow.webContents.reload()
 })
 
-ipcMain.on('app:dev', () => {
-  if (mainWindow) {
-    mainWindow.webContents.openDevTools()
-    try {
-      require('./window/devtools')(mainWindow)
-    } catch (_err) { }
-  }
-})
-
 ipcMain.on('app:min', () => {
   mainWindow.minimize()
 })
@@ -69,8 +60,25 @@ ipcMain.on('app:quit', () => {
   app.exit()
 })
 
-ipcMain.on('vue:ready', () => {
+ipcMain.on('vue:ready', (_e, dev) => {
   mainWindow.show()
+  if (dev) {
+    ipcMain.on('dev:tool', () => {
+      if (mainWindow) {
+        if (mainWindow.webContents.isDevToolsOpened()) {
+          mainWindow.webContents.closeDevTools()
+        } else {
+          mainWindow.webContents.openDevTools()
+        }
+      }
+    })
+
+    ipcMain.on('dev:vue', () => {
+      try {
+        require('./window/devtools')(mainWindow)
+      } catch (_err) { }
+    })
+  }
 })
 
 require('./window/console')

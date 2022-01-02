@@ -4,7 +4,11 @@ const { join } = require('path')
 let devWindow = null
 module.exports = function devtools(mainWindow) {
   if (devWindow) {
-    devWindow.show()
+    if (devWindow.isVisible()) {
+      devWindow.hide()
+    } else {
+      devWindow.show()
+    }
     return
   }
 

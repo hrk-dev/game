@@ -83,7 +83,7 @@ SceneManager.onKeyDown = function (event) {
         break
       case 123:   // F12
         if (dev) {
-          electron.ipcRenderer.send('app:dev')
+          electron.ipcRenderer.send('dev:tool')
         }
         break
     }

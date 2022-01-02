@@ -34,7 +34,8 @@
     "singleQuote": true,
     "semi": false,
     "arrowParens": "avoid",
-    "bracketSpacing": true
+    "bracketSpacing": true,
+    "printWidth": 100
   },
   "dependencies": {
     "@vue/devtools": "^5.3.4"

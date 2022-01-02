@@ -3,7 +3,7 @@ VueMain.app = new Vue({
   template: VueMain.loadTemplate('app'),
   components: {
     TitleBar: VueMain.loadComponent('Window/TitleBar'),
-    VMain: VueMain.loadComponent('Main'),
+    Window: VueMain.loadComponent('Main'),
     Logo: VueMain.loadComponent('View/Logo'),
     Loading: VueMain.loadComponent('View/Loading'),
     MainMenu: VueMain.loadComponent('Menu/MainMenu'),
@@ -33,17 +33,14 @@ VueMain.app = new Vue({
     }
   },
   methods: {
-    ipc(type) {
-      electron.ipcRenderer.send(type)
-    },
     setReady() {
       this.ready = true
       Components.Logo.start()
     }
   },
   mounted() {
-    setTimeout(() => {
-      this.ipc('vue:ready')
-    }, 50)
+    this.$nextTick(() => {
+      electron.ipcRenderer.send('vue:ready', dev)
+    })
   }
 })

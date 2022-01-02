@@ -1,6 +1,6 @@
 <div>
-  <TitleBar ref="TitleBar" @ipc="ipc" />
-  <VMain v-show="ready" ref="Main" :width="main.width" :height="main.height" :margin="main.margin" :scale="main.scale"
+  <TitleBar ref="TitleBar" />
+  <window v-show="ready" ref="Main" :width="main.width" :height="main.height" :margin="main.margin" :scale="main.scale"
     @ready="setReady">
     <Logo ref="Logo" />
     <Loading ref="Loading" />
@@ -15,5 +15,5 @@
     <Danmu ref="danmu" :height="main.height" :fontSize="_fontSize" />
     <Ending ref="ending" :fontSize="_fontSize" :scale="main.scale" />
     <Story ref="story" :fontSize="_fontSize" :scale="main.scale" />
-  </VMain>
+  </window>
 </div>

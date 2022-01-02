@@ -7,18 +7,12 @@
       <div class="title-text">{{ title }}</div>
     </div>
     <div class="title-btn-list">
-      <div class="title-btn" @click="ipc('app:reload')" v-if="dev">Re</div>
-      <div
-        class="title-btn"
-        style="width: 50px"
-        @click="ipc('app:dev')"
-        v-if="dev"
-      >
-        Dev
+      <div class="dev-btn" v-if="dev">
+        <div class="title-btn" @click="ipc('app:reload')" title="刷新页面">Re</div>
+        <div class="title-btn" @click="ipc('dev:tool')" title="打开devtools">Dev</div>
+        <div class="title-btn" @click="ipc('dev:vue')" title="打开vue-devtools">Vue</div>
       </div>
-      <div class="title-btn" style="line-height: 20px" @click="ipc('app:min')">
-        _
-      </div>
+      <div class="title-btn" style="line-height: 20px" @click="ipc('app:min')">_</div>
       <div class="title-btn" @click="ipc('app:max')">□</div>
       <div class="title-btn" @click="ipc('app:quit')">×</div>
     </div>
@@ -35,7 +29,7 @@ module.exports = {
   }),
   methods: {
     ipc(type) {
-      this.$emit('ipc', type)
+      electron.ipcRenderer.send(type)
     },
     titleTest() {
       if (this.titleTestIndex > this.titleList.length - 1) {
@@ -128,7 +122,11 @@ module.exports = {
 .title-btn-list
   display flex
 
+.dev-btn
+  background rgba(255, 255, 255, 0.2)
+
 .title-btn
+  display inline-block
   line-height 27px
   height 27px
   width 45px
