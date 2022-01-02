@@ -1,6 +1,6 @@
-/node_modules
+node_modules
 /dist
 /build
-/src/temp
-/src/save
+/temp
 /src/icu
+/src/game/save
