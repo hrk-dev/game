@@ -13,6 +13,7 @@ VueMain.app = new Vue({
     Popup: VueMain.loadComponent('Popup/Popup'),
     Choice: VueMain.loadComponent('Popup/Choice'),
     Message: VueMain.loadComponent('Popup/Message'),
+    Character: VueMain.loadComponent('Temp/Character'),
     VVideo: VueMain.loadComponent('Temp/Video'),
     Ending: VueMain.loadComponent('Temp/Ending'),
     Danmu: VueMain.loadComponent('Temp/Danmu'),

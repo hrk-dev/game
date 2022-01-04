@@ -3,6 +3,8 @@ const { join } = require('path')
 
 process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true'
 
+ipcMain.setMaxListeners(1)
+
 let mainWindow
 function createWindow() {
   mainWindow = new BrowserWindow({

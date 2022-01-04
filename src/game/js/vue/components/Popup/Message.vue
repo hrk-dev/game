@@ -219,10 +219,11 @@ module.exports = {
   },
   methods: {
     characterError() {
+      Components.Character.add(this.message.character.list.shio)
       this.message.character.list.shio = ''
     },
     otherCharacterError() {
-      console.warn(`立绘不存在: ${this.message.character.list.other} `)
+      Components.Character.add(this.message.character.list.other)
       this.message.character.list.other = ''
     },
     add(code, msg) {
