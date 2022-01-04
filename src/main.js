@@ -62,25 +62,45 @@ ipcMain.on('app:quit', () => {
   app.exit()
 })
 
+function setDev(dev) {
+  const eventNames = ipcMain.eventNames()
+
+
+  if (dev) {
+    if (!eventNames.includes('dev:tool')) {
+      ipcMain.on('dev:tool', () => {
+        if (mainWindow) {
+          if (mainWindow.webContents.isDevToolsOpened()) {
+            mainWindow.webContents.closeDevTools()
+          } else {
+            mainWindow.webContents.openDevTools()
+          }
+        }
+      })
+    }
+
+    if (!eventNames.includes('dev:vue')) {
+      ipcMain.on('dev:vue', () => {
+        try {
+          require('./window/devtools')(mainWindow)
+        } catch (_err) { }
+      })
+    }
+  } else {
+    if (!eventNames.includes('dev:tool')) {
+      ipcMain.off('dev:tool')
+    }
+
+    if (!eventNames.includes('dev:vue')) {
+      ipcMain.off('dev:vue')
+    }
+  }
+
+}
+
 ipcMain.on('vue:ready', (_e, dev) => {
   mainWindow.show()
-  if (dev) {
-    ipcMain.on('dev:tool', () => {
-      if (mainWindow) {
-        if (mainWindow.webContents.isDevToolsOpened()) {
-          mainWindow.webContents.closeDevTools()
-        } else {
-          mainWindow.webContents.openDevTools()
-        }
-      }
-    })
-
-    ipcMain.on('dev:vue', () => {
-      try {
-        require('./window/devtools')(mainWindow)
-      } catch (_err) { }
-    })
-  }
+  setDev(dev)
 })
 
 require('./window/console')
