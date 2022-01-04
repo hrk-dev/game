@@ -3,11 +3,7 @@
     <transition :name="_transition">
       <div class="message-wrapper" :class="_pos" v-if="message.show">
         <div class="text" :class="[_align, _size, _bg, _color]" ref="text">
-          <div
-            class="name"
-            :class="_nameAlign"
-            v-show="message.name && message.pos != 2"
-          >
+          <div class="name" :class="_nameAlign" v-show="message.name && message.pos != 2">
             {{ message.name }}
           </div>
           <template v-if="message.pos == 2">
@@ -37,11 +33,8 @@
               v-if="message.character.list.shio"
               :src="getUrl(message.character.list.shio)"
               :class="{
-                'shio-left':
-                  this.message.character.list.shio &&
-                  this.message.character.list.other,
-                lowlight:
-                  message.character.current !== message.character.list.shio
+                'shio-left': this.message.character.list.shio && this.message.character.list.other,
+                lowlight: message.character.current !== message.character.list.shio
               }"
               @error="characterError"
             />
@@ -52,8 +45,7 @@
               v-if="message.character.list.other"
               :src="getUrl(message.character.list.other)"
               :class="{
-                lowlight:
-                  message.character.current !== message.character.list.other
+                lowlight: message.character.current !== message.character.list.other
               }"
               @error="otherCharacterError"
             />
@@ -179,8 +171,7 @@ module.exports = {
       return this.message.show && this.message.pos == 0
     },
     _shioLeft() {
-      return this.message.character.list.shio &&
-        this.message.character.list.other
+      return this.message.character.list.shio && this.message.character.list.other
         ? 'shio-left'
         : ''
     }
@@ -202,10 +193,8 @@ module.exports = {
           this.message.temp.character = this.message.character.list.other
           this.message.en = this.choice.list[this.choice.index].msgEn
           this.message.cn = this.choice.list[this.choice.index].msgCn
-          this.message.character.list.other =
-            this.choice.list[this.choice.index].character
-          this.message.character.current =
-            this.choice.list[this.choice.index].character
+          this.message.character.list.other = this.choice.list[this.choice.index].character
+          this.message.character.current = this.choice.list[this.choice.index].character
         } else {
           if (this.message.temp.en || this.message.temp.cn) {
             this.message.en = this.message.temp.en
@@ -270,7 +259,11 @@ module.exports = {
 
         this.message.name = this.getName(temp[1])
 
-        const character = temp[2] || ''
+        let character = temp[2] || ''
+        if (character.includes('无立绘')) {
+          character = ''
+        }
+
         if (this.isShio(character)) {
           this.message.character.list.shio = character
         } else {
