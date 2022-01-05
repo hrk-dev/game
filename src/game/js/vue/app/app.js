@@ -16,8 +16,7 @@ VueMain.app = new Vue({
     Character: VueMain.loadComponent('Temp/Character'),
     VVideo: VueMain.loadComponent('Temp/Video'),
     Ending: VueMain.loadComponent('Temp/Ending'),
-    Danmu: VueMain.loadComponent('Temp/Danmu'),
-    Story: VueMain.loadComponent('Temp/Story')
+    Danmu: VueMain.loadComponent('Temp/Danmu')
   },
   data: () => ({
     ready: false,

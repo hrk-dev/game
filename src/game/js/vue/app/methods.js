@@ -42,14 +42,6 @@ global.Methods = class {
     return Components.Tip.show
   }
 
-  static showStory() {
-    Components.story.show()
-  }
-
-  static hideStory() {
-    Components.story.hide()
-  }
-
   static showPopup(en, cn, time) {
     return Components.Popup.show(en, cn, time)
   }
