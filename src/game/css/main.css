@@ -8,6 +8,10 @@ body {
   pointer-events: none;
 }
 
+#GameCanvas {
+  transition: filter 0.2s;
+}
+
 img {
   -webkit-user-drag: none;
 }

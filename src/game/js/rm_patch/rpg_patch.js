@@ -21,7 +21,7 @@ const Patch = class {
   static addGlobalInfo(name, data) {
     const globalInfo = DataManager.loadGlobalInfo()
     if (!globalInfo[0]) globalInfo[0] = {}
-    globalInfo[0][name] = {...globalInfo[0][name], ...data}
+    globalInfo[0][name] = { ...globalInfo[0][name], ...data }
 
     DataManager.saveGlobalInfo(globalInfo)
   }
@@ -63,4 +63,12 @@ const Patch = class {
 }
 
 /** 插件方法 */
-const Plugins = class { }
+const Plugins = class {
+  static focusToID(id, scale, time) {
+    Galv.ZOOM.target(id, scale, time)
+  }
+
+  static blur(time) {
+    Galv.ZOOM.restore(time)
+  }
+}
