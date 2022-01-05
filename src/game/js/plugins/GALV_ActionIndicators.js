@@ -210,7 +210,6 @@ Galv.AI.checkEventForIcon = function(event) {
 			if (event.page().list[i].code === 108) {
 				var iconCheck = event.page().list[i].parameters[0].match(/<icon: (.*)>/i);
 				if (iconCheck) {
-					// create target object
 					if (iconCheck[1] == 'move') {
 						_action.iconId = 255
 					} else if (iconCheck[1] == 'talk') {
@@ -223,7 +222,18 @@ Galv.AI.checkEventForIcon = function(event) {
 					_action.eventId = event._eventId
 					if (_action.iconId == 255) _action.eventId = 0
 					break;
-				};
+				} else {
+					if (/<move>/.test(event.page().list[i].parameters[0])) {
+					 _action.iconId = 255
+					} else if (/<talk>/.test(event.page().list[i].parameters[0])) {
+						_action.iconId = 254
+					} else if (/<check>/.test(event.page().list[i].parameters[0])) {
+						_action.iconId = 253
+					}
+					_action.eventId = event._eventId
+					if (_action.iconId == 255) _action.eventId = 0
+					break;
+				}
 			};
 		};
 		for (var i = 0; i < listCount; i++) {
