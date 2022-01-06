@@ -3,6 +3,11 @@
     src: url("IPix.ttf");
 }
 
+@font-face {
+    font-family: Error;
+    src: url("error.ttf");
+}
+
 .IIV::-webkit-media-controls-play-button,
 video::-webkit-media-controls-start-playback-button {
     opacity: 0;
