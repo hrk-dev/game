@@ -333,6 +333,7 @@ module.exports = {
       if (!this.choice.list[++this.choice.index].show) this.down()
     },
     onChoice() {
+      if (this.choice.index == -1) return
       $gameMessage.onChoice(this.choice.index)
       SceneManager._scene._messageWindow._choiceWindow._messageWindow.terminateMessage()
       SceneManager._scene._messageWindow._choiceWindow.close()
