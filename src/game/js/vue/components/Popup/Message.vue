@@ -8,7 +8,7 @@
           </div>
           <template v-if="message.pos == 2">
             <div ref="multiline">
-              <transition-group name="fade">
+              <transition-group name="multiline-fade">
                 <div
                   class="multiline"
                   v-for="(item, index) in message.multiline"
@@ -24,7 +24,9 @@
             <div class="en" v-html="message.en"></div>
             <div class="cn" v-html="message.cn"></div>
           </template>
-          <div class="next" :class="_iconColor" v-show="!choice.show"></div>
+          <div class="next-wrapper">
+            <div class="next" :class="_iconColor" v-show="!choice.show"></div>
+          </div>
         </div>
         <div class="character" v-show="_showCharacter">
           <transition name="slide-up">
@@ -482,12 +484,14 @@ module.exports = {
     height 180px
 
 .center
+  height 100%
   top 50%
   left 0
   right 0
   transform translateY(-50%)
 
   .text
+    height 100%
     min-height 120px
 
 .top
@@ -503,10 +507,13 @@ module.exports = {
     .en
       margin-bottom 3px !important
 
-    .next
-      position unset !important
-      align-self flex-end
-      margin-top 5px
+    .next-wrapper
+      display flex
+      justify-content center
+      margin-top 10px
+
+      .next
+        position unset !important
 
   .text
     height 100%
@@ -517,10 +524,13 @@ module.exports = {
   justify-content center
   text-align center
 
-  .next
-    bottom -10px !important
-    right 50% !important
-    transform translateX(50%)
+  .next-wrapper
+    display flex
+    justify-content center
+    margin-top 10px
+
+    .next
+      position unset !important
 
 .name-left
   left 10px
@@ -605,4 +615,13 @@ module.exports = {
 .slide-up-enter, .slide-up-leave-to
   transform translateY(100%)
   opacity 0
+
+.multiline-fade-enter, .multiline-fade-leave-to
+  opacity 0 !important
+
+.multiline-fade-enter-to, .multiline-fade-leave
+  opacity 1 !important
+
+.multiline-fade-enter-active
+  transition opacity 0.2s
 </style>
