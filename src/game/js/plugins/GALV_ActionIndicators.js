@@ -203,7 +203,7 @@ Galv.AI.checkEventForIcon = function(event) {
 	var icon = 0;
 			
 	const _action = {'eventId': -1, 'iconId': 0}
-	if (event.page()) {
+	if (event?.page()) {
 		var listCount = event.page().list.length;
 		
 		for (var i = 0; i < listCount; i++) {

@@ -231,7 +231,7 @@ module.exports = {
 
       this.message.pos = Number(temp[0][0]) || 0
 
-      const variables = this.message.list[1].match(/<var: (.*)>/i)
+      const variables = this.message.list[1]?.match(/<var: (.*)>/i)
       if (variables && Number(variables[1])) {
         const temp2 = ($gameVariables.value(variables[1]) || '').split('|')
         this.message.en = temp2[0]
