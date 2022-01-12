@@ -20,9 +20,9 @@ Galv.ZOOM = Galv.ZOOM || {};          // Galv's stuff
 
 //-----------------------------------------------------------------------------
 /*:
- * @plugindesc (v.1.1) Zoom in on a certain part of the screen
- * 
- * @author Galv - galvs-scripts.com
+ * @plugindesc 用于放大画面(经过修改)
+ *
+ * @author Galv - galvs-scripts.com & Blacktunes
  *
  * @param Battle Zoom
  * @desc The zoom scale battle will begin at.
@@ -49,7 +49,7 @@ Galv.ZOOM = Galv.ZOOM || {};          // Galv's stuff
  *   Galv.ZOOM.center(scale,duration);      // zooms in center of screen
  *
  *   Galv.ZOOM.restore(duration);           // set zoom to normal
- * 
+ *
  * NOTES:
  * If you move x,y as well as scale simultaneously, you may experience a strange
  * arc motion of the screen. I have not worked out a good way to remedy this so
@@ -69,215 +69,215 @@ Galv.ZOOM = Galv.ZOOM || {};          // Galv's stuff
 
 (function () {
 
-	Galv.ZOOM.battleScale = Number(PluginManager.parameters('GALV_ScreenZoom')["Battle Zoom"]);
+  Galv.ZOOM.battleScale = Number(PluginManager.parameters('GALV_ScreenZoom')["Battle Zoom"]);
 
-	Galv.ZOOM.setTo = function (x, y) {
-		if ($gameScreen._zoomScale == 1) {
-			$gameScreen._zoomX = x;
-			$gameScreen._zoomY = y;
-		}
-	};
+  Galv.ZOOM.setTo = function (x, y) {
+    if ($gameScreen._zoomScale == 1) {
+      $gameScreen._zoomX = x;
+      $gameScreen._zoomY = y;
+    }
+  };
 
-	Galv.ZOOM.move = function (x, y, scale, duration) {
-		$gameSystem._savedZoom.follow = false
-		$gameScreen.startZoom(x, y, scale, duration);
-	};
+  Galv.ZOOM.move = function (x, y, scale, duration) {
+    $gameSystem._savedZoom.follow = false
+    $gameScreen.startZoom(x, y, scale, duration);
+  };
 
-	Galv.ZOOM.center = function (scale, duration) {
-		$gameSystem._savedZoom.follow = false
-		var x = Graphics.boxWidth / 2;
-		var y = Graphics.boxHeight / 2;
-		$gameScreen.startZoom(x, y, scale, duration);
-	};
+  Galv.ZOOM.center = function (scale, duration) {
+    $gameSystem._savedZoom.follow = false
+    var x = Graphics.boxWidth / 2;
+    var y = Graphics.boxHeight / 2;
+    $gameScreen.startZoom(x, y, scale, duration);
+  };
 
-	Galv.ZOOM.target = function (id, scale, duration) {
-		if (id <= 0) {
-			var target = $gamePlayer;
-			$gameSystem._savedZoom.follow = true
-		} else {
-			var target = $gameMap.event(id);
-		}
-		var x = target.screenX();
-		var y = target.screenY() - 12 - scale;
-		$gameScreen._zoomScaleTargetID = id
-		$gameScreen.startZoom(x, y, scale, duration);
-	};
+  Galv.ZOOM.target = function (id, scale, duration) {
+    if (id <= 0) {
+      var target = $gamePlayer;
+      $gameSystem._savedZoom.follow = true
+    } else {
+      var target = $gameMap.event(id);
+    }
+    var x = target.screenX();
+    var y = target.screenY() - 12 - scale;
+    $gameScreen._zoomScaleTargetID = id
+    $gameScreen.startZoom(x, y, scale, duration);
+  };
 
-	Galv.ZOOM.restore = function (duration) {
-		$gameSystem._savedZoom.follow = false
-		var x = Graphics.boxWidth / 2;
-		var y = Graphics.boxHeight / 2;
-		$gameScreen.startZoom(x, y, 1, duration);
-	};
+  Galv.ZOOM.restore = function (duration) {
+    $gameSystem._savedZoom.follow = false
+    var x = Graphics.boxWidth / 2;
+    var y = Graphics.boxHeight / 2;
+    $gameScreen.startZoom(x, y, 1, duration);
+  };
 
-	Galv.ZOOM.saveZoomData = function () {
-		if (!$gameSystem._savedZoom) {
-			$gameSystem._savedZoom = {}
-		}
-		$gameSystem._savedZoom.x = Number($gameScreen._zoomX);
-		$gameSystem._savedZoom.xTarget = Number($gameScreen._zoomXTarget);
-		$gameSystem._savedZoom.y = Number($gameScreen._zoomY);
-		$gameSystem._savedZoom.yTarget = Number($gameScreen._zoomYTarget);
-		$gameSystem._savedZoom.scale = Number($gameScreen._zoomScale);
-		$gameSystem._savedZoom.scaleTarget = Number($gameScreen._zoomScaleTarget);
-		$gameSystem._savedZoom.duration = Number($gameScreen._zoomDuration);
-	};
-
-
-	//-----------------------------------------------------------------------------
-	//  GAME SYSTEM
-	//-----------------------------------------------------------------------------
-
-	Galv.ZOOM.Game_System_initialize = Game_System.prototype.initialize;
-	Game_System.prototype.initialize = function () {
-		Galv.ZOOM.Game_System_initialize.call(this);
-		var cx = Graphics.boxWidth / 2;
-		var cy = Graphics.boxHeight / 2
-		this._savedZoom = {
-			x: cx,
-			y: cy,
-			xTarget: cx,
-			yTarget: cy,
-			scale: 1,
-			scaleTarget: 1,
-			duration: 0
-		}
-	};
+  Galv.ZOOM.saveZoomData = function () {
+    if (!$gameSystem._savedZoom) {
+      $gameSystem._savedZoom = {}
+    }
+    $gameSystem._savedZoom.x = Number($gameScreen._zoomX);
+    $gameSystem._savedZoom.xTarget = Number($gameScreen._zoomXTarget);
+    $gameSystem._savedZoom.y = Number($gameScreen._zoomY);
+    $gameSystem._savedZoom.yTarget = Number($gameScreen._zoomYTarget);
+    $gameSystem._savedZoom.scale = Number($gameScreen._zoomScale);
+    $gameSystem._savedZoom.scaleTarget = Number($gameScreen._zoomScaleTarget);
+    $gameSystem._savedZoom.duration = Number($gameScreen._zoomDuration);
+  };
 
 
-	//-----------------------------------------------------------------------------
-	//  GAME SCREEN
-	//-----------------------------------------------------------------------------
+  //-----------------------------------------------------------------------------
+  //  GAME SYSTEM
+  //-----------------------------------------------------------------------------
 
-	// Overwrite
-	Game_Screen.prototype.startZoom = function (x, y, scale, duration) {
-		Galv.ZOOM.setTo(x, y);
-
-		var cx = Graphics.boxWidth / 2;
-		if (x < 0) {
-			x = this._zoomX;
-		} else if (x != cx) {
-			var pox = Graphics.boxWidth / (scale * 2 - 2);
-			var difX = cx - x;
-			if (difX != 0) difX = (difX / cx) * pox;
-			x = x - difX;
-		}
-
-		var cy = Graphics.boxHeight / 2;
-		if (y < 0) {
-			y = this._zoomY;
-		} else if (y != cy) {
-			var poy = Graphics.boxHeight / (scale * 2 - 2);
-			var difY = cy - y;
-			if (difY != 0) difY = (difY / cy) * poy;
-			y = y - difY;
-		}
-
-		this._zoomXTarget = Math.min(Graphics.boxWidth, Math.max(x, 0));
-		this._zoomYTarget = Math.min(Graphics.boxHeight, Math.max(y, 0));
-
-		this._zoomScaleTarget = scale < 0 ? this._zoomScale : scale;
-		this._zoomDuration = duration || 60;
-	};
-
-	// Overwrite
-	Game_Screen.prototype.updateZoom = function () {
-		if (this._zoomDuration > 0) {
-			var d = this._zoomDuration;
-			var t = this._zoomScaleTarget;
-			this._zoomScale = (this._zoomScale * (d - 1) + t) / d;
-			this._zoomX = (this._zoomX * (d - 1) + this._zoomXTarget) / d;
-			this._zoomY = (this._zoomY * (d - 1) + this._zoomYTarget) / d;
-			this._zoomDuration--;
-		}
-	};
-
-	// Overwrite
-	Game_Screen.prototype.clearZoom = function () {
-		if ($gameSystem._savedZoom) {
-			this._zoomX = Number($gameSystem._savedZoom.x);
-			this._zoomXTarget = Number($gameSystem._savedZoom.xTarget);
-			this._zoomY = Number($gameSystem._savedZoom.y);
-			this._zoomYTarget = Number($gameSystem._savedZoom.yTarget);
-			this._zoomScale = Number($gameSystem._savedZoom.scale);
-			this._zoomScaleTarget = Number($gameSystem._savedZoom.scaleTarget);
-			this._zoomDuration = Number($gameSystem._savedZoom.duration);
-		}
-	};
+  Galv.ZOOM.Game_System_initialize = Game_System.prototype.initialize;
+  Game_System.prototype.initialize = function () {
+    Galv.ZOOM.Game_System_initialize.call(this);
+    var cx = Graphics.boxWidth / 2;
+    var cy = Graphics.boxHeight / 2
+    this._savedZoom = {
+      x: cx,
+      y: cy,
+      xTarget: cx,
+      yTarget: cy,
+      scale: 1,
+      scaleTarget: 1,
+      duration: 0
+    }
+  };
 
 
-	Galv.ZOOM.Game_Screen_onBattleStart = Game_Screen.prototype.onBattleStart;
-	Game_Screen.prototype.onBattleStart = function () {
-		Galv.ZOOM.saveZoomData();
-		Galv.ZOOM.dontSave = true;
-		Galv.ZOOM.Game_Screen_onBattleStart.call(this);
-	};
+  //-----------------------------------------------------------------------------
+  //  GAME SCREEN
+  //-----------------------------------------------------------------------------
 
-	Game_Screen.prototype.resetBattleZoom = function () {
-		this._zoomX = Graphics.boxWidth / 2;
-		this._zoomXTarget = Graphics.boxWidth / 2;
-		this._zoomY = Graphics.boxHeight / 2;
-		this._zoomYTarget = Graphics.boxHeight / 2
-		this._zoomScale = Galv.ZOOM.battleScale;
-		this._zoomScaleTarget = Galv.ZOOM.battleScale;
-		this._zoomDuration = 0;
-	};
+  // Overwrite
+  Game_Screen.prototype.startZoom = function (x, y, scale, duration) {
+    Galv.ZOOM.setTo(x, y);
+
+    var cx = Graphics.boxWidth / 2;
+    if (x < 0) {
+      x = this._zoomX;
+    } else if (x != cx) {
+      var pox = Graphics.boxWidth / (scale * 2 - 2);
+      var difX = cx - x;
+      if (difX != 0) difX = (difX / cx) * pox;
+      x = x - difX;
+    }
+
+    var cy = Graphics.boxHeight / 2;
+    if (y < 0) {
+      y = this._zoomY;
+    } else if (y != cy) {
+      var poy = Graphics.boxHeight / (scale * 2 - 2);
+      var difY = cy - y;
+      if (difY != 0) difY = (difY / cy) * poy;
+      y = y - difY;
+    }
+
+    this._zoomXTarget = Math.min(Graphics.boxWidth, Math.max(x, 0));
+    this._zoomYTarget = Math.min(Graphics.boxHeight, Math.max(y, 0));
+
+    this._zoomScaleTarget = scale < 0 ? this._zoomScale : scale;
+    this._zoomDuration = duration || 60;
+  };
+
+  // Overwrite
+  Game_Screen.prototype.updateZoom = function () {
+    if (this._zoomDuration > 0) {
+      var d = this._zoomDuration;
+      var t = this._zoomScaleTarget;
+      this._zoomScale = (this._zoomScale * (d - 1) + t) / d;
+      this._zoomX = (this._zoomX * (d - 1) + this._zoomXTarget) / d;
+      this._zoomY = (this._zoomY * (d - 1) + this._zoomYTarget) / d;
+      this._zoomDuration--;
+    }
+  };
+
+  // Overwrite
+  Game_Screen.prototype.clearZoom = function () {
+    if ($gameSystem._savedZoom) {
+      this._zoomX = Number($gameSystem._savedZoom.x);
+      this._zoomXTarget = Number($gameSystem._savedZoom.xTarget);
+      this._zoomY = Number($gameSystem._savedZoom.y);
+      this._zoomYTarget = Number($gameSystem._savedZoom.yTarget);
+      this._zoomScale = Number($gameSystem._savedZoom.scale);
+      this._zoomScaleTarget = Number($gameSystem._savedZoom.scaleTarget);
+      this._zoomDuration = Number($gameSystem._savedZoom.duration);
+    }
+  };
 
 
-	//-----------------------------------------------------------------------------
-	//  SCENE MAP
-	//-----------------------------------------------------------------------------
+  Galv.ZOOM.Game_Screen_onBattleStart = Game_Screen.prototype.onBattleStart;
+  Game_Screen.prototype.onBattleStart = function () {
+    Galv.ZOOM.saveZoomData();
+    Galv.ZOOM.dontSave = true;
+    Galv.ZOOM.Game_Screen_onBattleStart.call(this);
+  };
 
-	Galv.ZOOM.Scene_Map_start = Scene_Map.prototype.start;
-	Scene_Map.prototype.start = function () {
-		$gameScreen.clearZoom();
-		Galv.ZOOM.Scene_Map_start.call(this);
-	};
-
-	Galv.ZOOM.Scene_Map_terminate = Scene_Map.prototype.terminate;
-	Scene_Map.prototype.terminate = function () {
-		if (!Galv.ZOOM.dontSave) Galv.ZOOM.saveZoomData();
-		Galv.ZOOM.Scene_Map_terminate.call(this);
-	};
+  Game_Screen.prototype.resetBattleZoom = function () {
+    this._zoomX = Graphics.boxWidth / 2;
+    this._zoomXTarget = Graphics.boxWidth / 2;
+    this._zoomY = Graphics.boxHeight / 2;
+    this._zoomYTarget = Graphics.boxHeight / 2
+    this._zoomScale = Galv.ZOOM.battleScale;
+    this._zoomScaleTarget = Galv.ZOOM.battleScale;
+    this._zoomDuration = 0;
+  };
 
 
-	//-----------------------------------------------------------------------------
-	//  SCENE BATTLE
-	//-----------------------------------------------------------------------------
+  //-----------------------------------------------------------------------------
+  //  SCENE MAP
+  //-----------------------------------------------------------------------------
 
-	Galv.ZOOM.Scene_Battle_start = Scene_Battle.prototype.start;
-	Scene_Battle.prototype.start = function () {
-		$gameScreen.resetBattleZoom();
-		Galv.ZOOM.Scene_Battle_start.call(this);
-	};
+  Galv.ZOOM.Scene_Map_start = Scene_Map.prototype.start;
+  Scene_Map.prototype.start = function () {
+    $gameScreen.clearZoom();
+    Galv.ZOOM.Scene_Map_start.call(this);
+  };
 
-	Galv.ZOOM.Scene_Battle_terminate = Scene_Battle.prototype.terminate;
-	Scene_Battle.prototype.terminate = function () {
-		Galv.ZOOM.dontSave = false;
-		Galv.ZOOM.Scene_Battle_terminate.call(this);
-	};
+  Galv.ZOOM.Scene_Map_terminate = Scene_Map.prototype.terminate;
+  Scene_Map.prototype.terminate = function () {
+    if (!Galv.ZOOM.dontSave) Galv.ZOOM.saveZoomData();
+    Galv.ZOOM.Scene_Map_terminate.call(this);
+  };
 
-	Game_Player.prototype.updateScroll = function(lastScrolledX, lastScrolledY) {
-		const zoom = $gameSystem._savedZoom;
+
+  //-----------------------------------------------------------------------------
+  //  SCENE BATTLE
+  //-----------------------------------------------------------------------------
+
+  Galv.ZOOM.Scene_Battle_start = Scene_Battle.prototype.start;
+  Scene_Battle.prototype.start = function () {
+    $gameScreen.resetBattleZoom();
+    Galv.ZOOM.Scene_Battle_start.call(this);
+  };
+
+  Galv.ZOOM.Scene_Battle_terminate = Scene_Battle.prototype.terminate;
+  Scene_Battle.prototype.terminate = function () {
+    Galv.ZOOM.dontSave = false;
+    Galv.ZOOM.Scene_Battle_terminate.call(this);
+  };
+
+  Game_Player.prototype.updateScroll = function (lastScrolledX, lastScrolledY) {
+    const zoom = $gameSystem._savedZoom;
     var x1 = lastScrolledX;
     var y1 = lastScrolledY;
     var x2 = this.scrolledX();
     var y2 = this.scrolledY();
     if (y2 > y1 && y2 > this.centerY()) {
-        $gameMap.scrollDown(y2 - y1);
+      $gameMap.scrollDown(y2 - y1);
     }
     if (x2 < x1 && x2 < this.centerX()) {
-        $gameMap.scrollLeft(x1 - x2);
+      $gameMap.scrollLeft(x1 - x2);
     }
     if (x2 > x1 && x2 > this.centerX()) {
-        $gameMap.scrollRight(x2 - x1);
+      $gameMap.scrollRight(x2 - x1);
     }
     if (y2 < y1 && y2 < this.centerY()) {
-        $gameMap.scrollUp(y1 - y2);
+      $gameMap.scrollUp(y1 - y2);
     }
-		if (zoom && zoom.follow && $gameScreen._zoomDuration <= 0) {
-			Galv.ZOOM.target($gameScreen._zoomScaleTargetID, $gameScreen._zoomScale, 1)
-		}
-};
+    if (zoom && zoom.follow && $gameScreen._zoomDuration <= 0) {
+      Galv.ZOOM.target($gameScreen._zoomScaleTargetID, $gameScreen._zoomScale, 1)
+    }
+  };
 
 })();

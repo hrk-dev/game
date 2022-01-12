@@ -113,8 +113,7 @@ var utakata = utakata || (utakata = {});
 
         //protected methods
         MessageSkip.prototype.isPressedMsgSkipButton = function(){
-            //return Input.isPressed(this._skipKey);
-            return TS_Debug.MessageSkip || Input.isPressed(this._skipKey);
+            return Input.isPressed(this._skipKey);
         };
 
         return MessageSkip;

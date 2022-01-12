@@ -3,8 +3,8 @@
 //=============================================================================
 
 /*:
- * @plugindesc Unlimited Layer Display System.
- * @author taroxd
+ * @plugindesc 无限图层(经过修改，不具备通用性)
+ * @author taroxd & Blacktunes
  *
  * @param Default Path
  * @desc The default path where pictures are stored.
@@ -53,174 +53,174 @@
  */
 
 
-void function() {
+void function () {
 
-    var assign = Object.assign || function(target) {
-        for (var i = 1; i < arguments.length; i++) {
-            var source = arguments[i];
-            for (var key in source) {
-                target[key] = source[key];
-            }
-        }
-        return target;
-    };
-
-    var RE = /<ulds>([^]*?)<\/ulds>/ig;
-    var parameters = PluginManager.parameters('ULDS');
-    var DEFAULT_SETTINGS = {
-        z: parseFloat(parameters['Default Z']),
-        path: parameters['Default Path'],
-        smooth: true
-    };
-
-    // Feel free to add your own helper.
-    var Helper = {
-        t: 0,
-
-        // Converts a coordinate on the map to the corresponding coordinate on the screen.
-        rx: function(x, scrollRate) {
-            if (scrollRate == null) {
-                scrollRate = $gameMap.tileWidth();
-            }
-
-            if (scrollRate === 0) {
-                return x;
-            } else {
-                return $gameMap.adjustX(x / scrollRate) * scrollRate;
-            }
-        },
-
-        ry: function(y, scrollRate) {
-            if (scrollRate == null) {
-                scrollRate = $gameMap.tileHeight();
-            }
-
-            if (scrollRate === 0) {
-                return y;
-            } else {
-                return $gameMap.adjustY(y / scrollRate) * scrollRate;
-            }
-        },
-
-        update: function() {
-            ++this.t;
-            this._updater(this.t, $gameSwitches, $gameVariables);
-        },
-
-        assignSettings: function(settings) {
-            var code = '';
-            for (var key in settings) {
-                var value = settings[key];
-                if (typeof(value) === 'string') {
-                    // this.x = (formula);
-                    // this.scale.x = (formula); // key is "scale.x"
-                    code += 'this.' + key + ' = (' + value + ');\n';
-                } else {
-                    // if key is "scale.x"
-                    // keys is ["scale", "x"]
-                    var keys = key.split('.');
-                    // set key to "x"
-                    key = keys.pop();
-
-                    var target = this;
-                    keys.forEach(function(k) {
-                        if (typeof(target) !== 'object') {
-                            target[k] = {};
-                        }
-                        target = target[k];
-                    });
-
-                    target[key] = value;
-                }
-            }
-            // You may log the code for debugging purpose.
-            // console.log(code);
-            this._updater = new Function('t', 's', 'v', code);
-        }
-    };
-
-    // NOT a class constructor
-    function ULDS(settings) {
-        settings = assign({}, DEFAULT_SETTINGS, settings);
-        var spriteClass = settings.loop ? ULDS.TilingSprite : ULDS.Sprite;
-        var bitmap = ImageManager.loadBitmap('img/' + settings.path + '/',
-            settings.name, settings.hue, settings.smooth);
-        var sprite = new spriteClass(bitmap);
-
-        delete settings.path;
-        delete settings.name;
-        delete settings.loop;
-        delete settings.hue;
-        delete settings.smooth;
-
-        sprite.assignSettings(settings);
-
-        return sprite;
+  var assign = Object.assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+      for (var key in source) {
+        target[key] = source[key];
+      }
     }
+    return target;
+  };
 
-    ULDS.Sprite = function(bitmap) {
-        Sprite.call(this, bitmap);
-    };
+  var RE = /<ulds>([^]*?)<\/ulds>/ig;
+  var parameters = PluginManager.parameters('ULDS');
+  var DEFAULT_SETTINGS = {
+    z: parseFloat(parameters['Default Z']),
+    path: parameters['Default Path'],
+    smooth: true
+  };
 
-    ULDS.Sprite.prototype = Object.create(Sprite.prototype);
-    ULDS.Sprite.prototype.constructor = ULDS.Sprite;
-    assign(ULDS.Sprite.prototype, Helper);
+  // Feel free to add your own helper.
+  var Helper = {
+    t: 0,
 
-    ULDS.TilingSprite = function(bitmap) {
-        TilingSprite.call(this, bitmap);
-        bitmap.addLoadListener(function() {
-            this.move(0, 0, bitmap.width + 16, bitmap.height);
-        }.bind(this));
-    };
+    // Converts a coordinate on the map to the corresponding coordinate on the screen.
+    rx: function (x, scrollRate) {
+      if (scrollRate == null) {
+        scrollRate = $gameMap.tileWidth();
+      }
 
-    ULDS.TilingSprite.prototype = Object.create(TilingSprite.prototype);
-    ULDS.TilingSprite.prototype.constructor = ULDS.TilingSprite;
-    assign(ULDS.TilingSprite.prototype, Helper);
+      if (scrollRate === 0) {
+        return x;
+      } else {
+        return $gameMap.adjustX(x / scrollRate) * scrollRate;
+      }
+    },
 
-    Object.defineProperties(ULDS.TilingSprite.prototype, {
-        x: {
-            get: function() { return -this.origin.x; },
-            set: function(x) { this.origin.x = -x; }
-        },
-        y: {
-            get: function() { return -this.origin.y; },
-            set: function(y) { this.origin.y = -y; }
-        }
-    });
+    ry: function (y, scrollRate) {
+      if (scrollRate == null) {
+        scrollRate = $gameMap.tileHeight();
+      }
 
-    var ct = Spriteset_Map.prototype.createTilemap;
-    Spriteset_Map.prototype.createTilemap = function() {
-        ct.call(this);
-        if ($dataMap.parallaxName && !$dataMap.note) {
-            const name = $dataMap.parallaxName.split('_')[0]
-            this._tilemap.addChild(ULDS({
-                name: name + "_0",
-                x: "this.rx(0)",
-                y: "this.ry(0)"
-            }));
-            this._tilemap.addChild(ULDS({
-                name: name + "_1",
-                x: "this.rx(0)",
-                y: "this.ry(0)",
-                z: "5"
-            }));
+      if (scrollRate === 0) {
+        return y;
+      } else {
+        return $gameMap.adjustY(y / scrollRate) * scrollRate;
+      }
+    },
+
+    update: function () {
+      ++this.t;
+      this._updater(this.t, $gameSwitches, $gameVariables);
+    },
+
+    assignSettings: function (settings) {
+      var code = '';
+      for (var key in settings) {
+        var value = settings[key];
+        if (typeof (value) === 'string') {
+          // this.x = (formula);
+          // this.scale.x = (formula); // key is "scale.x"
+          code += 'this.' + key + ' = (' + value + ');\n';
         } else {
-            $dataMap.note.replace(RE, function(_match, settings) {
-                var isValid = false;
-                try {
-                    settings = JSON.parse(settings);
-                    isValid = typeof(settings) === 'object';
-                    if (!isValid) {
-                        throw 'ULDS settings should be an object';
-                    }
-                } catch (e) {
-                    console.error(e);
-                    console.log(settings);
-                }
-                if (isValid) {
-                    this._tilemap.addChild(ULDS(settings));
-                }
-            }.bind(this));
+          // if key is "scale.x"
+          // keys is ["scale", "x"]
+          var keys = key.split('.');
+          // set key to "x"
+          key = keys.pop();
+
+          var target = this;
+          keys.forEach(function (k) {
+            if (typeof (target) !== 'object') {
+              target[k] = {};
+            }
+            target = target[k];
+          });
+
+          target[key] = value;
         }
-    };
+      }
+      // You may log the code for debugging purpose.
+      // console.log(code);
+      this._updater = new Function('t', 's', 'v', code);
+    }
+  };
+
+  // NOT a class constructor
+  function ULDS(settings) {
+    settings = assign({}, DEFAULT_SETTINGS, settings);
+    var spriteClass = settings.loop ? ULDS.TilingSprite : ULDS.Sprite;
+    var bitmap = ImageManager.loadBitmap('img/' + settings.path + '/',
+      settings.name, settings.hue, settings.smooth);
+    var sprite = new spriteClass(bitmap);
+
+    delete settings.path;
+    delete settings.name;
+    delete settings.loop;
+    delete settings.hue;
+    delete settings.smooth;
+
+    sprite.assignSettings(settings);
+
+    return sprite;
+  }
+
+  ULDS.Sprite = function (bitmap) {
+    Sprite.call(this, bitmap);
+  };
+
+  ULDS.Sprite.prototype = Object.create(Sprite.prototype);
+  ULDS.Sprite.prototype.constructor = ULDS.Sprite;
+  assign(ULDS.Sprite.prototype, Helper);
+
+  ULDS.TilingSprite = function (bitmap) {
+    TilingSprite.call(this, bitmap);
+    bitmap.addLoadListener(function () {
+      this.move(0, 0, bitmap.width + 16, bitmap.height);
+    }.bind(this));
+  };
+
+  ULDS.TilingSprite.prototype = Object.create(TilingSprite.prototype);
+  ULDS.TilingSprite.prototype.constructor = ULDS.TilingSprite;
+  assign(ULDS.TilingSprite.prototype, Helper);
+
+  Object.defineProperties(ULDS.TilingSprite.prototype, {
+    x: {
+      get: function () { return -this.origin.x; },
+      set: function (x) { this.origin.x = -x; }
+    },
+    y: {
+      get: function () { return -this.origin.y; },
+      set: function (y) { this.origin.y = -y; }
+    }
+  });
+
+  var ct = Spriteset_Map.prototype.createTilemap;
+  Spriteset_Map.prototype.createTilemap = function () {
+    ct.call(this);
+    if ($dataMap.parallaxName && !$dataMap.note) {
+      const name = $dataMap.parallaxName.split('_')[0]
+      this._tilemap.addChild(ULDS({
+        name: name + "_0",
+        x: "this.rx(0)",
+        y: "this.ry(0)"
+      }));
+      this._tilemap.addChild(ULDS({
+        name: name + "_1",
+        x: "this.rx(0)",
+        y: "this.ry(0)",
+        z: "5"
+      }));
+    } else {
+      $dataMap.note.replace(RE, function (_match, settings) {
+        var isValid = false;
+        try {
+          settings = JSON.parse(settings);
+          isValid = typeof (settings) === 'object';
+          if (!isValid) {
+            throw 'ULDS settings should be an object';
+          }
+        } catch (e) {
+          console.error(e);
+          console.log(settings);
+        }
+        if (isValid) {
+          this._tilemap.addChild(ULDS(settings));
+        }
+      }.bind(this));
+    }
+  };
 }();
