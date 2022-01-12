@@ -25,7 +25,7 @@
             <div class="cn" v-html="message.cn"></div>
           </template>
           <div class="next-wrapper">
-            <div class="next" :class="_iconColor" v-show="!choice.show"></div>
+            <div class="next" :class="_iconColor" v-show="!choice.show && !message.wait"></div>
           </div>
         </div>
         <div class="character" v-show="_showCharacter">
@@ -91,6 +91,7 @@ module.exports = {
       show: false,
       noHide: false,
       _noHide: false,
+      wait: false,
       list: [],
       multiline: [],
       // 0-下 1-中 2-上
@@ -343,6 +344,8 @@ module.exports = {
     },
     reset() {
       if (this.message.show) {
+        SceneManager._scene._messageWindow.clearFlags()
+
         if (this.message.pos != 2) {
           this.message.multiline = []
         }
@@ -524,13 +527,9 @@ module.exports = {
   justify-content center
   text-align center
 
-  .next-wrapper
-    display flex
-    justify-content center
-    margin-top 10px
-
-    .next
-      position unset !important
+  .next
+    right 50% !important
+    transform translateX(50%)
 
 .name-left
   left 10px
