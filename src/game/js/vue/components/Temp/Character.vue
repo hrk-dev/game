@@ -4,8 +4,15 @@
       <div style="margin-bottom: 5px; border-bottom: 1px solid #fff">
         缺少立绘 - {{ list.length }}
       </div>
-      <div class="text" v-for="(name, i) in list" :key="i">
+      <div class="text" v-for="(name, i) in list" :key="'i' + i">
         {{ name }}
+      </div>
+      <br>
+      <div style="margin-bottom: 5px; border-bottom: 1px solid #fff">
+        影响事件 - {{ event.length }}
+      </div>
+      <div class="text" v-for="(msg, j) in event" :key="'j' + j">
+        {{ msg }}
       </div>
     </div>
   </div>
@@ -14,7 +21,8 @@
 <script>
 module.exports = {
   data: () => ({
-    list: []
+    list: [],
+    event: []
   }),
   computed: {
     show() {
@@ -23,10 +31,17 @@ module.exports = {
   },
   methods: {
     add(name) {
-      if (this.list.includes(name)) return
-      console.warn(`立绘不存在: ${name}`)
-      this.list.push(name)
-      this.list.sort()
+      const msg = `${$dataMapInfos[$gameMap.mapId()].name} - 事件${$gameMap._interpreter.eventId()}`
+      if (!this.event.includes(msg)) {
+        console.warn(`${msg} 缺少立绘`)
+        this.event.push(msg)
+        this.event.sort()
+      }
+      if (!this.list.includes(name)) {
+        console.warn(`立绘不存在: ${name}`)
+        this.list.push(name)
+        this.list.sort()
+      }
     }
   }
 }
