@@ -65,7 +65,6 @@ ipcMain.on('app:quit', () => {
 function setDev(dev) {
   const eventNames = ipcMain.eventNames()
 
-
   if (dev) {
     if (!eventNames.includes('dev:tool')) {
       ipcMain.on('dev:tool', () => {
@@ -87,11 +86,11 @@ function setDev(dev) {
       })
     }
   } else {
-    if (!eventNames.includes('dev:tool')) {
+    if (eventNames.includes('dev:tool')) {
       ipcMain.off('dev:tool')
     }
 
-    if (!eventNames.includes('dev:vue')) {
+    if (eventNames.includes('dev:vue')) {
       ipcMain.off('dev:vue')
     }
   }
