@@ -4,8 +4,8 @@
   "main": "src/main.js",
   "scripts": {
     "start": "chcp 65001 && electron .",
-    "dist": "node scripts/encryption.js",
-    "build": "node scripts/encryption.js && node scripts/packager.js",
+    "dist": "node bin/encryption.js",
+    "build": "node bin/encryption.js && node bin/packager.js",
     "build:test": "electron-packager src Hiiro --overwrite --icon=src/icon/icon.ico --out=build --ignore=\"(temp$|icu$)\""
   },
   "author": "Blacktunes",
@@ -27,7 +27,8 @@
     "electron-packager": "^15.2.0",
     "fs-extra": "^10.0.0",
     "md5-js": "^0.0.3",
-    "nodemon": "^2.0.7"
+    "nodemon": "^2.0.7",
+    "@vue/devtools": "^5.3.4"
   },
   "prettier": {
     "trailingComma": "none",
@@ -36,8 +37,5 @@
     "arrowParens": "avoid",
     "bracketSpacing": true,
     "printWidth": 100
-  },
-  "dependencies": {
-    "@vue/devtools": "^5.3.4"
   }
 }

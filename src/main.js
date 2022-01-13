@@ -1,7 +1,7 @@
 const { app, BrowserWindow, ipcMain } = require('electron')
 const { join } = require('path')
 
-process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true'
+require('./module/process')
 
 ipcMain.setMaxListeners(1)
 
@@ -82,7 +82,7 @@ function setDev(dev) {
     if (!eventNames.includes('dev:vue')) {
       ipcMain.on('dev:vue', () => {
         try {
-          require('./window/devtools')(mainWindow)
+          require('./module/devtools')(mainWindow)
         } catch (_err) { }
       })
     }
@@ -103,4 +103,4 @@ ipcMain.on('vue:ready', (_e, dev) => {
   setDev(dev)
 })
 
-require('./window/console')
+require('./module/console')

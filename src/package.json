@@ -1,9 +1,0 @@
-{
-  "name": "game",
-  "version": "1.0.0",
-  "author": "Blacktunes",
-  "main": "main.js",
-  "dependencies": {
-    "console-png": "^1.2.1"
-  }
-}
