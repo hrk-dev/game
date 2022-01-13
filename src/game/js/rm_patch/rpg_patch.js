@@ -55,6 +55,10 @@ const Patch = class {
     }
   }
 
+  static checkSave() {
+    return fs.existsSync(StorageManager.localFilePath(1))
+  }
+
   static showTip() {
     if ($gameSystem.tipData) {
       Methods.showTip($gameSystem.tipData.en, $gameSystem.tipData.cn, $gameSystem.tipData.time)

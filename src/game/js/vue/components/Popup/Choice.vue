@@ -31,6 +31,7 @@ module.exports = {
         this.fn = fn
         if (cb) this.cb = cb
         this.show = true
+        Methods.hidePopup()
       } else {
         console.warn('Choice: 参数错误')
       }

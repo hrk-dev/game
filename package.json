@@ -6,7 +6,7 @@
     "start": "chcp 65001 && electron .",
     "dist": "node bin/encryption.js",
     "build": "node bin/encryption.js && node bin/packager.js",
-    "build:test": "electron-packager src Hiiro --overwrite --icon=src/icon/icon.ico --out=build --ignore=\"(temp$|icu$)\""
+    "build:test": "electron-packager src Hiiro --overwrite --icon=src/game/icon/icon.ico --out=build --ignore=\"(icu$)\""
   },
   "author": "Blacktunes",
   "repository": {

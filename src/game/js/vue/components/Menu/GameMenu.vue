@@ -164,7 +164,7 @@ module.exports = {
       this.menu.show = true
     },
     checkSave() {
-      this.hasSave = fs.existsSync(StorageManager.localFilePath(1))
+      this.hasSave = Patch.checkSave()
     },
     checkInput(buttonName) {
       if (!this.show) return

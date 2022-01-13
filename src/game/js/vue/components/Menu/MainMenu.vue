@@ -86,7 +86,7 @@ module.exports = {
           }
         },
         {
-          show: true,
+          show: false,
           cn: '继续',
           en: 'Continue',
           fn() {
@@ -153,7 +153,11 @@ module.exports = {
       AudioManager.stopAll()
       for (const i in this.menu.list) {
         if (i > 0) {
-          this.menu.list[i].show = true
+          if (this.menu.list[i].cn === '继续') {
+            if (Patch.checkSave()) this.menu.list[i].show = true
+          } else {
+            this.menu.list[i].show = true
+          }
         }
       }
       const data = DataManager.loadGlobalInfo()
@@ -256,11 +260,7 @@ module.exports = {
         this.menu.restart = false
       } else {
         this.menu.show = false
-        Methods.showPopup(
-          "Well, that'll have to do",
-          '好吧，那只能这样了',
-          1500
-        ).then(() => {
+        Methods.showPopup("Well, that'll have to do", '好吧，那只能这样了', 1500).then(() => {
           for (const i in this.menu.list) {
             if (i > 0) {
               this.menu.list[i].show = false

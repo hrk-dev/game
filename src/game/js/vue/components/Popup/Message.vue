@@ -341,6 +341,7 @@ module.exports = {
       SceneManager._scene._messageWindow._choiceWindow._messageWindow.terminateMessage()
       SceneManager._scene._messageWindow._choiceWindow.close()
       SceneManager._scene._messageWindow._choiceWindow.deactivate()
+      this.resetChoice()
     },
     reset() {
       if (this.message.show) {
@@ -365,9 +366,7 @@ module.exports = {
         }
       }
       if (this.choice.show) {
-        this.choice.list.length = 0
-        this.choice.index = -1
-        this.choice.show = false
+        this.resetChoice()
       }
     },
     resetCharacter() {
@@ -380,6 +379,14 @@ module.exports = {
         this.message.temp.character = ''
         this.message.character.show = false
       }
+    },
+    resetChoice() {
+      this.choice.list.length = 0
+      this.choice.index = -1
+      this.choice.show = false
+      this.message.temp.en = ''
+      this.message.temp.cn = ''
+      this.message.temp.character = ''
     },
     getUrl(str) {
       return str ? md5Url(`img/pictures/${str}.png`) : null

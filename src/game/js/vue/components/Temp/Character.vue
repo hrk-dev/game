@@ -35,7 +35,6 @@ module.exports = {
       if (!this.event.includes(msg)) {
         console.warn(`${msg} 缺少立绘`)
         this.event.push(msg)
-        this.event.sort()
       }
       if (!this.list.includes(name)) {
         console.warn(`立绘不存在: ${name}`)
