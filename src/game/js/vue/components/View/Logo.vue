@@ -6,8 +6,9 @@
       </div>
     </transition>
     <transition name="logo" @after-leave="toTitleOrStart">
-      <div class="wrapper" v-if="tip.show">
-        <img :src="tip.bg" />
+      <div class="wrapper tip" v-if="tip.show">
+        <img :src="tip.bg1" />
+        <img class="arrow" :src="tip.bg2" />
       </div>
     </transition>
   </div>
@@ -22,7 +23,8 @@ module.exports = {
     },
     tip: {
       show: false,
-      bg: md5Url('img/system/Loading.png')
+      bg1: md5Url('img/system/tips_1.png'),
+      bg2: md5Url('img/system/tips_2.png')
     }
   }),
   methods: {
@@ -63,6 +65,14 @@ module.exports = {
     align-items center
     justify-content center
 
+  .tip
+    img
+      position fixed
+      inset 0
+
+    .arrow
+      animation move 0.5s linear infinite alternate
+
 .logo-enter-active
   animation logo 0.5s linear
 
@@ -75,4 +85,11 @@ module.exports = {
 
   to
     opacity 1
+
+@keyframes move
+  from
+    top 0
+
+  to
+    top 10px
 </style>
