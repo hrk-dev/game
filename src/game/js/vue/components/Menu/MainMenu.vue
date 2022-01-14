@@ -64,16 +64,12 @@ module.exports = {
                 this.menu.show = false
                 $gameVariables.setValue(1, this.loop.next)
                 $gameTemp.reserveCommonEvent(97)
-                $gameTemp.reserveCommonEvent(98) // 触发重载
                 Methods.clearTip()
-                $gameSystem.onBeforeSave()
-                if (DataManager.saveGame(1)) {
-                  StorageManager.cleanBackup(1)
-                }
                 Patch.addGlobalInfo('loop', {
                   restart: false,
                   load: true
                 })
+                AudioManager.stopAll()
                 SceneManager.goto(Scene_Map)
                 $gameSystem.onAfterLoad()
                 setTimeout(() => {

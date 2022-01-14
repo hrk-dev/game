@@ -46,3 +46,11 @@ Window_ChoiceList.prototype.start = function () {
   this.open()
   this.activate()
 }
+
+Window_ChoiceList.prototype.processOk = function() {}
+
+Window_ChoiceList.prototype.processCancel = function() {
+  this.updateInputData()
+  this.deactivate()
+  this.callCancelHandler()
+}

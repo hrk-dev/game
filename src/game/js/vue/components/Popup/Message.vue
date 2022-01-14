@@ -337,11 +337,11 @@ module.exports = {
     },
     onChoice() {
       if (this.choice.index == -1) return
+      SceneManager._scene._messageWindow._choiceWindow.updateInputData()
+      SceneManager._scene._messageWindow._choiceWindow.deactivate()
       $gameMessage.onChoice(this.choice.index)
       SceneManager._scene._messageWindow._choiceWindow._messageWindow.terminateMessage()
       SceneManager._scene._messageWindow._choiceWindow.close()
-      SceneManager._scene._messageWindow._choiceWindow.deactivate()
-      this.resetChoice()
     },
     reset() {
       if (this.message.show) {
@@ -365,8 +365,14 @@ module.exports = {
           this.message.show = false
         }
       }
+
       if (this.choice.show) {
         this.resetChoice()
+      }
+    },
+    resetMultiline() {
+      if (this.message.multiline.length > 0) {
+        this.message.multiline = []
       }
     },
     resetCharacter() {

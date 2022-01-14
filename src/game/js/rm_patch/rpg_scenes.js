@@ -20,6 +20,14 @@ Scene_Title.prototype.isBusy = function () {
   return false
 }
 
+Scene_Map.prototype.callMenu = function() {
+  SceneManager.push(Scene_Menu)
+  Window_MenuCommand.initCommandPosition()
+  $gameTemp.clearDestination()
+  this._mapNameWindow.hide()
+  this._waitCount = 2
+}
+
 /** VUE游戏菜单适配 */
 Scene_Menu.prototype.create = function () {
   Scene_MenuBase.prototype.create.call(this)
