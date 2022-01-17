@@ -54,14 +54,14 @@ module.exports = {
             Methods.hidePopup()
             if (!this.loop.next) {
               DataManager.setupNewGame()
-              this.menu.show = false
+              this.hideMenu()
               SceneManager.goto(Scene_Map)
               setTimeout(() => {
                 this.show = false
               }, 400)
             } else {
               if (DataManager.loadGame(1)) {
-                this.menu.show = false
+                this.hideMenu()
                 $gameVariables.setValue(1, this.loop.next)
                 $gameTemp.reserveCommonEvent(97)
                 Methods.clearTip()
@@ -91,7 +91,7 @@ module.exports = {
               this.test()
             } else {
               if (DataManager.loadGame(1)) {
-                this.menu.show = false
+                this.hideMenu()
                 Patch.startWait()
                 setTimeout(() => {
                   $gameTemp.reserveCommonEvent(98)
@@ -114,7 +114,7 @@ module.exports = {
           cn: '设置',
           en: 'Setting',
           fn() {
-            this.menu.show = false
+            this.hideMenu()
             this.$refs.Setting.show = true
           }
         },
@@ -167,8 +167,21 @@ module.exports = {
         if (data[0].loop.load === false) this.menu.list[1].show = false
       }
       DataManager.saveGlobalInfo(data)
-      this.menu.show = true
       this.menu.current = 1
+      this.menu.show = true
+      this.menuShowAnime()
+    },
+    menuShowAnime() {
+      this.$nextTick(() => {
+        anime({
+          targets: '.btn',
+          translateY: [
+            { value: 100, duration: 0 },
+            { value: 0, easing: 'spring(1, 100, 5, 0)', duration: 500 }
+          ],
+          delay: anime.stagger(50)
+        })
+      })
     },
     getLastItem() {
       const isLast = key => {
@@ -238,24 +251,30 @@ module.exports = {
     back() {
       if (!this.show) return
       this.$refs.Setting.back()
-      this.menu.show = true
+      this.showMenu()
     },
     showMenu() {
+      if (this.menu.show) return
       this.menu.show = true
+      this.menuShowAnime()
+    },
+    hideMenu() {
+      if (!this.menu.show) return
+      this.menu.show = false
     },
     test() {
       if (this.menu.restart) {
-        this.menu.show = false
+        this.hideMenu()
         Methods.showPopup(
           'I think you should restart the game',
           '我觉得你应该重新开始游戏',
           1500
         ).then(() => {
-          this.menu.show = true
+          this.showMenu()
         })
         this.menu.restart = false
       } else {
-        this.menu.show = false
+        this.hideMenu()
         Methods.showPopup("Well, that'll have to do", '好吧，那只能这样了', 1500).then(() => {
           for (const i in this.menu.list) {
             if (i > 0) {
@@ -263,7 +282,7 @@ module.exports = {
             }
           }
           this.menu.current = 0
-          this.menu.show = true
+          this.showMenu()
           Patch.setGlobalInfo('loop', 'load', false)
         })
       }
