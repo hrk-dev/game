@@ -64,6 +64,16 @@ const Patch = class {
       Methods.showTip($gameSystem.tipData.en, $gameSystem.tipData.cn, $gameSystem.tipData.time)
     }
   }
+
+  static restart() {
+    AudioManager.stopAll()
+    DataManager.setupNewGame()
+    SceneManager.goto(Scene_Map)
+    this.startWait()
+    this.delLoop()
+    Components.Loading.loadingHide()
+    this.stopWait()
+  }
 }
 
 /** 插件方法 */
