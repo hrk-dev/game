@@ -79,19 +79,19 @@ module.exports = {
               'Do you wish to load this save file',
               '是否读取存档',
               () => {
+                this.menu.show = false
                 Components.Loading.loadingShow()
                 setTimeout(() => {
                   if (DataManager.loadGame(1)) {
                     Patch.startWait()
-                    this.menu.show = false
                     // $gameTemp.reserveCommonEvent(98)
                     SceneManager.goto(Scene_Map)
                     $gameSystem.onAfterLoad()
                     setTimeout(() => {
                       this.show = false
                       Patch.showTip()
-                      Patch.stopWait()
                       Components.Loading.loadingHide()
+                      Patch.stopWait()
                     }, 300)
                   } else {
                     Methods.showPopup('Load failed', '读取失败', 1000)

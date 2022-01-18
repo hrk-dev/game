@@ -49,7 +49,7 @@ module.exports = {
     },
     getInfo() {
       if (this.list[this.current]) {
-        this.img = this.list[this.current].meta?.img
+        this.img = md5Url(this.list[this.current].meta?.img)
         this.text = this.list[this.current].meta?.text
       } else {
         this.img = ''

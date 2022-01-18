@@ -175,10 +175,9 @@ module.exports = {
       this.$nextTick(() => {
         anime({
           targets: '.btn',
-          translateY: [
-            { value: 100, duration: 0 },
-            { value: 0, easing: 'spring(1, 100, 5, 0)', duration: 500 }
-          ],
+          translateY: [100, 0],
+          easing: 'spring(1, 100, 10, 10)',
+          duration: 500,
           delay: anime.stagger(50)
         })
       })
