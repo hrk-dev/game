@@ -429,9 +429,6 @@ module.exports = {
         top -35px
         font-size 30px
         font-weight bold
-        text-underline-offset 5px
-        text-decoration-line underline
-        text-decoration-thickness 2px
 
       .multiline
         margin-top 15px
@@ -498,6 +495,7 @@ module.exports = {
 
   .text
     height 180px
+    border-top 3px solid rgb(255, 190, 179)
 
 .center
   height 100%

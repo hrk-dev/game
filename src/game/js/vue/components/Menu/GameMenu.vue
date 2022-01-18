@@ -55,15 +55,15 @@ module.exports = {
           cn: '保存',
           en: 'Save',
           fn() {
+            if (Components.Popup.isShow) {
+              Methods.hidePopup()
+              return
+            }
             if (this.hasSave) {
-              Methods.showChoice(
-                'Do you wish to overwrite this save file',
-                '是否覆盖存档',
-                () => {
-                  Patch.save()
-                  this.checkSave()
-                }
-              )
+              Methods.showChoice('Do you wish to overwrite this save file', '是否覆盖存档', () => {
+                Patch.save()
+                this.checkSave()
+              })
             } else {
               Patch.save()
               this.checkSave()
@@ -75,30 +75,26 @@ module.exports = {
           cn: '读取',
           en: 'Load',
           fn() {
-            Methods.showChoice(
-              'Do you wish to load this save file',
-              '是否读取存档',
-              () => {
-                this.menu.show = false
-                Components.Loading.loadingShow()
-                setTimeout(() => {
-                  if (DataManager.loadGame(1)) {
-                    Patch.startWait()
-                    // $gameTemp.reserveCommonEvent(98)
-                    SceneManager.goto(Scene_Map)
-                    $gameSystem.onAfterLoad()
-                    setTimeout(() => {
-                      this.show = false
-                      Patch.showTip()
-                      Components.Loading.loadingHide()
-                      Patch.stopWait()
-                    }, 300)
-                  } else {
-                    Methods.showPopup('Load failed', '读取失败', 1000)
-                  }
-                }, 300)
-              }
-            )
+            Methods.showChoice('Do you wish to load this save file', '是否读取存档', () => {
+              this.menu.show = false
+              Components.Loading.loadingShow()
+              setTimeout(() => {
+                if (DataManager.loadGame(1)) {
+                  Patch.startWait()
+                  // $gameTemp.reserveCommonEvent(98)
+                  SceneManager.goto(Scene_Map)
+                  $gameSystem.onAfterLoad()
+                  setTimeout(() => {
+                    this.show = false
+                    Patch.showTip()
+                    Components.Loading.loadingHide()
+                    Patch.stopWait()
+                  }, 300)
+                } else {
+                  Methods.showPopup('Load failed', '读取失败', 1000)
+                }
+              }, 300)
+            })
           }
         },
         {
@@ -124,15 +120,11 @@ module.exports = {
           cn: '退出',
           en: 'Exit',
           fn() {
-            Methods.showChoice(
-              'Do you wish back to title',
-              '是否返回主菜单',
-              () => {
-                AudioManager.stopBgm()
-                AudioManager.stopBgs()
-                SceneManager.goto(Scene_Title)
-              }
-            )
+            Methods.showChoice('Do you wish back to title', '是否返回主菜单', () => {
+              AudioManager.stopBgm()
+              AudioManager.stopBgs()
+              SceneManager.goto(Scene_Title)
+            })
           }
         }
       ]

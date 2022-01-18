@@ -312,13 +312,15 @@ module.exports = {
         height 100%
 
     .btn-list
+      box-sizing border-box
       position absolute
       bottom 60px
       left 0
       width 100%
+      padding 0 10px
       display flex
       justify-content space-around
-      background rgba(0, 0, 0, 0.5)
+      background linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.5) 10px, rgba(0, 0, 0, 0.5) calc(100% - 10px), transparent 100%)
 
       .btn
         overflow hidden

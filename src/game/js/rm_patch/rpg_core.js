@@ -119,6 +119,39 @@ Graphics._onKeyDown = function (event) {
   }
 }
 
+/**
+ * A hash table to convert from a virtual key code to a mapped key name.
+ *
+ * @static
+ * @property keyMapper
+ * @type Object
+ */
+ Input.keyMapper = {
+  9: 'tab',       // tab
+  13: 'ok',       // enter
+  16: 'shift',    // shift
+  17: 'control',  // control
+  27: 'escape',   // escape
+  32: 'ok',       // space
+  33: 'pageup',   // pageup
+  34: 'pagedown', // pagedown
+  37: 'left',     // left arrow
+  38: 'up',       // up arrow
+  39: 'right',    // right arrow
+  40: 'down',     // down arrow
+  45: 'escape',   // insert
+  81: 'pageup',   // Q
+  87: 'pagedown', // W
+  88: 'escape',   // X
+  90: 'ok',       // Z
+  96: 'escape',   // numpad 0
+  98: 'down',     // numpad 2
+  100: 'left',    // numpad 4
+  102: 'right',   // numpad 6
+  104: 'up',      // numpad 8
+  120: 'debug'    // F9
+};
+
 Input._onKeyDown = function (event) {
   if (this._shouldPreventDefault(event.keyCode)) {
     event.preventDefault()
