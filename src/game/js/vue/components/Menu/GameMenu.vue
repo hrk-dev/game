@@ -47,7 +47,7 @@ module.exports = {
     menu: {
       show: false,
       current: 0,
-      img: md5Url('img/pictures/汐/震惊-智慧的眼睛.png'),
+      img: md5Url('img/pictures/汐/震惊-思考.png'),
       list: [
         {
           show: true,
@@ -79,14 +79,13 @@ module.exports = {
                   // $gameTemp.reserveCommonEvent(98)
                   SceneManager.goto(Scene_Map)
                   $gameSystem.onAfterLoad()
-                  setTimeout(() => {
-                    this.show = false
-                    Patch.showTip()
-                    Components.Loading.loadingHide()
-                    Patch.stopWait()
-                  }, 300)
+                  Components.Loading.loadingHide()
+                  Patch.showTip()
+                  Patch.stopWait()
                 } else {
-                  Methods.showPopup('Load failed', '读取失败', 1000)
+                  Methods.showPopup('Load failed', '读取失败', 1500)
+                  Components.Loading.loadingHide()
+                  this.show = true
                 }
               }, 300)
             })
@@ -116,6 +115,7 @@ module.exports = {
           en: 'Exit',
           fn() {
             Methods.showChoice('Do you wish back to title', '是否返回主菜单', () => {
+              Components.Choice.hideChoice()
               AudioManager.stopBgm()
               AudioManager.stopBgs()
               SceneManager.goto(Scene_Title)
@@ -296,7 +296,7 @@ $pink = rgba(255, 176, 170, 0.9)
     height 50px
     text-align left
     color #fff
-    background rgba(110, 110, 110, 0.5)
+    background rgba(40, 40, 40, 0.7)
     border 2px solid $pink
     border-left none
     border-top-right-radius 10px

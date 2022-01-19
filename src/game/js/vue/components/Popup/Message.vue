@@ -408,9 +408,11 @@ module.exports = {
 </script>
 
 <style scoped lang="stylus">
+$pink = rgba(255, 176, 170, 0.9)
+
 #message
   color #fff
-  text-shadow 0 0 1px black, 0 0 1px black, 0 0 1px black
+  
 
   .message-wrapper
     display flex
@@ -432,6 +434,7 @@ module.exports = {
         text-underline-offset 5px
         text-decoration-line underline
         text-decoration-thickness 2px
+        text-shadow 0 0 2px black, 0 0 2px black, 0 0 2px black
 
       .multiline
         margin-top 15px
@@ -477,10 +480,12 @@ module.exports = {
 
     .item
       padding 5px 25px
-      background linear-gradient(to right, transparent 0%, rgba(50, 50, 50, 0.8) 10px, rgba(50, 50, 50, 0.8) calc(100% - 10px), transparent 100%)
-      // border-radius 25px
+      background rgba(40, 40, 40, 0.7)
+      border-radius 10px
       margin 10px auto
       min-width 250px
+      border 2px solid transparent
+      transition transform 0.3s, border 0.3s, background 0.3s
 
       .en
         font-size 16px
@@ -500,7 +505,12 @@ module.exports = {
     height 180px
 
   .bg
-    background rgba(65, 65, 65, 0.6)
+    background rgba(40, 40, 40, 0.7)
+    border 2px solid $pink
+    border-bottom none
+    border-top-left-radius 10px
+    border-top-right-radius 10px
+    margin 0 5px
 
 .center
   height 100%
@@ -592,8 +602,9 @@ module.exports = {
     line-height 35px
 
 .highlight
-  & > *
-    text-shadow #ed9c94 0px 0 2px, #ed9c94 0px 0 2px, #ed9c94 0px 0 2px, #ed9c94 0px 0 2px
+  transform scale(1.1)
+  background rgba(0, 0, 0, 0.8) !important
+  border-color $pink !important
 
 .lowlight
   filter brightness(0.5)

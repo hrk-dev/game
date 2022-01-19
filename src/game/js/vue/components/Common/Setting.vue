@@ -3,69 +3,67 @@
     <transition name="fade">
       <div class="setting-wrapper" v-if="show">
         <div class="setting-frame">
-          <div class="vertical-frame">
-            <div class="title">
-              <div>设置 Setting</div>
-            </div>
+          <div class="title">
+            <div>设置 Setting</div>
           </div>
-          <div class="horizontal-frame">
-            <div class="setting">
-              <div class="item">
-                <div class="text">
-                  <div class="cn">持续奔跑</div>
-                  <div class="en">Keep Running</div>
-                </div>
-                <div class="switch" :class="{ highlight: current === 0 }">
-                  <transition name="switch">
-                    <div v-if="keepRunning">
-                      <div>○</div>
-                    </div>
-                  </transition>
-                  <transition name="switch">
-                    <div v-if="!keepRunning">
-                      <div>×</div>
-                    </div>
-                  </transition>
-                </div>
+          <div class="setting">
+            <div class="arrow" :style="{ top: `${top}px` }">→</div>
+            <div class="item" ref="run">
+              <div class="text">
+                <div class="en">Keep Running</div>
+                <div class="cn">持续奔跑</div>
               </div>
-              <div class="item">
-                <div class="text">
-                  <div class="cn">背景音量</div>
-                  <div class="en">BGM Volume</div>
-                </div>
-                <div class="slider" :class="{ highlight: current === 1 }">
-                  <div
-                    v-for="i in 10"
-                    :key="'bgm' + i"
-                    class="block"
-                    :style="{
-                      background: i <= bgm ? '#fff' : ''
-                    }"
-                  ></div>
-                </div>
-                <div class="percent">{{ _bgm }}%</div>
-              </div>
-              <div class="item">
-                <div class="text">
-                  <div class="cn">特效音量</div>
-                  <div class="en">Sound Effect Volume</div>
-                </div>
-                <div class="slider" :class="{ highlight: current === 2 }">
-                  <div
-                    v-for="i in 10"
-                    :key="'bgm' + i"
-                    class="block"
-                    :style="{
-                      background: i <= se ? '#fff' : ''
-                    }"
-                  ></div>
-                </div>
-                <div class="percent">{{ _se }}%</div>
+              <div class="switch">
+                <transition name="switch">
+                  <div v-if="keepRunning">
+                    <div>○</div>
+                  </div>
+                </transition>
+                <transition name="switch">
+                  <div v-if="!keepRunning">
+                    <div>×</div>
+                  </div>
+                </transition>
               </div>
             </div>
-            <div class="back">
-              <div class="back-btn" :class="{ highlight: current === 3 }">
-                返回
+            <div class="item" ref="bgm">
+              <div class="text">
+                <div class="en">BGM Volume</div>
+                <div class="cn">背景音量</div>
+              </div>
+              <div class="slider">
+                <div
+                  v-for="i in 10"
+                  :key="'bgm' + i"
+                  class="block"
+                  :style="{
+                    background: i <= bgm ? '#fff' : ''
+                  }"
+                ></div>
+              </div>
+              <div class="percent">{{ _bgm }}%</div>
+            </div>
+            <div class="item" ref="se">
+              <div class="text">
+                <div class="en">SE Volume</div>
+                <div class="cn">特效音量</div>
+              </div>
+              <div class="slider">
+                <div
+                  v-for="i in 10"
+                  :key="'bgm' + i"
+                  class="block"
+                  :style="{
+                    background: i <= se ? '#fff' : ''
+                  }"
+                ></div>
+              </div>
+              <div class="percent">{{ _se }}%</div>
+            </div>
+            <div class="item" ref="back">
+              <div class="text">
+                <div class="en">Back</div>
+                <div class="cn">返回</div>
               </div>
             </div>
           </div>
@@ -83,7 +81,8 @@ module.exports = {
     keydown: 0,
     keepRunning: false,
     bgm: 0,
-    se: 0
+    se: 0,
+    top: 79
   }),
   computed: {
     _bgm() {
@@ -107,6 +106,9 @@ module.exports = {
     se() {
       AudioManager.seVolume = this._se
       AudioManager.meVolume = this._se
+    },
+    current() {
+      this.setArrow()
     }
   },
   methods: {
@@ -114,6 +116,22 @@ module.exports = {
       this.keepRunning = ConfigManager.alwaysDash
       this.bgm = AudioManager.bgmVolume / 10
       this.se = AudioManager.seVolume / 10
+      this.setArrow()
+    },
+    setArrow() {
+      this.$nextTick(() => {
+        let top = this.top
+        if (this.current === 0) {
+          top = this.$refs.run.offsetTop
+        } else if (this.current === 1) {
+          top = this.$refs.bgm.offsetTop
+        } else if (this.current === 2) {
+          top = this.$refs.se.offsetTop
+        } else if (this.current === 3) {
+          top = this.$refs.back.offsetTop
+        }
+        this.top = top
+      })
     },
     checkInput(buttonName) {
       if (!this.show) return
@@ -221,121 +239,96 @@ module.exports = {
   inset 0
 
   .setting-frame
+    overflow hidden
+    display flex
+    flex-direction column
     color #fff
     position absolute
     width 80%
     height 80%
     left 10%
     top 10%
-    background rgba(0, 0, 0, 0.7)
+    background rgba(40, 40, 40, 0.7)
+    border 3px solid rgba(255, 176, 170, 0.9)
+    border-radius 15px
 
-    .vertical-frame
-      box-sizing border-box
-      margin 0 10px
-      width calc(100% - 20px)
-      height 100%
-      border-width 5px
-      border-color #75d6f9
-      border-style none solid
-
-      .title
-        box-sizing border-box
-        font-size 24px
-        line-height 100%
-        padding 5px 15px
-        height 45px
-        display flex
-        flex-direction column
-        justify-content center
-
-    .horizontal-frame
+    .arrow
       position absolute
-      left 0
-      bottom 15px
-      padding 0 25px
-      box-sizing border-box
-      width 100%
-      height calc(100% - 45px - 15px)
-      border-width 5px
-      border-color #f8c8bf
-      border-style solid none
+      left 35px
+      height 45px
+      line-height 50px
+      transition top 0.3s
+
+    .title
+      position absolute
+      right -30px
+      bottom 20px
+      transform rotate(330deg)
+      background rgba(0, 0, 0, 0.5)
+      padding 10px 30px 10px 80px
+      font-size 24px
+
+    .setting
+      flex 1
       display flex
       flex-direction column
+      justify-content space-evenly
+      padding-left 10px
 
-      .setting
-        flex 1
+      .item
         display flex
-        flex-direction column
-        justify-content space-evenly
-        padding-left 10px
+        align-items center
+        height 45px
+        margin-left 80px
 
-        .item
+        .text
+          width 250px
           display flex
-          align-items center
-          width 100%
+          flex-direction column
+          justify-content center
+
+          .cn
+            font-size 22px
+            line-height 22px
+
+          .en
+            font-size 20px
+            line-height 22px
+
+        .switch
+          overflow hidden
+          position relative
+          font-size 60px
+          width 45px
           height 45px
+          padding 2px
 
-          .text
-            width 250px
-            display flex
-            flex-direction column
-            justify-content center
-
-            .cn
-              font-size 22px
-              line-height 22px
-
-            .en
-              font-size 20px
-              line-height 22px
-
-          .switch
-            overflow hidden
-            position relative
-            font-size 60px
-            width 45px
-            height 45px
-            padding 2px
-
-            div
-              position absolute
-              inset 0
-              display flex
-              align-items center
-              justify-content center
-
-          .slider
-            height 100%
-            width 300px
-            padding 0 5px
+          div
+            position absolute
+            inset 0
             display flex
             align-items center
+            justify-content center
 
-            .block
-              box-sizing border-box
-              margin 3px
-              width 10%
-              height 55%
-              border 1px solid #fff
-              transition background 0.2s linear
+        .slider
+          height 100%
+          width 300px
+          padding 0 5px
+          display flex
+          align-items center
 
-          .percent
-            font-size 25px
-            text-align right
-            width 70px
+          .block
+            box-sizing border-box
+            margin 3px
+            width 10%
+            height 55%
+            border 1px solid #fff
+            transition background 0.2s linear
 
-      .back
-        height 30px
-        font-size 22px
-        line-height 22px
-        margin-bottom 5px
-
-        .back-btn
-          display inline-block
-          padding 5px
-
-.highlight
-  animation highlight-blinks 1s linear infinite alternate
+        .percent
+          font-size 25px
+          text-align right
+          width 70px
 
 .fade-enter-active, .fade-leave-active
   transition opacity 0.5s
@@ -357,11 +350,4 @@ module.exports = {
 
 .switch-enter-to, .switch-leave
   transform translateX(0)
-
-@keyframes highlight-blinks
-  from
-    background rgba(255, 255, 255, 0.5)
-
-  to
-    background transparent
 </style>

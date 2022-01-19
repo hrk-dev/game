@@ -36,6 +36,9 @@ module.exports = {
         console.warn('Choice: 参数错误')
       }
     },
+    hideChoice() {
+      this.show = false
+    },
     checkInput(buttonName) {
       if (this.show) {
         switch (buttonName) {
@@ -121,10 +124,12 @@ $pink = rgba(255, 176, 170, 0.9)
       padding 8px 10px
       font-size 14px
       line-height 14px
+      border 2px solid transparent
+      border-radius 10px
+      transition border 0.3s
 
 .highlight
-  border 2px solid $pink
-  border-radius 10px
+  border-color rgba(255, 176, 170, 0.9) !important
 
 .fade-enter, .fade-leave-to
   opacity 0

@@ -16,8 +16,8 @@
                 }"
                 :key="index"
               >
-                <div class="cn">{{ item.cn }}</div>
                 <div class="en">{{ item.en }}</div>
+                <div class="cn">{{ item.cn }}</div>
               </div>
             </template>
           </div>
@@ -53,31 +53,36 @@ module.exports = {
           fn() {
             Methods.hidePopup()
             if (!this.loop.next) {
-              DataManager.setupNewGame()
               this.hideMenu()
+              DataManager.setupNewGame()
               SceneManager.goto(Scene_Map)
+              Patch.startWait()
               setTimeout(() => {
                 this.show = false
-              }, 400)
+                Patch.stopWait()
+              }, 300)
             } else {
-              if (DataManager.loadGame(1)) {
-                this.hideMenu()
-                $gameVariables.setValue(1, this.loop.next)
-                $gameTemp.reserveCommonEvent(97)
-                Methods.clearTip()
-                Patch.addGlobalInfo('loop', {
-                  restart: false,
-                  load: true
-                })
-                AudioManager.stopAll()
-                SceneManager.goto(Scene_Map)
-                $gameSystem.onAfterLoad()
-                setTimeout(() => {
+              this.hideMenu()
+              setTimeout(() => {
+                if (DataManager.loadGame(1)) {
                   this.show = false
-                }, 400)
-              } else {
-                Methods.showPopup('Error', '奇怪的错误', 1500)
-              }
+                  $gameVariables.setValue(1, this.loop.next)
+                  $gameTemp.reserveCommonEvent(97)
+                  Methods.clearTip()
+                  Patch.addGlobalInfo('loop', {
+                    restart: false,
+                    load: true
+                  })
+                  AudioManager.stopAll()
+                  SceneManager.goto(Scene_Map)
+                  $gameSystem.onAfterLoad()
+                  Components.Loading.loadingHide()
+                } else {
+                  Methods.showPopup('Error', '奇怪的错误', 1500)
+                  Components.Loading.loadingHide()
+                  this.showMenu()
+                }
+              }, 300)
             }
           }
         },
@@ -90,22 +95,20 @@ module.exports = {
             if (this.loop.restart) {
               this.test()
             } else {
-              if (DataManager.loadGame(1)) {
-                this.hideMenu()
-                Patch.startWait()
-                setTimeout(() => {
+              this.hideMenu()
+              setTimeout(() => {
+                Components.Loading.loadingShow()
+                if (DataManager.loadGame(1)) {
+                  this.show = false
                   $gameTemp.reserveCommonEvent(98)
                   SceneManager.goto(Scene_Map)
                   $gameSystem.onAfterLoad()
-                  setTimeout(() => {
-                    this.show = false
-                    Patch.showTip()
-                    Patch.stopWait()
-                  }, 500)
-                }, 200)
-              } else {
-                Methods.showPopup('Error', '奇怪的错误', 1500)
-              }
+                } else {
+                  Methods.showPopup('Error', '奇怪的错误', 1500)
+                  Components.Loading.loadingHide()
+                  this.showMenu()
+                }
+              }, 300)
             }
           }
         },
@@ -151,7 +154,6 @@ module.exports = {
       for (const i in this.menu.list) {
         if (i > 0) {
           if (this.menu.list[i].cn === '继续') {
-            console.log(Patch.checkSave())
             if (Patch.checkSave()) {
               this.menu.list[i].show = true
             } else {
@@ -369,14 +371,17 @@ module.exports = {
 .menu-highlight
   border-color rgba(255, 176, 170, 0.9) !important
 
-.fade-enter-active, .fade-leave-active
-  transition opacity 0.5s
-
 .fade-enter, .fade-leave-to
   opacity 0
 
 .fade-enter-to, .fade-leave
   opacity 1
+
+.fade-enter-active
+  transition opacity 0.5s
+
+.fade-leave-active
+  transition opacity 0.3s
 
 .slide-up-enter-active, .slide-up-leave-active
   transition all 0.3s

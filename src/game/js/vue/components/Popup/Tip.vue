@@ -75,9 +75,9 @@ module.exports = {
     position absolute
     top 60px
     left 0
-    padding 5px 30px 5px 10px
+    padding 5px 10px
     text-align left
-    background rgba(110, 110, 110, 0.5)
+    background rgba(40, 40, 40, 0.7)
     color #fff
     width fit-content
     max-width 80%

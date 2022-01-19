@@ -78,9 +78,9 @@ module.exports = {
   top 50%
   background rgba(0, 0, 0, 0.6)
   transform translate(-50%, -50%)
-  padding 3px 5px 10px 5px
+  padding 5px 7px 12px 7px
   text-align center
-  border 2px solid rgba(255, 176, 170, 0.9)
+  // border 1px solid rgba(255, 176, 170, 0.9)
   border-radius 10px
 
   .en, .cn
