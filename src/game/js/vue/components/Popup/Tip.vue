@@ -1,11 +1,9 @@
 <template>
   <div id="tip">
-    <transition name="slide-down">
+    <transition name="slide-right">
       <div class="tip" v-if="show">
-        <div class="en">{{ enText }}</div>
-        <div class="cn">{{ cnText }}</div>
-        <div class="left"></div>
-        <div class="right"></div>
+        <div class="en" v-html="enText"></div>
+        <div class="cn" v-html="cnText"></div>
       </div>
     </transition>
   </div>
@@ -31,7 +29,9 @@ module.exports = {
       $gameSystem.tipData.show = true
       $gameSystem.tipData.en = en
       $gameSystem.tipData.cn = cn
-      $gameSystem.tipData.time = time
+      $gameSystem.tipData.time = time || 3000
+
+      time = time ?? 3000
 
       this.clearTimer()
       this.show = true
@@ -73,57 +73,49 @@ module.exports = {
 #tip
   .tip
     position absolute
-    top 10px
-    left 50%
-    padding 5px 10px
-    transform translateX(-50%)
-    text-align center
-    border-width 4px
-    border-style solid none
-    border-top-color #ffa6ca
-    border-bottom-color #ffa6ca
-    background rgba(0, 0, 0, 0.6)
+    top 20px
+    left 0
+    padding 5px 30px 5px 10px
+    text-align left
+    background rgba(110, 110, 110, 0.5)
     color #fff
     width fit-content
     max-width 80%
+    clip-path polygon(0 0, 100% 0, calc(100% - 20px) 100%, 0% 100%)
+    text-shadow rgba(0, 0, 0, 0.7) 0px 0px 1px, rgba(0, 0, 0, 0.7) 0px 0px 1px, rgba(0, 0, 0, 0.7) 0px 0px 1px
+
+    &:after
+      content ''
+      position absolute
+      width calc(100% + 10px)
+      height 100%
+      top 0
+      left 0
+      clip-path polygon(calc(100% - 15px) 0px, 100% 0px, calc(100% - 10px) 100%, calc(100% - 35px) 100%)
+      background rgb(248, 200, 191)
+
+  hr
+    margin 0 0 5px 0
+    visibility hidden
 
   .en
-    font-size 20px
+    font-size 18px
     line-height 20px
 
   .cn
     margin-top 5px
-    font-size 22px
+    font-size 20px
     line-height 22px
 
-  .left
-    position absolute
-    height calc(100% + 1px)
-    left 0
-    top -0.5px
-    width 4px
-    background #a6d4ff
-
-  .right
-    position absolute
-    height calc(100% + 1px)
-    right 0
-    top -0.5px
-    width 4px
-    background #a6d4ff
-
-.slide-down-enter, .slide-down-leave-to
-  top -50px !important
+.slide-right-enter, .slide-right-leave-to
+  transform translateX(-100%)
   opacity 0 !important
 
-.slide-down-enter-to, .slide-down-leave
-  top 10px !important
-  opacity 1 !important
+.slide-right-enter-to, .slide-right-leave
+  transform translateX(0)
+  opacity 0.5 !important
 
-.slide-down-enter-active
+.slide-right-enter-active, .slide-right-leave-active
   transition all 0.3s ease-out
   transition-delay 0.2s
-
-.slide-down-leave-active
-  transition all 0.3s ease-out
 </style>

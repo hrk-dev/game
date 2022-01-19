@@ -9,6 +9,16 @@ SceneManager.run = function (sceneClass) {
   }
 }
 
+// SceneManager.initGraphics = function() {
+//   Graphics.initialize(this._screenWidth, this._screenHeight, 'canvas')
+//   Graphics.boxWidth = this._boxWidth
+//   Graphics.boxHeight = this._boxHeight
+//   Graphics.setLoadingImage('img/system/Loading.png')
+//   if (Utils.isOptionValid('showfps')) {
+//       Graphics.showFps()
+//   }
+// }
+
 StorageManager.isLocalMode = function () {
   return true
 }

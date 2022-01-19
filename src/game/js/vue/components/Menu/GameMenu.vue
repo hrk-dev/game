@@ -1,13 +1,5 @@
 <template>
   <div id="game-menu">
-    <transition name="slide-down">
-      <div class="tip" v-if="tipShow">
-        <div class="en">{{ tip.en }}</div>
-        <div class="cn">{{ tip.cn }}</div>
-        <div class="left"></div>
-        <div class="right"></div>
-      </div>
-    </transition>
     <transition name="fade">
       <div v-if="show">
         <transition name="slide-up" appear>
@@ -55,10 +47,6 @@ module.exports = {
           cn: '保存',
           en: 'Save',
           fn() {
-            if (Components.Popup.isShow) {
-              Methods.hidePopup()
-              return
-            }
             if (this.hasSave) {
               Methods.showChoice('Do you wish to overwrite this save file', '是否覆盖存档', () => {
                 Patch.save()
@@ -76,7 +64,7 @@ module.exports = {
           en: 'Load',
           fn() {
             Methods.showChoice('Do you wish to load this save file', '是否读取存档', () => {
-              this.menu.show = false
+              this.show = false
               Components.Loading.loadingShow()
               setTimeout(() => {
                 if (DataManager.loadGame(1)) {
@@ -102,7 +90,7 @@ module.exports = {
           cn: '物品栏',
           en: 'Item',
           fn() {
-            this.menu.show = false
+            this.hideMenu()
             this.$refs.Item.show()
           }
         },
@@ -111,7 +99,7 @@ module.exports = {
           cn: '设置',
           en: 'Setting',
           fn() {
-            this.menu.show = false
+            this.hideMenu()
             this.$refs.Setting.show = true
           }
         },
@@ -143,6 +131,13 @@ module.exports = {
     },
     hasSave() {
       this.menu.list[1].show = this.hasSave
+    },
+    tipShow() {
+      if (this.tipShow) {
+        Patch.showTip(0)
+      } else {
+        Methods.hideTip()
+      }
     }
   },
   methods: {
@@ -153,7 +148,7 @@ module.exports = {
         this.tip.cn = $gameSystem.tipData.cn
       }
       this.menu.current = 0
-      this.menu.show = true
+      this.showMenu()
     },
     checkSave() {
       this.hasSave = Patch.checkSave()
@@ -162,6 +157,10 @@ module.exports = {
       if (!this.show) return
       if (buttonName === 'escape') {
         this.back()
+        return
+      }
+      if (Components.Popup.isShow) {
+        Methods.hidePopup()
         return
       }
       if (Components.Choice.show) {
@@ -226,7 +225,7 @@ module.exports = {
         }
         if (this.menu.show) {
           Methods.hidePopup()
-          this.menu.show = false
+          this.hideMenu()
           setTimeout(() => {
             SceneManager.pop()
           }, 200)
@@ -244,52 +243,30 @@ module.exports = {
       }
     },
     showMenu() {
+      if (this.menu.show) return
       this.menu.show = true
+      this.menuShowAnime()
+    },
+    hideMenu() {
+      if (!this.menu.show) return
+      this.menu.show = false
+    },
+    menuShowAnime() {
+      this.$nextTick(() => {
+        anime({
+          targets: '.btn',
+          translateY: [100, 0],
+          easing: 'spring(1, 100, 10, 10)',
+          duration: 500,
+          delay: anime.stagger(50)
+        })
+      })
     }
   }
 }
 </script>
 
 <style lang="stylus" scoped>
-.tip
-  position absolute
-  top 10px
-  left 50%
-  padding 5px 10px
-  transform translateX(-50%)
-  text-align center
-  border-width 4px
-  border-style solid none
-  border-top-color #ffa6ca
-  border-bottom-color #ffa6ca
-  background rgba(0, 0, 0, 0.6)
-  color #fff
-
-  .en
-    font-size 20px
-    line-height 20px
-
-  .cn
-    margin-top 5px
-    font-size 22px
-    line-height 22px
-
-  .left
-    position absolute
-    height calc(100% + 1px)
-    left 0
-    top -0.5px
-    width 4px
-    background #a6d4ff
-
-  .right
-    position absolute
-    height calc(100% + 1px)
-    right 0
-    top -0.5px
-    width 4px
-    background #a6d4ff
-
 .menu
   position absolute
   bottom 60px
@@ -297,7 +274,7 @@ module.exports = {
   width 100%
   display flex
   justify-content space-around
-  background rgba(255, 255, 255, 0.5)
+  background rgba(65, 65, 65, 0.6)
 
   .btn
     overflow hidden
@@ -310,17 +287,11 @@ module.exports = {
     color #000
     height 50px
     text-align center
+    color #fff
+    text-shadow rgba(0, 0, 0, 0.7) 0px 0px 1px, rgba(0, 0, 0, 0.7) 0px 0px 1px, rgba(0, 0, 0, 0.7) 0px 0px 1px
 
     div
       z-index 2
-
-    .highlight
-      position absolute
-      width calc(100% - 10px)
-      height calc(100% - 10px)
-      bottom 2.5px
-      left 2.5px
-      border 2px solid #fff
 
     .cn
       font-size 20px
@@ -331,21 +302,9 @@ module.exports = {
       font-size 16px
       line-height 16px
 
-.highlight
-  background rgba(0, 0, 0, 0.5)
-
 .menu-highlight
   & > *
-    color #fff
-    text-shadow #000 0px 0 2px, #000 0px 0 2px, #000 0px 0 2px, #000 0px 0 2px
-
-.slide-down-enter, .slide-down-leave-to
-  top -50px !important
-  opacity 0 !important
-
-.slide-down-enter-to, .slide-down-leave
-  top 10px !important
-  opacity 1 !important
+    text-shadow #ed9c94 0px 0 2px, #ed9c94 0px 0 2px, #ed9c94 0px 0 2px, #ed9c94 0px 0 2px
 
 .slide-up-enter-active, .slide-up-leave-active
   transition all 0.3s
@@ -357,9 +316,6 @@ module.exports = {
 .slide-up-enter-to, .slide-up-leave
   bottom 60px !important
   opacity 1
-
-.slide-down-enter-active, .slide-down-leave-active
-  transition all 0.3s ease-out
 
 .fade-enter, .fade-leave-to
   opacity 0

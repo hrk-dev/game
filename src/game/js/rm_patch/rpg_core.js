@@ -64,7 +64,7 @@ Graphics._createModeBox = function () {
   box.style.width = '119px'
   box.style.height = '58px'
   box.style.background = 'rgba(0,0,0,0.2)'
-  box.style.zIndex = 9
+  box.style.zIndex = 999
   box.style.opacity = 0
 
   var text = document.createElement('div')

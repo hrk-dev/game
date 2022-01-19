@@ -36,7 +36,7 @@ console.log('开始复制文件')
 fs.emptyDirSync(dir)
 fs.copySync(path.join(__dirname, '../src'), dir, {
   filter: src => {
-    const reg = new RegExp(`src\\${path.sep}window\\${path.sep}devtools.js|src\\${path.sep}yarn.lock|src\\${path.sep}game\\${path.sep}js\\${path.sep}env\\${path.sep}dev.js|src\\${path.sep}icu|Game.rpgproject`)
+    const reg = new RegExp(`src\\${path.sep}module\\${path.sep}devtools.js|src\\${path.sep}icu|Game.rpgproject|src\\${path.sep}game\\${path.sep}js\\${path.sep}env\\${path.sep}dev.js`)
     if (reg.test(src)) {
       console.log('已忽略 ', src)
       return false

@@ -133,3 +133,7 @@ Game_Map.prototype.isEventRunning = function () {
   }
   return eventRunning
 }
+
+Game_Event.prototype.page = function() {
+  return this?.event()?.pages?.[this._pageIndex]
+}

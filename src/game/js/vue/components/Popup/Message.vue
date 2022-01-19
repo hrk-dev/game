@@ -429,6 +429,9 @@ module.exports = {
         top -35px
         font-size 30px
         font-weight bold
+        text-underline-offset 5px
+        text-decoration-line underline
+        text-decoration-thickness 2px
 
       .multiline
         margin-top 15px
@@ -474,7 +477,7 @@ module.exports = {
 
     .item
       padding 5px 25px
-      background linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.8) 5%, rgba(0, 0, 0, 0.8) 95%, transparent 100%)
+      background linear-gradient(to right, transparent 0%, rgba(50, 50, 50, 0.8) 10px, rgba(50, 50, 50, 0.8) calc(100% - 10px), transparent 100%)
       // border-radius 25px
       margin 10px auto
       min-width 250px
@@ -495,7 +498,9 @@ module.exports = {
 
   .text
     height 180px
-    border-top 3px solid rgb(255, 190, 179)
+
+  .bg
+    background rgba(65, 65, 65, 0.6)
 
 .center
   height 100%
@@ -587,8 +592,8 @@ module.exports = {
     line-height 35px
 
 .highlight
-  background linear-gradient(to right, transparent 0%, rgba(255, 255, 255, 0.8) 5%, rgba(255, 255, 255, 0.8) 95%, transparent 100%) !important
-  color #000
+  & > *
+    text-shadow #ed9c94 0px 0 2px, #ed9c94 0px 0 2px, #ed9c94 0px 0 2px, #ed9c94 0px 0 2px
 
 .lowlight
   filter brightness(0.5)
