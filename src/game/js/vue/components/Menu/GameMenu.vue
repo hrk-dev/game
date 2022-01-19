@@ -2,20 +2,26 @@
   <div id="game-menu">
     <transition name="fade">
       <div v-if="show">
-        <transition name="slide-up" appear>
+        <transition name="slide-right" appear>
           <div class="menu" v-if="menu.show">
             <template v-for="(item, index) in menu.list">
-              <div class="btn" v-if="item.show" :key="index">
-                <div
-                  :class="{
-                    'menu-highlight': item.cn === menu.list[menu.current].cn
-                  }"
-                >
-                  <div class="cn">{{ item.cn }}</div>
-                  <div class="en">{{ item.en }}</div>
-                </div>
+              <div
+                class="btn"
+                :class="{
+                  'menu-highlight': item.cn === menu.list[menu.current].cn
+                }"
+                v-if="item.show"
+                :key="index"
+              >
+                <div class="en">{{ item.en }}</div>
+                <div class="cn">{{ item.cn }}</div>
               </div>
             </template>
+          </div>
+        </transition>
+        <transition name="slide-up" appear>
+          <div class="character" v-if="menu.show">
+            <img :src="menu.img" />
           </div>
         </transition>
         <Item ref="Item"></Item>
@@ -41,6 +47,7 @@ module.exports = {
     menu: {
       show: false,
       current: 0,
+      img: md5Url('img/pictures/汐/震惊-智慧的眼睛.png'),
       list: [
         {
           show: true,
@@ -255,10 +262,10 @@ module.exports = {
       this.$nextTick(() => {
         anime({
           targets: '.btn',
-          translateY: [100, 0],
-          easing: 'spring(1, 100, 10, 10)',
+          translateX: [-100, 0],
+          easing: 'spring(1, 100, 20, 0)',
           duration: 500,
-          delay: anime.stagger(50)
+          delay: anime.stagger(60)
         })
       })
     }
@@ -267,28 +274,34 @@ module.exports = {
 </script>
 
 <style lang="stylus" scoped>
+$pink = rgba(255, 176, 170, 0.9)
+
 .menu
   position absolute
-  bottom 60px
-  left 0
-  width 100%
+  top 190px
+  left 0px
   display flex
+  flex-direction column
   justify-content space-around
-  background rgba(65, 65, 65, 0.6)
 
   .btn
     overflow hidden
     position relative
     display flex
     flex-direction column
-    align-items center
     justify-content center
     padding 0 10px
-    color #000
+    margin 10px 0
+    width 100px
     height 50px
-    text-align center
+    text-align left
     color #fff
-    text-shadow rgba(0, 0, 0, 0.7) 0px 0px 1px, rgba(0, 0, 0, 0.7) 0px 0px 1px, rgba(0, 0, 0, 0.7) 0px 0px 1px
+    background rgba(110, 110, 110, 0.5)
+    border 2px solid $pink
+    border-left none
+    border-top-right-radius 10px
+    border-bottom-right-radius 10px
+    transition width 0.3s, baacground 0.3s
 
     div
       z-index 2
@@ -302,20 +315,39 @@ module.exports = {
       font-size 16px
       line-height 16px
 
+.character
+  position absolute
+  right 0
+  bottom 0
+  width 350px
+
+  img
+    display block
+    width 100%
+
 .menu-highlight
-  & > *
-    text-shadow #ed9c94 0px 0 2px, #ed9c94 0px 0 2px, #ed9c94 0px 0 2px, #ed9c94 0px 0 2px
+  width 130px !important
+  background $pink !important
+
+.slide-right-enter, .slide-right-leave-to
+  transform translateX(-100%)
+
+.slide-right-enter-to, .slide-right-leave
+  transform translateX(0)
+
+.slide-right-enter-active, .slide-right-leave-active
+  transition all 0.3s ease
+
+.slide-up-enter-to, .slide-up-leave
+  transform translateY(0)
+  opacity 1
+
+.slide-up-enter, .slide-up-leave-to
+  transform translateY(100%)
+  opacity 0
 
 .slide-up-enter-active, .slide-up-leave-active
   transition all 0.3s
-
-.slide-up-enter, .slide-up-leave-to
-  bottom -70px !important
-  opacity 0.5
-
-.slide-up-enter-to, .slide-up-leave
-  bottom 60px !important
-  opacity 1
 
 .fade-enter, .fade-leave-to
   opacity 0

@@ -73,7 +73,7 @@ module.exports = {
 #tip
   .tip
     position absolute
-    top 20px
+    top 60px
     left 0
     padding 5px 30px 5px 10px
     text-align left
@@ -81,18 +81,10 @@ module.exports = {
     color #fff
     width fit-content
     max-width 80%
-    clip-path polygon(0 0, 100% 0, calc(100% - 20px) 100%, 0% 100%)
-    text-shadow rgba(0, 0, 0, 0.7) 0px 0px 1px, rgba(0, 0, 0, 0.7) 0px 0px 1px, rgba(0, 0, 0, 0.7) 0px 0px 1px
-
-    &:after
-      content ''
-      position absolute
-      width calc(100% + 10px)
-      height 100%
-      top 0
-      left 0
-      clip-path polygon(calc(100% - 15px) 0px, 100% 0px, calc(100% - 10px) 100%, calc(100% - 35px) 100%)
-      background rgb(248, 200, 191)
+    border 2px solid rgba(255, 176, 170, 0.9)
+    border-left none
+    border-top-right-radius 10px
+    border-bottom-right-radius 10px
 
   hr
     margin 0 0 5px 0
@@ -109,13 +101,10 @@ module.exports = {
 
 .slide-right-enter, .slide-right-leave-to
   transform translateX(-100%)
-  opacity 0 !important
 
 .slide-right-enter-to, .slide-right-leave
   transform translateX(0)
-  opacity 0.5 !important
 
 .slide-right-enter-active, .slide-right-leave-active
-  transition all 0.3s ease-out
-  transition-delay 0.2s
+  transition transform 0.3s ease
 </style>

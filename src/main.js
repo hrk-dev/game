@@ -27,6 +27,7 @@ function createWindow() {
 
   mainWindow.on('closed', () => {
     app.quit()
+    process.exit()
   })
 }
 

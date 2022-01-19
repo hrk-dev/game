@@ -83,8 +83,7 @@ module.exports = {
 </script>
 
 <style lang="stylus" scoped>
-$highlight-color = rgba(150, 150, 150, 0.8)
-$text-shadow-color = rgba(0, 0, 0, 0.7)
+$pink = rgba(255, 176, 170, 0.9)
 
 .choice
   z-index 20
@@ -94,31 +93,11 @@ $text-shadow-color = rgba(0, 0, 0, 0.7)
   top 50%
   background rgba(0, 0, 0, 0.6)
   transform translate(-50%, -50%)
-  padding 5px
+  padding 10px
   text-align center
-  padding 25px 20px 25px 30px
-  clip-path polygon(20px 0, 100% 0, calc(100% - 20px) 100%, 0% 100%)
-  text-shadow $text-shadow-color 0px 0px 1px, $text-shadow-color 0px 0px 1px, $text-shadow-color 0px 0px 1px
-
-  &:before
-    content ''
-    position absolute
-    top 0
-    left 0
-    height 100%
-    width 25px
-    clip-path polygon(0px 0px, 100% 0px, calc(100% - 20px) 100%, 0 100%)
-    background rgb(117, 214, 249)
-
-  &:after
-    content ''
-    position absolute
-    top 0
-    right 0
-    height 100%
-    width 25px
-    clip-path polygon(20px 0px, 100% 0px, calc(100% - 20px) 100%, 0px 100%)
-    background rgb(248, 200, 191)
+  border 2px solid $pink
+  border-radius 10px
+  padding 15px 10px
 
   .en
     font-size 16px
@@ -144,7 +123,8 @@ $text-shadow-color = rgba(0, 0, 0, 0.7)
       line-height 14px
 
 .highlight
-  background linear-gradient(to right, transparent 0%, $highlight-color 10px, $highlight-color calc(100% - 10px), transparent 100%)
+  border 2px solid $pink
+  border-radius 10px
 
 .fade-enter, .fade-leave-to
   opacity 0

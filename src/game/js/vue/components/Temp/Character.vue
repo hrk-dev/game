@@ -50,8 +50,8 @@ module.exports = {
 .character-wrapper
   z-index 999
   position absolute
-  top 90px
-  left 0
+  top 20px
+  right 0
   background #000
   color #fff
   font-size 14px

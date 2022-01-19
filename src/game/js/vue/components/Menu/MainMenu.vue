@@ -147,10 +147,19 @@ module.exports = {
   methods: {
     init() {
       AudioManager.stopAll()
+      this.menu.current = 1
       for (const i in this.menu.list) {
         if (i > 0) {
           if (this.menu.list[i].cn === '继续') {
-            if (Patch.checkSave()) this.menu.list[i].show = true
+            console.log(Patch.checkSave())
+            if (Patch.checkSave()) {
+              this.menu.list[i].show = true
+            } else {
+              this.menu.list[i].show = false
+              this.menu.list[0].cn = '开始'
+              this.menu.list[0].en = 'Start'
+              this.menu.current = 0
+            }
           } else {
             this.menu.list[i].show = true
           }
@@ -167,7 +176,6 @@ module.exports = {
         if (data[0].loop.load === false) this.menu.list[1].show = false
       }
       DataManager.saveGlobalInfo(data)
-      this.menu.current = 1
       this.menu.show = true
       this.menuShowAnime()
     },
@@ -317,8 +325,10 @@ module.exports = {
       bottom 60px
       left 0
       width 100%
+      height 60px
       padding 0 10px
       display flex
+      align-items center
       justify-content space-around
       background linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.5) 10px, rgba(0, 0, 0, 0.5) calc(100% - 10px), transparent 100%)
 
@@ -332,6 +342,9 @@ module.exports = {
         padding 0 10px
         color #fff
         height 50px
+        border 2px solid transparent
+        border-radius 10px
+        transition border 0.3s
 
         div
           z-index 2
@@ -354,8 +367,7 @@ module.exports = {
           line-height 16px
 
 .menu-highlight
-  & > *
-    text-shadow #ed9c94 0px 0 2px, #ed9c94 0px 0 2px, #ed9c94 0px 0 2px, #ed9c94 0px 0 2px
+  border-color rgba(255, 176, 170, 0.9) !important
 
 .fade-enter-active, .fade-leave-active
   transition opacity 0.5s
