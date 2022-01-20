@@ -122,13 +122,13 @@ module.exports = {
       this.$nextTick(() => {
         let top = this.top
         if (this.current === 0) {
-          top = this.$refs.run.offsetTop
+          top = this.$refs?.run?.offsetTop
         } else if (this.current === 1) {
-          top = this.$refs.bgm.offsetTop
+          top = this.$refs?.bgm?.offsetTop
         } else if (this.current === 2) {
-          top = this.$refs.se.offsetTop
+          top = this.$refs?.se?.offsetTop
         } else if (this.current === 3) {
-          top = this.$refs.back.offsetTop
+          top = this.$refs?.back?.offsetTop
         }
         this.top = top
       })

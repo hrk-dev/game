@@ -1,7 +1,7 @@
 <template>
   <div id="tip">
     <transition name="slide-right">
-      <div class="tip" v-if="show">
+      <div class="tip" v-if="show" ref="tip">
         <div class="en" v-html="enText"></div>
         <div class="cn" v-html="cnText"></div>
       </div>
@@ -16,6 +16,11 @@ module.exports = {
     enText: '',
     cnText: ''
   }),
+  computed: {
+    height() {
+      return this.$refs?.tip?.offsetHeight || 50
+    }
+  },
   methods: {
     showTip(en, cn, time) {
       if (!en || !cn) return
@@ -81,6 +86,7 @@ module.exports = {
     color #fff
     width fit-content
     max-width 80%
+    min-height 50px
     border 2px solid rgba(255, 176, 170, 0.9)
     border-left none
     border-top-right-radius 10px

@@ -3,19 +3,20 @@
     <transition name="fade">
       <div v-if="show">
         <transition name="slide-right" appear>
-          <div class="menu" v-if="menu.show">
+          <div class="menu" :style="{ top: `${menu.top}px` }" v-if="menu.show">
             <template v-for="(item, index) in menu.list">
-              <div
-                class="btn"
-                :class="{
-                  'menu-highlight': item.cn === menu.list[menu.current].cn
-                }"
-                v-if="item.show"
-                :key="index"
+              <transition name="btn" :key="index">
+                <div
+                  class="btn"
+                  :class="{
+                    'menu-highlight': item.cn === menu.list[menu.current].cn
+                  }"
+                  v-if="item.show"
+                >
+                  <div class="en">{{ item.en }}</div>
+                  <div class="cn">{{ item.cn }}</div>
+                </div></transition
               >
-                <div class="en">{{ item.en }}</div>
-                <div class="cn">{{ item.cn }}</div>
-              </div>
             </template>
           </div>
         </transition>
@@ -46,6 +47,7 @@ module.exports = {
     },
     menu: {
       show: false,
+      top: 130,
       current: 0,
       img: md5Url('img/pictures/汐/震惊-思考.png'),
       list: [
@@ -93,7 +95,7 @@ module.exports = {
         },
         {
           show: true,
-          cn: '物品栏',
+          cn: '物品',
           en: 'Item',
           fn() {
             this.hideMenu()
@@ -127,7 +129,7 @@ module.exports = {
   }),
   computed: {
     tipShow() {
-      return this.show && this.menu.show && (this.tip.en || this.tip.cn)
+      return this.show && this.menu.show
     }
   },
   watch: {
@@ -141,7 +143,7 @@ module.exports = {
     },
     tipShow() {
       if (this.tipShow) {
-        Patch.showTip(0)
+        this.showTip()
       } else {
         Methods.hideTip()
       }
@@ -149,13 +151,15 @@ module.exports = {
   },
   methods: {
     init() {
+      this.showTip()
       this.checkSave()
-      if ($gameSystem && $gameSystem.tipData) {
-        this.tip.en = $gameSystem.tipData.en
-        this.tip.cn = $gameSystem.tipData.cn
-      }
-      this.menu.current = 0
+      // this.menu.current = 0
       this.showMenu()
+    },
+    async showTip() {
+      Patch.showTip(0)
+      await this.$nextTick()
+      this.menu.top = 60 + (Components.Tip.$refs?.tip?.scrollHeight || 50) + 10
     },
     checkSave() {
       this.hasSave = Patch.checkSave()
@@ -278,13 +282,14 @@ $pink = rgba(255, 176, 170, 0.9)
 
 .menu
   position absolute
-  top 190px
+  top 130px
   left 0px
   display flex
   flex-direction column
   justify-content space-around
 
   .btn
+    box-sizing border-box
     overflow hidden
     position relative
     display flex
@@ -301,7 +306,7 @@ $pink = rgba(255, 176, 170, 0.9)
     border-left none
     border-top-right-radius 10px
     border-bottom-right-radius 10px
-    transition width 0.3s, baacground 0.3s
+    transition width 0.3s, padding 0.3s, background 0.3s
 
     div
       z-index 2
@@ -326,8 +331,22 @@ $pink = rgba(255, 176, 170, 0.9)
     width 100%
 
 .menu-highlight
-  width 130px !important
-  background $pink !important
+  padding-left 30px !important
+  width 120px !important
+  background rgba(255, 176, 170, 0.9) !important
+
+.btn-enter, .btn-leave-to
+  height 0 !important
+  margin 0px !important
+  opacity 0
+
+.btn-enter-to, .btn-leave
+  height 50px !important
+  margin 10px 0 !important
+  opacity 1
+
+.btn-enter-active, .btn-leave-active
+  transition all 0.3s !important
 
 .slide-right-enter, .slide-right-leave-to
   transform translateX(-100%)
@@ -357,16 +376,4 @@ $pink = rgba(255, 176, 170, 0.9)
 
 .fade-enter-active, .fade-leave-active
   transition opacity 0.2s
-
-.switch-enter-active, .switch-leave-active
-  transition all 0.3s
-
-.switch-enter
-  transform translateX(-100%)
-
-.switch-leave-to
-  transform translateX(100%)
-
-.switch-enter-to, .switch-leave
-  transform translateX(0)
 </style>

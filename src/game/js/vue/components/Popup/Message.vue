@@ -431,10 +431,6 @@ $pink = rgba(255, 176, 170, 0.9)
         top -35px
         font-size 30px
         font-weight bold
-        text-underline-offset 5px
-        text-decoration-line underline
-        text-decoration-thickness 2px
-        text-shadow 0 0 2px black, 0 0 2px black, 0 0 2px black
 
       .multiline
         margin-top 15px
