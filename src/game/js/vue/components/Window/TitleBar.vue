@@ -7,11 +7,6 @@
       <div class="title-text">{{ title }}</div>
     </div>
     <div class="title-btn-list">
-      <div style="-webkit-app-region: no-drag;display: flex;margin: 5px;">
-        <input type="number" min="1" max="99" v-model="saveID" />
-        <button @click="save">save</button>
-        <button @click="load">load</button>
-      </div>
       <div class="dev-btn" v-if="dev">
         <div class="title-btn" @click="ipc('app:reload')" title="刷新页面">Re</div>
         <div class="title-btn" @click="ipc('dev:tool')" title="打开devtools">Dev</div>
@@ -30,8 +25,7 @@ module.exports = {
     dev: false,
     title: 'Hiiro',
     color: '',
-    titleTestIndex: 0,
-    saveID: 1
+    titleTestIndex: 0
   }),
   methods: {
     ipc(type) {
@@ -47,31 +41,6 @@ module.exports = {
         this.title = this.titleList[this.titleTestIndex] + 'iiro'
       }
       ++this.titleTestIndex
-    },
-    save() {
-      $gameSystem.onBeforeSave()
-      if (DataManager.saveGame(this.saveID + 1)) {
-        StorageManager.cleanBackup(this.saveID + 1)
-        Methods.showPopup('Save success', '保存成功', 1000)
-      } else {
-        Methods.showPopup('Save failed', '保存失败', 1000)
-      }
-    },
-    load() {
-      AudioManager.stopAll()
-      Components.MainMenu.show = false
-      if (DataManager.loadGame(this.saveID + 1)) {
-        Patch.startWait()
-        Components.Loading.loadingShow()
-        SceneManager.goto(Scene_Map)
-        $gameSystem.onAfterLoad()
-        setTimeout(() => {
-          Components.Loading.loadingHide()
-          Patch.stopWait()
-        }, 500)
-      } else {
-        Methods.showPopup('Load failed', '读取失败', 1000)
-      }
     }
   },
   mounted() {

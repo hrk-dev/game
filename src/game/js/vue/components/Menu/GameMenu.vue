@@ -1,5 +1,13 @@
 <template>
   <div id="game-menu">
+    <!-- 测试 -->
+    <transition name="slide-right" appear>
+      <div class="test" v-if="menu.show">
+        <input type="number" min="1" max="99" v-model.number="saveID" />
+        <button @click="save">save</button>
+        <button @click="load">load</button>
+      </div>
+    </transition>
     <transition name="fade">
       <div v-if="show">
         <transition name="slide-right" appear>
@@ -9,7 +17,7 @@
                 <div
                   class="btn"
                   :class="{
-                    'menu-highlight': item.cn === menu.list[menu.current].cn
+                    highlight: item.cn === menu.list[menu.current].cn
                   }"
                   v-if="item.show"
                 >
@@ -39,6 +47,7 @@ module.exports = {
     Setting: VueMain.loadComponent('Common/Setting')
   },
   data: () => ({
+    saveID: 1, // 测试
     show: false,
     hasSave: false,
     tip: {
@@ -133,6 +142,11 @@ module.exports = {
     }
   },
   watch: {
+    // 测试
+    saveID() {
+      if (this.saveID > 99) this.saveID = 99
+      if (this.saveID < 1) this.saveID = 1
+    },
     show() {
       if (this.show) {
         this.init()
@@ -180,7 +194,7 @@ module.exports = {
         this.$refs.Item.checkInput(buttonName)
       } else if (this.$refs.Setting.show) {
         this.$refs.Setting.checkInput(buttonName)
-      } else {
+      } else if (this.menu.show) {
         switch (buttonName) {
           case 'left':
             this.up()
@@ -272,6 +286,38 @@ module.exports = {
           delay: anime.stagger(60)
         })
       })
+    },
+    // 测试
+    save() {
+      if (!this.show) return
+      Components.Choice.reset()
+      $gameSystem.onBeforeSave()
+      if (DataManager.saveGame(this.saveID + 1)) {
+        StorageManager.cleanBackup(this.saveID + 1)
+        Methods.showPopup('Save success', '保存成功', 1500)
+      } else {
+        Methods.showPopup('Save failed', '保存失败', 1500)
+      }
+    },
+    load() {
+      if (!this.show) return
+      Components.Choice.reset()
+      this.show = false
+      Components.Loading.loadingShow()
+      setTimeout(() => {
+        if (DataManager.loadGame(this.saveID + 1)) {
+          Patch.startWait()
+          SceneManager.goto(Scene_Map)
+          $gameSystem.onAfterLoad()
+          Components.Loading.loadingHide()
+          Patch.showTip()
+          Patch.stopWait()
+        } else {
+          Methods.showPopup('Load failed', '读取失败', 1500)
+          Components.Loading.loadingHide()
+          this.show = true
+        }
+      }, 300)
     }
   }
 }
@@ -330,7 +376,7 @@ $pink = rgba(255, 176, 170, 0.9)
     display block
     width 100%
 
-.menu-highlight
+.highlight
   padding-left 30px !important
   width 120px !important
   background rgba(255, 176, 170, 0.9) !important
@@ -376,4 +422,30 @@ $pink = rgba(255, 176, 170, 0.9)
 
 .fade-enter-active, .fade-leave-active
   transition opacity 0.2s
+
+// 测试
+.test
+  position fixed
+  top 0px
+  left 0px
+  display flex
+  height 40px
+  margin 0px
+  border-top 2px solid rgba(255, 176, 170, 0.9)
+  border-right 2px solid rgba(255, 176, 170, 0.9)
+  border-bottom 2px solid rgba(255, 176, 170, 0.9)
+  border-left none
+  border-top-right-radius 10px
+  border-bottom-right-radius 10px
+  overflow hidden
+
+  & > *
+    color #fff
+    background rgba(40, 40, 40, 0.7)
+    margin 1px
+    border-radius 5px
+    border 2px solid rgba(255, 176, 170, 0.9)
+
+  input
+    text-align center
 </style>

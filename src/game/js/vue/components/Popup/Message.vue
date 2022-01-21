@@ -412,7 +412,7 @@ $pink = rgba(255, 176, 170, 0.9)
 
 #message
   color #fff
-  
+  text-shadow -1px -1px 0 #4f4d57, 1px -1px 0 #4f4d57, -1px 1px 0 #4f4d57, 1px 1px 0 #4f4d57, 0px 2px 2px rgba(0, 0, 0, 0.6)
 
   .message-wrapper
     display flex

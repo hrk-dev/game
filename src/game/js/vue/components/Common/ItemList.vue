@@ -11,7 +11,7 @@
               class="item"
               v-for="(item, index) in list"
               :key="index"
-              :class="{ highlight: current == index }"
+              :class="{ 'select': current == index }"
             >
               <div class="en" v-if="item.meta?.en">{{ item.meta.en }}</div>
               <div class="cn">{{ item.meta?.cn || item.name }}</div>
@@ -224,7 +224,7 @@ module.exports = {
           font-size 20px
           line-height 20px
 
-.highlight
+.select
   background #fff
   color #000
 </style>

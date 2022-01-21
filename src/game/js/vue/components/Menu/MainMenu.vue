@@ -12,7 +12,7 @@
                 v-if="item.show"
                 class="btn"
                 :class="{
-                  'menu-highlight': item.cn === menu.list[menu.current].cn
+                  highlight: item.cn === menu.list[menu.current].cn
                 }"
                 :key="index"
               >
@@ -351,14 +351,6 @@ module.exports = {
         div
           z-index 2
 
-        .highlight
-          position absolute
-          width calc(100% - 10px)
-          height calc(100% - 10px)
-          bottom 2.5px
-          left 2.5px
-          border 2px solid #fff
-
         .cn
           font-size 20px
           line-height 20px
@@ -368,7 +360,7 @@ module.exports = {
           font-size 16px
           line-height 16px
 
-.menu-highlight
+.highlight
   border-color rgba(255, 176, 170, 0.9) !important
 
 .fade-enter, .fade-leave-to
