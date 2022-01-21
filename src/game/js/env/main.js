@@ -6,6 +6,7 @@ var dev = false
 
 const md5Url = (str) => {
   if (dev) return str
+  if (!str) return str
   const list = str.split('/')
   for (const i in list) {
     if (list[i]) list[i] = md5(list[i])
