@@ -192,18 +192,31 @@ void function () {
   Spriteset_Map.prototype.createTilemap = function () {
     ct.call(this);
     if ($dataMap.parallaxName && !$dataMap.note) {
-      const name = $dataMap.parallaxName.split('_')[0]
-      this._tilemap.addChild(ULDS({
-        name: name + "_0",
-        x: "this.rx(0)",
-        y: "this.ry(0)"
-      }));
-      this._tilemap.addChild(ULDS({
-        name: name + "_1",
-        x: "this.rx(0)",
-        y: "this.ry(0)",
-        z: "5"
-      }));
+      let list = $dataMap.parallaxName.split('_')
+      if (isNaN(Number(list[list.length - 1]))) {
+        list = [list.join('_')]
+      }
+      if (list.length === 1) {
+        this._tilemap.addChild(ULDS({
+          name: list[0],
+          x: "this.rx(0)",
+          y: "this.ry(0)"
+        }));
+      } else {
+        list.pop()
+        const name = list.join('_')
+        this._tilemap.addChild(ULDS({
+          name: name + "_0",
+          x: "this.rx(0)",
+          y: "this.ry(0)"
+        }));
+        this._tilemap.addChild(ULDS({
+          name: name + "_1",
+          x: "this.rx(0)",
+          y: "this.ry(0)",
+          z: "5"
+        }));
+      }
     } else {
       $dataMap.note.replace(RE, function (_match, settings) {
         var isValid = false;
