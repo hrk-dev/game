@@ -63,20 +63,17 @@ module.exports = {
               }, 300)
             } else {
               this.hideMenu()
+              Components.Loading.loadingShow()
               setTimeout(() => {
                 if (DataManager.loadGame(1)) {
                   this.show = false
+                  $gameMap._interpreter.command115()
                   $gameVariables.setValue(1, this.loop.next)
                   $gameTemp.reserveCommonEvent(97)
                   Methods.clearTip()
-                  Patch.addGlobalInfo('loop', {
-                    restart: false,
-                    load: true
-                  })
                   AudioManager.stopAll()
                   SceneManager.goto(Scene_Map)
                   $gameSystem.onAfterLoad()
-                  Components.Loading.loadingHide()
                 } else {
                   Methods.showPopup('Error', '奇怪的错误', 1500)
                   Components.Loading.loadingHide()
@@ -151,6 +148,7 @@ module.exports = {
     init() {
       AudioManager.stopAll()
       this.menu.current = 1
+      Components.GameMenu.menu.current = 0
       for (const i in this.menu.list) {
         if (i > 0) {
           if (this.menu.list[i].cn === '继续') {
@@ -206,7 +204,7 @@ module.exports = {
     },
     checkInput(buttonName) {
       if (!this.show || this.busy) return
-      if (this.$refs.Setting.show) {
+      if (this.$refs?.Setting?.show) {
         this.$refs.Setting.checkInput(buttonName)
       } else if (this.menu.show) {
         switch (buttonName) {
@@ -259,7 +257,7 @@ module.exports = {
     },
     back() {
       if (!this.show) return
-      this.$refs.Setting.back()
+      this.$refs?.Setting?.back()
       this.showMenu()
     },
     showMenu() {

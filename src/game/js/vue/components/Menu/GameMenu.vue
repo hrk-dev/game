@@ -1,15 +1,15 @@
 <template>
   <div id="game-menu">
-    <!-- 测试 -->
-    <transition name="slide-right" appear>
-      <div class="test" v-if="menu.show">
-        <input type="number" min="1" max="99" v-model.number="saveID" />
-        <button @click="save">save</button>
-        <button @click="load">load</button>
-      </div>
-    </transition>
     <transition name="fade">
       <div v-if="show">
+        <!-- 测试 -->
+        <transition name="slide-right" appear>
+          <div class="test" v-if="menu.show">
+            <input type="number" min="1" max="99" v-model.number="saveID" />
+            <button @click="save">save</button>
+            <button @click="load">load</button>
+          </div>
+        </transition>
         <transition name="slide-right" appear>
           <div class="menu" :style="{ top: `${menu.top}px` }" v-if="menu.show">
             <template v-for="(item, index) in menu.list">
