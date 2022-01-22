@@ -33,10 +33,12 @@ const dir = path.join(__dirname, '../dist')
 let s = Date.now()
 console.log('开始复制文件')
 
+const test = process.env.NODE_ENV != 'development' ? `|src\\${path.sep}game\\${path.sep}js\\${path.sep}env\\${path.sep}test.js$` : ''
+
 fs.emptyDirSync(dir)
 fs.copySync(path.join(__dirname, '../src'), dir, {
   filter: src => {
-    const reg = new RegExp(`src\\${path.sep}module\\${path.sep}devtools.js|src\\${path.sep}icu|Game.rpgproject|src\\${path.sep}game\\${path.sep}js\\${path.sep}env\\${path.sep}dev.js`)
+    const reg = new RegExp(`src\\${path.sep}module\\${path.sep}devtools.js|src\\${path.sep}icu|Game.rpgproject|src\\${path.sep}game\\${path.sep}js\\${path.sep}env\\${path.sep}dev.js$${test}`)
     if (reg.test(src)) {
       console.log('已忽略 ', src)
       return false

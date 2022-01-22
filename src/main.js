@@ -22,7 +22,7 @@ function createWindow() {
     }
   })
 
-  // mainWindow.setMenu(null)
+  mainWindow.setMenu(null)
   mainWindow.loadFile(join(__dirname, './game/index.html'))
 
   mainWindow.on('closed', () => {

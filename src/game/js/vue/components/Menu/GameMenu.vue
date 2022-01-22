@@ -4,8 +4,8 @@
       <div v-if="show">
         <!-- 测试 -->
         <transition name="slide-right" appear>
-          <div class="test" v-if="menu.show">
-            <input type="number" min="1" max="99" v-model.number="saveID" />
+          <div class="test" v-if="test.dev && menu.show">
+            <input type="number" min="1" max="99" v-model.number="test.saveID" />
             <button @click="save">save</button>
             <button @click="load">load</button>
           </div>
@@ -47,7 +47,11 @@ module.exports = {
     Setting: VueMain.loadComponent('Common/Setting')
   },
   data: () => ({
-    saveID: 1, // 测试
+    // 测试
+    test: {
+      dev: false,
+      saveID: 1
+    },
     show: false,
     hasSave: false,
     tip: {
@@ -144,8 +148,8 @@ module.exports = {
   watch: {
     // 测试
     saveID() {
-      if (this.saveID > 99) this.saveID = 99
-      if (this.saveID < 1) this.saveID = 1
+      if (this.test.saveID > 99) this.test.saveID = 99
+      if (this.test.saveID < 1) this.test.saveID = 1
     },
     show() {
       if (this.show) {
@@ -292,8 +296,8 @@ module.exports = {
       if (!this.show) return
       Components.Choice.reset()
       $gameSystem.onBeforeSave()
-      if (DataManager.saveGame(this.saveID + 1)) {
-        StorageManager.cleanBackup(this.saveID + 1)
+      if (DataManager.saveGame(this.test.saveID + 1)) {
+        StorageManager.cleanBackup(this.test.saveID + 1)
         Methods.showPopup('Save success', '保存成功', 1500)
       } else {
         Methods.showPopup('Save failed', '保存失败', 1500)
@@ -305,7 +309,7 @@ module.exports = {
       this.show = false
       Components.Loading.loadingShow()
       setTimeout(() => {
-        if (DataManager.loadGame(this.saveID + 1)) {
+        if (DataManager.loadGame(this.test.saveID + 1)) {
           Patch.startWait()
           SceneManager.goto(Scene_Map)
           $gameSystem.onAfterLoad()
@@ -318,6 +322,11 @@ module.exports = {
           this.show = true
         }
       }, 300)
+    }
+  },
+  mounted() {
+    if (test || dev) {
+      this.test.dev = true
     }
   }
 }

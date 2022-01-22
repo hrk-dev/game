@@ -7,10 +7,10 @@
       <div class="title-text">{{ title }}</div>
     </div>
     <div class="title-btn-list">
-      <div class="dev-btn" v-if="dev">
+      <div class="dev-btn" v-if="test">
         <div class="title-btn" @click="ipc('app:reload')" title="刷新页面">Re</div>
         <div class="title-btn" @click="ipc('dev:tool')" title="打开devtools">Dev</div>
-        <div class="title-btn" @click="ipc('dev:vue')" title="打开vue-devtools">Vue</div>
+        <div class="title-btn" @click="ipc('dev:vue')" title="打开vue-devtools" v-if="dev">Vue</div>
       </div>
       <div class="title-btn" style="line-height: 20px" @click="ipc('app:min')">_</div>
       <div class="title-btn" @click="ipc('app:max')">□</div>
@@ -22,6 +22,7 @@
 <script>
 module.exports = {
   data: () => ({
+    test: false,
     dev: false,
     title: 'Hiiro',
     color: '',
@@ -44,6 +45,9 @@ module.exports = {
     }
   },
   mounted() {
+    if (test) {
+      this.test = true
+    }
     if (dev) {
       this.dev = true
     }

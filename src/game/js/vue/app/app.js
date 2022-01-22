@@ -13,7 +13,7 @@ VueMain.app = new Vue({
     Popup: VueMain.loadComponent('Popup/Popup'),
     Choice: VueMain.loadComponent('Popup/Choice'),
     Message: VueMain.loadComponent('Popup/Message'),
-    Character: VueMain.loadComponent('Temp/Character'),
+    CharacterTest: VueMain.loadComponent('Temp/CharacterTest'),
     VVideo: VueMain.loadComponent('Temp/Video'),
     Ending: VueMain.loadComponent('Temp/Ending'),
     Danmu: VueMain.loadComponent('Temp/Danmu')
@@ -40,7 +40,7 @@ VueMain.app = new Vue({
   },
   mounted() {
     this.$nextTick(() => {
-      electron.ipcRenderer.send('vue:ready', dev)
+      electron.ipcRenderer.send('vue:ready', (test || dev))
     })
   }
 })

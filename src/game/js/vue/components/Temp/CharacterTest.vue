@@ -1,5 +1,5 @@
 <template>
-  <div id="character">
+  <div id="character" v-if="dev">
     <div class="character-wrapper" v-if="show">
       <div style="margin-bottom: 5px; border-bottom: 1px solid #fff">
         缺少立绘 - {{ list.length }}
@@ -7,7 +7,7 @@
       <div class="text" v-for="(name, i) in list" :key="'i' + i">
         {{ name }}
       </div>
-      <br>
+      <br />
       <div style="margin-bottom: 5px; border-bottom: 1px solid #fff">
         影响事件 - {{ event.length }}
       </div>
@@ -21,6 +21,7 @@
 <script>
 module.exports = {
   data: () => ({
+    dev: false,
     list: [],
     event: []
   }),
@@ -41,6 +42,11 @@ module.exports = {
         this.list.push(name)
         this.list.sort()
       }
+    }
+  },
+  mounted() {
+    if (test || dev) {
+      this.dev = true
     }
   }
 }

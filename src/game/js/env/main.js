@@ -3,6 +3,7 @@ const fs = require('fs')
 const path = require('path')
 
 var dev = false
+var test = false
 
 const md5Url = (str) => {
   if (dev) return str

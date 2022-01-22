@@ -211,11 +211,11 @@ module.exports = {
   },
   methods: {
     characterError() {
-      Components.Character.add(this.message.character.list.shio)
+      Components.CharacterTest.add(this.message.character.list.shio)
       this.message.character.list.shio = ''
     },
     otherCharacterError() {
-      Components.Character.add(this.message.character.list.other)
+      Components.CharacterTest.add(this.message.character.list.other)
       this.message.character.list.other = ''
     },
     add(code, msg) {
