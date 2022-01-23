@@ -623,13 +623,6 @@ $pink = rgba(255, 176, 170, 0.9)
   bottom 10px
   transform translateX(-50%)
 
-@keyframes fade
-  from
-    opacity 0
-
-  to
-    opacity 1
-
 .slide-up-enter-active, .slide-up-leave-active
   transition all 0.3s
 
@@ -649,4 +642,11 @@ $pink = rgba(255, 176, 170, 0.9)
 
 .multiline-fade-enter-active
   transition opacity 0.2s
+
+@keyframes fade
+  from
+    opacity 0
+
+  to
+    opacity 1
 </style>

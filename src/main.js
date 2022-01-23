@@ -37,30 +37,30 @@ app.whenReady().then(() => {
   app.on('activate', function () {
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
   })
+
+  ipcMain.on('app:reload', () => {
+    mainWindow.webContents.reload()
+  })
+  
+  ipcMain.on('app:min', () => {
+    mainWindow.minimize()
+  })
+  
+  ipcMain.on('app:max', e => {
+    if (mainWindow.isMaximized()) {
+      mainWindow.unmaximize()
+    } else {
+      mainWindow.maximize()
+    }
+  })
+  
+  ipcMain.on('app:quit', () => {
+    app.exit()
+  })
 })
 
 app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') app.quit()
-})
-
-ipcMain.on('app:reload', () => {
-  mainWindow.webContents.reload()
-})
-
-ipcMain.on('app:min', () => {
-  mainWindow.minimize()
-})
-
-ipcMain.on('app:max', e => {
-  if (mainWindow.isMaximized()) {
-    mainWindow.unmaximize()
-  } else {
-    mainWindow.maximize()
-  }
-})
-
-ipcMain.on('app:quit', () => {
-  app.exit()
 })
 
 function setDev(dev) {

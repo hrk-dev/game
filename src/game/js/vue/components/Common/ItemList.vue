@@ -7,11 +7,16 @@
             <div>物品 Item</div>
           </div>
           <div class="item-list">
+            <div class="pre" v-show="page > 0"></div>
+            <div
+              class="next"
+              v-show="itemLength > page_num && page < Math.ceil(itemLength / page_num) - 1"
+            ></div>
             <div
               class="item"
               v-for="(item, index) in list"
               :key="index"
-              :class="{ 'select': current == index }"
+              :class="{ select: current == index }"
             >
               <div class="en" v-if="item.meta?.en">{{ item.meta.en }}</div>
               <div class="cn">{{ item.meta?.cn || item.name }}</div>
@@ -33,8 +38,6 @@
 </template>
 
 <script>
-const page_num = 10
-
 module.exports = {
   data: () => ({
     isShow: false,
@@ -50,10 +53,10 @@ module.exports = {
   }),
   computed: {
     page() {
-      return (this.index / page_num) | 0
+      return (this.index / this.page_num) | 0
     },
     current() {
-      return this.index % page_num
+      return this.index % this.page_num
     }
   },
   watch: {
@@ -62,6 +65,7 @@ module.exports = {
     },
     page() {
       this.list = this.groupList[this.page]
+      this.getInfo()
     }
   },
   methods: {
@@ -91,13 +95,8 @@ module.exports = {
         this.groupList = []
         const temp = $gameParty.items()
 
-        // const temp = []
-        // for (let i = 0; i < 98; i++) {
-        //   temp.push({ name: i })
-        // }
-
-        for (let i = 0; i < temp.length; i += page_num) {
-          this.groupList.push(temp.slice(i, i + page_num))
+        for (let i = 0; i < temp.length; i += this.page_num) {
+          this.groupList.push(temp.slice(i, i + this.page_num))
         }
         if (this.groupList.length < 1) this.groupList.push([])
         this.itemLength = temp.length
@@ -109,10 +108,10 @@ module.exports = {
           this.hide()
           break
         case 'left':
-          this.up()
+          this.left()
           break
         case 'right':
-          this.down()
+          this.right()
           break
         case 'up':
           this.up()
@@ -124,12 +123,25 @@ module.exports = {
     },
     up() {
       if (this.itemLength < 2) return
-      if (--this.index < 0) this.index = this.itemLength - 1
+      this.index = this.index - 1 < 0 ? this.itemLength - 1 : --this.index
     },
     down() {
       if (this.itemLength < 2) return
-      if (++this.index >= this.itemLength) this.index = 0
+      this.index = this.index + 1 >= this.itemLength ? 0 : ++this.index
+    },
+    left() {
+      if (this.itemLength <= this.page_num) this.up()
+      let temp = this.index - this.page_num
+      this.index = temp < 0 ? 0 : temp
+    },
+    right() {
+      if (this.itemLength <= this.page_num) this.down()
+      let temp = this.index + this.page_num
+      this.index = temp > this.itemLength - 1 ? this.itemLength - 1 : temp
     }
+  },
+  created() {
+    this.page_num = 10
   }
 }
 </script>
@@ -162,13 +174,39 @@ module.exports = {
       font-size 24px
 
     .item-list
+      position relative
       overflow hidden
       box-sizing border-box
       width 50%
       margin 10px 5px 10px 10px
+      padding 10px
       border 1px solid
       border-top-left-radius 10px
       border-bottom-left-radius 10px
+
+      .pre
+        position absolute
+        top 2px
+        left 50%
+        transform translateX(-50%)
+        width 0
+        height 0
+        border-bottom 5px solid #fff
+        border-left 5px solid transparent
+        border-right 5px solid transparent
+        animation fade 1s ease infinite alternate
+
+      .next
+        position absolute
+        bottom 2px
+        left 50%
+        transform translateX(-50%)
+        width 0
+        height 0
+        border-top 5px solid #fff
+        border-left 5px solid transparent
+        border-right 5px solid transparent
+        animation fade 1s ease infinite alternate
 
       .item
         height 10%
@@ -177,6 +215,7 @@ module.exports = {
         display flex
         flex-direction column
         justify-content center
+        border-radius 5px
 
         .en
           font-size 14px
@@ -193,24 +232,26 @@ module.exports = {
       margin 10px 10px 10px 0
 
       .img
-        height 40%
         display flex
         justify-content center
         align-items center
         box-sizing border-box
+        height 40%
+        padding 10px
         border 1px solid
         border-top-right-radius 10px
 
         img
           max-width 100%
           max-height 100%
+          border-radius 5px
 
       .text
         display flex
         flex-direction column
         flex 1
         box-sizing border-box
-        padding 5px 10px
+        padding 10px
         font-size 20px
         border 1px solid
         border-top none
@@ -225,6 +266,12 @@ module.exports = {
           line-height 20px
 
 .select
-  background #fff
-  color #000
+  background rgba(255, 176, 170, 0.9) !important
+
+@keyframes fade
+  from
+    opacity 0
+
+  to
+    opacity 1
 </style>

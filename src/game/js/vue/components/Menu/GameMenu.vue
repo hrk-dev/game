@@ -130,10 +130,13 @@ module.exports = {
           en: 'Exit',
           fn() {
             Methods.showChoice('Do you wish back to title', '是否返回主菜单', () => {
-              Components.Choice.hideChoice()
-              AudioManager.stopBgm()
-              AudioManager.stopBgs()
-              SceneManager.goto(Scene_Title)
+              this.show = false
+              setTimeout(() => {
+                Components.Choice.hideChoice()
+                AudioManager.stopBgm()
+                AudioManager.stopBgs()
+                SceneManager.goto(Scene_Title)
+              }, 300)
             })
           }
         }
