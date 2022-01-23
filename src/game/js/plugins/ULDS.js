@@ -115,6 +115,9 @@ void function () {
           // this.x = (formula);
           // this.scale.x = (formula); // key is "scale.x"
           code += 'this.' + key + ' = (' + value + ');\n';
+          if (value.includes('(t)')) {
+            code += 'if (!global.ULDS) global.ULDS = {}\nglobal.ULDS[this._bitmap._url] = this.t\n'
+          }
         } else {
           // if key is "scale.x"
           // keys is ["scale", "x"]
@@ -155,6 +158,10 @@ void function () {
 
     sprite.assignSettings(settings);
 
+    if (global.ULDS?.[sprite._bitmap._url]) {
+      sprite.t = global.ULDS?.[sprite._bitmap._url]
+    }
+
     return sprite;
   }
 
@@ -169,7 +176,8 @@ void function () {
   ULDS.TilingSprite = function (bitmap) {
     TilingSprite.call(this, bitmap);
     bitmap.addLoadListener(function () {
-      this.move(0, 0, bitmap.width + 16, bitmap.height);
+      this.move(0, 0, bitmap.width, bitmap.height);
+      this.anchor.x = -8 / bitmap.width
     }.bind(this));
   };
 
