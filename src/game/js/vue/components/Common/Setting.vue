@@ -3,7 +3,7 @@
     <transition name="fade">
       <div class="setting-wrapper" v-if="show">
         <div class="setting-frame">
-          <div class="title">
+          <div class="setting-title">
             <div>设置 Setting</div>
           </div>
           <div class="setting">
@@ -259,7 +259,7 @@ module.exports = {
       line-height 50px
       transition top 0.3s
 
-    .title
+    .setting-title
       position absolute
       right -30px
       bottom 20px

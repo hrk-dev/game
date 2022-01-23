@@ -4,8 +4,8 @@
       <div class="main-menu" v-if="show">
         <div class="bg">
           <img class="img" :src="bg" alt draggable="false" />
-          <transition name="slide-down" appear>
-            <img class="title" :src="title" alt draggable="false" v-if="menu.show" />
+          <transition name="title" appear>
+            <img class="main-title" :src="title" alt draggable="false" v-if="menu.show" />
           </transition>
         </div>
         <transition name="slide-up" appear>
@@ -94,7 +94,7 @@ module.exports = {
           fn() {
             Methods.hidePopup()
             if (this.loop.restart) {
-              this.test()
+              this.chapterEnd()
             } else {
               this.hideMenu()
               setTimeout(() => {
@@ -173,7 +173,7 @@ module.exports = {
       const data = DataManager.loadGlobalInfo()
       if (data[0].loop) {
         if (data[0].loop.lock) {
-          Methods.showPopup('', '这是一段解锁动画，还没做', 2000)
+          Methods.showPopup('', '这是一段解锁动画，但是还没做', 2000)
           data[0].loop.lock = false
         }
         this.loop.restart = data[0].loop.restart
@@ -192,6 +192,12 @@ module.exports = {
           easing: 'spring(1, 100, 10, 10)',
           duration: 500,
           delay: anime.stagger(50)
+        })
+        anime({
+          targets: '.main-title',
+          top: [0, '30%'],
+          easing: 'spring(1, 100, 10, 10)',
+          duration: 500
         })
       })
     },
@@ -275,7 +281,7 @@ module.exports = {
       if (!this.menu.show) return
       this.menu.show = false
     },
-    test() {
+    chapterEnd() {
       if (this.menu.restart) {
         this.hideMenu()
         Methods.showPopup(
@@ -325,7 +331,7 @@ module.exports = {
       .img
         width 100%
 
-      .title
+      .main-title
         display block
         position absolute
         top 30%
@@ -388,18 +394,15 @@ module.exports = {
 .fade-leave-active
   transition opacity 0.3s
 
-.slide-down-enter-active, .slide-down-leave-active
-  transition all 0.3s
-
-.slide-down-enter, .slide-down-leave-to
+.title-leave-to
   top 0 !important
   opacity 0
 
-.slide-down-enter-to, .slide-down-leave
+.title-leave
   top 30% !important
   opacity 1
 
-.slide-up-enter-active, .slide-up-leave-active
+.title-leave-active
   transition all 0.3s
 
 .slide-up-enter, .slide-up-leave-to
@@ -409,4 +412,7 @@ module.exports = {
 .slide-up-enter-to, .slide-up-leave
   bottom 60px !important
   opacity 1
+
+.slide-up-enter-active, .slide-up-leave-active
+  transition all 0.3s
 </style>

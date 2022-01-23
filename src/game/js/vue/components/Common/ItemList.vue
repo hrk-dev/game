@@ -3,7 +3,7 @@
     <transition name="fade">
       <div class="item-list-wrapper" v-if="isShow">
         <div class="item-list-frame">
-          <div class="title">
+          <div class="item-title">
             <div>物品 Item</div>
           </div>
           <div class="item-list">
@@ -164,7 +164,7 @@ module.exports = {
     border 3px solid rgba(255, 176, 170, 0.9)
     border-radius 15px
 
-    .title
+    .item-title
       position absolute
       right -30px
       bottom 10px
