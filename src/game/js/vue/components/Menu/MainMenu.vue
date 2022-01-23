@@ -3,7 +3,10 @@
     <transition name="fade">
       <div class="main-menu" v-if="show">
         <div class="bg">
-          <img :src="bg" alt draggable="false" />
+          <img class="img" :src="bg" alt draggable="false" />
+          <transition name="slide-down" appear>
+            <img class="title" :src="title" alt draggable="false" v-if="menu.show" />
+          </transition>
         </div>
         <transition name="slide-up" appear>
           <div class="btn-list" v-if="menu.show">
@@ -34,9 +37,10 @@ module.exports = {
     Setting: VueMain.loadComponent('Common/Setting')
   },
   data: () => ({
-    bg: md5Url('img/pictures/menu.png'),
     show: false,
     busy: false,
+    bg: md5Url('img/system/menu/menu.png'),
+    title: md5Url('img/system/menu/title.png'),
     loop: {
       restart: false,
       next: 0
@@ -123,7 +127,8 @@ module.exports = {
           cn: '制作组',
           en: 'Credits',
           fn() {
-            Methods.showPopup('Not finished', '还没做', 1500)
+            this.hideMenu()
+            Components.Credits.start()
           }
         },
         {
@@ -204,6 +209,7 @@ module.exports = {
     },
     checkInput(buttonName) {
       if (!this.show || this.busy) return
+      if (Components.Credits.show) return
       if (this.$refs?.Setting?.show) {
         this.$refs.Setting.checkInput(buttonName)
       } else if (this.menu.show) {
@@ -309,15 +315,24 @@ module.exports = {
     user-select none
 
     .bg
-      position absolute
+      position relative
       width 100%
       height 100%
       left 0
       top 0
       overflow hidden
 
-      img
-        height 100%
+      .img
+        width 100%
+
+      .title
+        display block
+        position absolute
+        top 30%
+        left 50%
+        transform translate(-50%, -50%)
+        width 50%
+        background linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.5) 10px, rgba(0, 0, 0, 0.5) calc(100% - 10px), transparent 100%)
 
     .btn-list
       box-sizing border-box
@@ -372,6 +387,17 @@ module.exports = {
 
 .fade-leave-active
   transition opacity 0.3s
+
+.slide-down-enter-active, .slide-down-leave-active
+  transition all 0.3s
+
+.slide-down-enter, .slide-down-leave-to
+  top 0 !important
+  opacity 0
+
+.slide-down-enter-to, .slide-down-leave
+  top 30% !important
+  opacity 1
 
 .slide-up-enter-active, .slide-up-leave-active
   transition all 0.3s
