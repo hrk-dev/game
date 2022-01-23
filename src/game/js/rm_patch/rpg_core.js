@@ -3,31 +3,38 @@ Utils.isNwjs = function () {
   return false
 }
 
-/**
- * VUE层视频播放进度
- * 待修改
- */
-Graphics._playVideo = function (src) {
-  this._video.src = src
-  this._video.onloadeddata = this._onVideoLoad.bind(this)
-  this._video.onerror = this._videoLoader
-  this._video.onended = this._onVideoEnd.bind(this)
-  this._video.load()
-  this._videoLoading = true
-  if (VueMain.app) {
-    Components.video.show = true
-    this._video.oncanplay = () => {
-      Components.video.duration = this._video.duration | 0
-    }
-    this._video.ontimeupdate = () => {
-      Components.video.current = this._video.currentTime | 0
-    }
-  }
-}
+// /**
+//  * VUE层视频播放进度
+//  * 待修改
+//  */
+// Graphics._playVideo = function (src) {
+//   this._video.src = src
+//   this._video.onloadeddata = this._onVideoLoad.bind(this)
+//   this._video.onerror = this._videoLoader
+//   this._video.onended = this._onVideoEnd.bind(this)
+//   this._video.load()
+//   this._videoLoading = true
+//   if (VueMain.app) {
+//     Components.video.show = true
+//     this._video.oncanplay = () => {
+//       Components.video.duration = this._video.duration | 0
+//     }
+//     this._video.ontimeupdate = () => {
+//       Components.video.current = this._video.currentTime | 0
+//     }
+//   }
+// }
+
+// /** 视频播放结束隐藏VUE层 */
+// Graphics._onVideoEnd = function () {
+//   if (VueMain.app) {
+//     Components.video.show = false
+//   }
+//   this._updateVisibility(false)
+// }
 
 /**
  * VUE适配
- * 待修改
  */
 Graphics._updateRealScale = function () {
   if (this._stretchEnabled) {
@@ -99,14 +106,6 @@ Graphics._centerElement = function (element) {
   element.style.bottom = 0
   element.style.width = width + 'px'
   element.style.height = height + 'px'
-}
-
-/** 视频播放结束隐藏VUE层 */
-Graphics._onVideoEnd = function () {
-  if (VueMain.app) {
-    Components.video.show = false
-  }
-  this._updateVisibility(false)
 }
 
 /** 禁用F3 F4 */

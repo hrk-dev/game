@@ -7,25 +7,6 @@ global.Methods = class {
     Components.TitleBar.title = title
   }
 
-  /** test */
-  static titleTest() {
-    Components.TitleBar.titleTest()
-  }
-
-  static startEnding() {
-    Components.ending.startEnding()
-  }
-
-  /** test */
-  static showDanmu() {
-    Components.danmu.showDanmu()
-  }
-
-  /** test */
-  static stopDanmu() {
-    Components.danmu.stopDanmu()
-  }
-
   static showTip(en, cn, time, menu) {
     Components.Tip.showTip(en, cn, time, menu)
   }

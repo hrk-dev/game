@@ -330,7 +330,11 @@ module.exports = {
           text-align right
           width 70px
 
-.fade-enter-active, .fade-leave-active
+.fade-enter-active
+  transition opacity 0.5s
+  transition-delay 0.2s
+
+.fade-leave-active
   transition opacity 0.5s
 
 .fade-enter, .fade-leave-to

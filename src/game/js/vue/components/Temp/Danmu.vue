@@ -88,4 +88,11 @@ module.exports = {
     animation danmu 5s linear
     color pink
     text-shadow 0 0 2px rgba(0, 0, 0, 0.9)
+
+@keyframes danmu
+  from
+    left 100%
+
+  to
+    left -100%
 </style>

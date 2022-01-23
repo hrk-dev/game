@@ -24,24 +24,15 @@ module.exports = {
   data: () => ({
     test: false,
     dev: false,
-    title: 'Hiiro',
-    color: '',
-    titleTestIndex: 0
+    title: '',
+    color: ''
   }),
   methods: {
     ipc(type) {
       electron.ipcRenderer.send(type)
     },
-    titleTest() {
-      if (this.titleTestIndex > this.titleList.length - 1) {
-        this.titleTestIndex = 0
-      }
-      if (this.titleTestIndex === 8) {
-        this.title = this.titleList[this.titleTestIndex] + 'irro'
-      } else {
-        this.title = this.titleList[this.titleTestIndex] + 'iiro'
-      }
-      ++this.titleTestIndex
+    reset() {
+      this.title = '与你相遇的那天是轮回高校的日常这也是合理的吗？'
     }
   },
   mounted() {
@@ -51,37 +42,7 @@ module.exports = {
     if (dev) {
       this.dev = true
     }
-
-    this.titleList = [
-      'H',
-      'A',
-      'B',
-      'C',
-      'D',
-      'E',
-      'F',
-      'G',
-      'H',
-      'I',
-      'J',
-      'K',
-      'L',
-      'M',
-      'N',
-      'O',
-      'P',
-      'Q',
-      'R',
-      'S',
-      'T',
-      'U',
-      'V',
-      'W',
-      'X',
-      'Y',
-      'Z'
-    ]
-    this.titleTest()
+    this.reset()
   }
 }
 </script>
@@ -104,42 +65,54 @@ module.exports = {
   transition background-color 0.2s
   font-family auto
 
-.title-icon-text
-  display flex
-  justify-content center
-  align-items center
-  opacity 0
-  animation-delay 1s
-  animation title-show 1s
-  animation-fill-mode forwards
+  .title-icon-text
+    display flex
+    justify-content center
+    align-items center
+    opacity 0
+    animation-delay 1s
+    animation title-show 3s
+    animation-fill-mode forwards
+    height 100%
 
-.title-icon
-  display flex
-  justify-content center
-  align-items center
-  height 30px
-  width 30px
+  .title-icon
+    display flex
+    justify-content center
+    align-items center
+    flex-shrink 0
+    height 30px
+    width 30px
 
-.title-text
-  margin-left 5px
+  .title-text
+    font-family 'GameFont'
+    overflow hidden
+    height 100%
 
-.title-btn-list
-  display flex
+  .title-btn-list
+    display flex
 
-.dev-btn
-  background rgba(255, 255, 255, 0.2)
+    .dev-btn
+      display flex
+      background rgba(255, 255, 255, 0.2)
 
-.title-btn
-  display inline-block
-  line-height 27px
-  height 27px
-  width 45px
-  text-align center
-  -webkit-app-region no-drag
+    .title-btn
+      display inline-block
+      line-height 27px
+      height 27px
+      width 45px
+      text-align center
+      -webkit-app-region no-drag
 
-  &:hover
-    background #fadbd8
+      &:hover
+        background #fadbd8
 
-  &:active
-    background #f5b7bb
+      &:active
+        background #f5b7bb
+
+@keyframes title-show
+  from
+    opacity 0
+
+  to
+    opacity 1
 </style>

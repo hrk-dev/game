@@ -6,6 +6,7 @@ VueMain.app = new Vue({
     Window: VueMain.loadComponent('Main'),
     Logo: VueMain.loadComponent('View/Logo'),
     Loading: VueMain.loadComponent('View/Loading'),
+    Credits: VueMain.loadComponent('View/Credits'),
     MainMenu: VueMain.loadComponent('Menu/MainMenu'),
     GameMenu: VueMain.loadComponent('Menu/GameMenu'),
     MoveTip: VueMain.loadComponent('Popup/MoveTip'),
@@ -13,10 +14,7 @@ VueMain.app = new Vue({
     Popup: VueMain.loadComponent('Popup/Popup'),
     Choice: VueMain.loadComponent('Popup/Choice'),
     Message: VueMain.loadComponent('Popup/Message'),
-    CharacterTest: VueMain.loadComponent('Temp/CharacterTest'),
-    VVideo: VueMain.loadComponent('Temp/Video'),
-    Ending: VueMain.loadComponent('Temp/Ending'),
-    Danmu: VueMain.loadComponent('Temp/Danmu')
+    CharacterTest: VueMain.loadComponent('Temp/CharacterTest')
   },
   data: () => ({
     ready: false,
