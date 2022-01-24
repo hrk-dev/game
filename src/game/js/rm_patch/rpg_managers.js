@@ -102,7 +102,7 @@ SceneManager.onKeyDown = function (event) {
 
 ImageManager.loadBitmap = function (folder, filename, hue, smooth) {
   if (filename) {
-    const _filename = dev ? (encodeURIComponent(filename) + '.png') : md5(filename + '.png')
+    const _filename = dev ? (encodeURIComponent(filename) + '.png') : md5(filename + '.png').substr(8, 16)
     var path = md5Url(folder) + _filename
     var bitmap = this.loadNormalBitmap(path, hue || 0)
     bitmap.smooth = smooth
@@ -114,7 +114,7 @@ ImageManager.loadBitmap = function (folder, filename, hue, smooth) {
 
 ImageManager.reserveBitmap = function (folder, filename, hue, smooth, reservationId) {
   if (filename) {
-    const _filename = dev ? (encodeURIComponent(filename) + '.png') : md5(filename + '.png')
+    const _filename = dev ? (encodeURIComponent(filename) + '.png') : md5(filename + '.png').substr(8, 16)
     var path = md5Url(folder) + _filename
     var bitmap = this.reserveNormalBitmap(path, hue || 0, reservationId || this._defaultReservationId)
     bitmap.smooth = smooth
@@ -126,7 +126,7 @@ ImageManager.reserveBitmap = function (folder, filename, hue, smooth, reservatio
 
 ImageManager.requestBitmap = function (folder, filename, hue, smooth) {
   if (filename) {
-    const _filename = dev ? (encodeURIComponent(filename) + '.png') : md5(filename + '.png')
+    const _filename = dev ? (encodeURIComponent(filename) + '.png') : md5(filename + '.png').substr(8, 16)
     var path = md5Url(folder) + _filename
     var bitmap = this.requestNormalBitmap(path, hue || 0)
     bitmap.smooth = smooth
@@ -136,20 +136,20 @@ ImageManager.requestBitmap = function (folder, filename, hue, smooth) {
   }
 }
 
-AudioManager._path = dev ? 'audio/' : `${md5('audio')}/`
+AudioManager._path = dev ? 'audio/' : `${md5('audio').substr(8, 16)}/`
 AudioManager.playEncryptedBgm = function (bgm, pos) {
   var ext = this.audioFileExt()
-  const filename = dev ? (encodeURIComponent(bgm.name) + ext) : md5(bgm.name + ext)
-  var url = this._path + (dev ? 'bgm/' : `${md5('bgm')}/`) + (dev ? filename : md5(filename))
+  const filename = dev ? (encodeURIComponent(bgm.name) + ext) : md5(bgm.name + ext).substr(8, 16)
+  var url = this._path + (dev ? 'bgm/' : `${md5('bgm').substr(8, 16)}/`) + (dev ? filename : md5(filename).substr(8, 16))
   url = Decrypter.extToEncryptExt(url)
   Decrypter.decryptHTML5Audio(url, bgm, pos)
 }
 
 AudioManager.createBuffer = function (folder, name) {
   var ext = this.audioFileExt()
-  const filename = dev ? (encodeURIComponent(name) + ext) : md5(name + ext)
-  var url = this._path + (dev ? folder : md5(folder)) + '/' + filename
-  const key = dev ? 'bgm' : md5('bgm')
+  const filename = dev ? (encodeURIComponent(name) + ext) : md5(name + ext).substr(8, 16)
+  var url = this._path + (dev ? folder : md5(folder).substr(8, 16)) + '/' + filename
+  const key = dev ? 'bgm' : md5('bgm').substr(8, 16)
   if (this.shouldUseHtml5Audio() && folder === key) {
     if (this._blobUrl) Html5Audio.setup(this._blobUrl)
     else Html5Audio.setup(url)

@@ -338,6 +338,7 @@ module.exports = {
         left 50%
         transform translate(-50%, -50%)
         width 50%
+        padding 0px 5px
         background linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.5) 10px, rgba(0, 0, 0, 0.5) calc(100% - 10px), transparent 100%)
 
     .btn-list

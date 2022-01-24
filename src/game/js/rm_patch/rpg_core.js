@@ -169,7 +169,7 @@ Input._onKeyDown = function (event) {
 TouchInput._setupEventHandlers = function () { }
 
 Decrypter._ignoreList = [
-  dev ? 'img/system/Window.png' : `${md5('img')}/${md5('system')}/${md5('Window.png')}`
+  dev ? 'img/system/Window.png' : `${md5('img').substr(8, 16)}/${md5('system').substr(8, 16)}/${md5('Window.png').substr(8, 16)}`
 ]
 
 /**

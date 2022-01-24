@@ -10,7 +10,7 @@ const md5Url = (str) => {
   if (!str) return str
   const list = str.split('/')
   for (const i in list) {
-    if (list[i]) list[i] = md5(list[i])
+    if (list[i]) list[i] = md5(list[i]).substr(8, 16)
   }
   return `${list.join('/')}`
 }

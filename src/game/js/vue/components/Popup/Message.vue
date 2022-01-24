@@ -4,7 +4,12 @@
       <div class="message-wrapper" :class="_pos" v-if="message.show">
         <div class="text" :class="[_align, _size, _bg, _color]" ref="text">
           <div class="name" :class="_nameAlign" v-show="message.name && message.pos != 2">
-            {{ message.name }}
+            <div class="name-cn">
+              {{ nameObj.cn }}
+            </div>
+            <div class="name-en">
+              {{ nameObj.en }}
+            </div>
           </div>
           <template v-if="message.pos == 2">
             <div ref="multiline">
@@ -128,6 +133,13 @@ module.exports = {
     }
   }),
   computed: {
+    nameObj() {
+      const temp = this.message.name?.split(' ') || []
+      return {
+        cn: temp.shift() || '',
+        en: temp.join(' ') || ''
+      }
+    },
     _choiceIndex() {
       return this.choice.index
     },
@@ -431,9 +443,16 @@ $pink = rgba(255, 176, 170, 0.9)
 
       .name
         position absolute
-        top -35px
-        font-size 30px
+        top -5px
+        font-size 28px
         font-weight bold
+        transform translateY(-100%)
+        display flex
+        align-items baseline
+
+        .name-en
+          margin-left 10px
+          font-size 20px
 
       .multiline
         margin-top 15px

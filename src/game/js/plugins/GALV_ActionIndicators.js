@@ -390,7 +390,7 @@ Galv.AI = Galv.AI || {};      // Galv's plugin stuff
 
     if (Galv.AI.needRefresh) Galv.AI.checkActionIcon();
 
-    if ($gamePlayer.actionIconTarget.eventId != this._eventId) {
+    if ($gamePlayer?.actionIconTarget && $gamePlayer?.actionIconTarget?.eventId != this._eventId) {
       this.initPopVars();
       this._eventId = $gamePlayer.actionIconTarget.eventId;
     }

@@ -6,7 +6,7 @@ let num = 0
 
 function md5Dir(dir, name) {
   const oldDir = path.join(dir, name)
-  const newDir = path.join(oldDir, `../${md5(name)}`)
+  const newDir = path.join(oldDir, `../${md5(name).substr(8, 16)}`)
   fs.renameSync(oldDir, newDir)
   console.log(`  ${oldDir}\n→ ${newDir}\n`)
   md5Filename(newDir)
@@ -15,7 +15,7 @@ function md5Dir(dir, name) {
 function md5Filename(dir) {
   fs.readdirSync(dir).forEach(file => {
     let fullPath = path.join(dir, file)
-    const newPath = path.join(fullPath, `../${md5(file)}`)
+    const newPath = path.join(fullPath, `../${md5(file).substr(8, 16)}`)
     if (fs.lstatSync(fullPath).isDirectory()) {
       fs.renameSync(fullPath, newPath)
       console.log(`  ${fullPath}\n→ ${newPath}\n`)
