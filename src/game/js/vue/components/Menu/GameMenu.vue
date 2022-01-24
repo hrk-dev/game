@@ -15,7 +15,7 @@
             <template v-for="(item, index) in menu.list">
               <transition name="btn" :key="index">
                 <div
-                  class="btn"
+                  class="btn game-menu-btn"
                   :class="{
                     highlight: item.cn === menu.list[menu.current].cn
                   }"
@@ -23,9 +23,16 @@
                 >
                   <div class="en">{{ item.en }}</div>
                   <div class="cn">{{ item.cn }}</div>
-                </div></transition
-              >
+                </div>
+              </transition>
             </template>
+            <transition name="btn">
+              <div class="time game-menu-btn">
+                <span>
+                  {{ _time }}
+                </span>
+              </div>
+            </transition>
           </div>
         </transition>
         <transition name="slide-up" appear>
@@ -54,6 +61,7 @@ module.exports = {
     },
     show: false,
     hasSave: false,
+    time: 0,
     tip: {
       en: '',
       cn: ''
@@ -146,6 +154,12 @@ module.exports = {
   computed: {
     tipShow() {
       return this.show && this.menu.show
+    },
+    _time() {
+      const hour = Math.floor(this.time / 60 / 60)
+      const min = Math.floor(this.time / 60) % 60
+      const sec = this.time % 60
+      return hour.padZero(2) + ':' + min.padZero(2) + ':' + sec.padZero(2)
     }
   },
   watch: {
@@ -286,13 +300,18 @@ module.exports = {
     menuShowAnime() {
       this.$nextTick(() => {
         anime({
-          targets: '.btn',
+          targets: '.game-menu-btn',
           translateX: [-100, 0],
           easing: 'spring(1, 100, 20, 0)',
           duration: 500,
-          delay: anime.stagger(60)
+          delay: anime.stagger(40)
         })
       })
+    },
+    setTime() {
+      if (this.menu.show) {
+        this.time = $gameSystem.playtime()
+      }
     },
     // 测试
     save() {
@@ -377,6 +396,21 @@ $pink = rgba(255, 176, 170, 0.9)
     .en
       font-size 16px
       line-height 16px
+
+  .time
+    box-sizing border-box
+    text-align left
+    color #fff
+    background rgba(40, 40, 40, 0.7)
+    border 2px solid $pink
+    border-left none
+    border-top-right-radius 10px
+    border-bottom-right-radius 10px
+    font-size 14px
+    min-width 100px
+    width min-content
+    padding 0 10px
+    margin 10px 0
 
 .character
   position absolute

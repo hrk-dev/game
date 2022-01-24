@@ -66,13 +66,13 @@ const Patch = class {
   }
 
   static restart() {
+    Components.Loading.loadingShow()
     AudioManager.stopAll()
-    DataManager.setupNewGame()
-    SceneManager.goto(Scene_Map)
-    this.startWait()
-    this.delLoop()
-    Components.Loading.loadingHide()
-    this.stopWait()
+    setTimeout(() => {
+      DataManager.setupNewGame()
+      SceneManager.goto(Scene_Map)
+      Components.Loading.loadingHide()
+    }, 300)
   }
 }
 

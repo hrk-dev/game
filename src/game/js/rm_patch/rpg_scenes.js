@@ -20,7 +20,7 @@ Scene_Title.prototype.isBusy = function () {
   return false
 }
 
-Scene_Map.prototype.callMenu = function() {
+Scene_Map.prototype.callMenu = function () {
   SceneManager.push(Scene_Menu)
   Window_MenuCommand.initCommandPosition()
   $gameTemp.clearDestination()
