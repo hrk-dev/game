@@ -12,3 +12,6 @@ packager({
   }
 })
   .then(appPaths => {})
+  .catch(err => {
+    console.error(err)
+  })
