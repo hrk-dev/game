@@ -118,7 +118,7 @@ module.exports = {
           this.show = false
           Components.TitleBar.reset()
           Components.MainMenu.showMenu()
-        }, 2000)
+        }, 3000)
       }, 1000)
     }
   },

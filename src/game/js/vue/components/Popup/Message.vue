@@ -30,7 +30,11 @@
             <div class="cn" v-html="message.cn"></div>
           </template>
           <div class="next-wrapper">
-            <div class="next" :class="_iconColor" v-show="!choice.show && !message.wait"></div>
+            <div
+              class="next"
+              :class="_iconColor"
+              :style="{ opacity: !choice.show && !message.wait ? 1 : 0 }"
+            ></div>
           </div>
         </div>
         <div class="character" v-show="_showCharacter">
@@ -470,7 +474,9 @@ $pink = rgba(255, 176, 170, 0.9)
         height 0
         border-left 10px solid transparent
         border-right 10px solid transparent
-        animation fade 1s ease infinite alternate
+        animation fade 0.6s ease-in-out infinite alternate
+        transition opacity 0.1s
+        opacity 0
 
     .character
       position absolute

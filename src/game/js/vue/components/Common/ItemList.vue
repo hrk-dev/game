@@ -81,7 +81,9 @@ module.exports = {
     },
     getInfo() {
       if (this.list[this.current]) {
-        this.img = md5Url(this.list[this.current].meta?.img)
+        this.img = this.list[this.current].meta?.img
+          ? md5Url('img/pictures/' + this.list[this.current].meta.img)
+          : ''
         this.text.en = this.list[this.current].meta?.infoEn || ''
         this.text.cn = this.list[this.current].meta?.infoCn || ''
       } else {
@@ -174,10 +176,10 @@ module.exports = {
       font-size 24px
 
     .item-list
-      position relative
-      overflow hidden
       box-sizing border-box
-      width 50%
+      overflow hidden
+      position relative
+      flex 1
       margin 10px 5px 10px 10px
       padding 10px
       border 1px solid
@@ -226,17 +228,18 @@ module.exports = {
           line-height 20px
 
     .item-info
+      flex 0 0 400px
       display flex
       flex-direction column
-      width 50%
       margin 10px 10px 10px 0
 
       .img
+        overflow hidden
         display flex
         justify-content center
         align-items center
         box-sizing border-box
-        height 40%
+        height 281px
         padding 10px
         border 1px solid
         border-top-right-radius 10px
