@@ -267,6 +267,7 @@ module.exports = {
         .cn
           font-size 20px
           line-height 20px
+          margin-top 5px
 
 .select
   background rgba(255, 176, 170, 0.9) !important

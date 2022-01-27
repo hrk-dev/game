@@ -304,7 +304,7 @@ module.exports = {
           translateX: [-100, 0],
           easing: 'spring(1, 100, 20, 0)',
           duration: 500,
-          delay: anime.stagger(40)
+          delay: anime.stagger(50)
         })
       })
     },
