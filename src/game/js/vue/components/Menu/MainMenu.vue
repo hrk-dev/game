@@ -97,8 +97,8 @@ module.exports = {
               this.chapterEnd()
             } else {
               this.hideMenu()
+              Components.Loading.loadingShow()
               setTimeout(() => {
-                Components.Loading.loadingShow()
                 if (DataManager.loadGame(1)) {
                   this.show = false
                   $gameTemp.reserveCommonEvent(98)
