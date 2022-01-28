@@ -8,8 +8,8 @@
               <div class="en">Credits</div>
               <div class="cn">制作组</div>
             </div>
-            <div class="img" v-for="(url, index) in img.list" :key="index">
-              <img :src="url" />
+            <div class="img" v-for="(name, index) in img.list" :key="index">
+              <img :src="getUrl(name)" />
             </div>
             <div class="text">
               <div class="en">Special Thanks</div>
@@ -39,7 +39,15 @@ module.exports = {
     img: {
       show: false,
       index: 0,
-      list: [md5Url('img/pictures/制作组/咸鱼.png'), md5Url('img/pictures/制作组/其它.png')]
+      list: [
+        '咸鱼.png',
+        '小白.png',
+        '月饼.png',
+        '极致西瓜.jpg',
+        '囧-Smith.png',
+        '黄豆人.jpg',
+        '其它.png'
+      ]
     },
     hiiro: {
       show: false,
@@ -120,6 +128,9 @@ module.exports = {
           Components.MainMenu.showMenu()
         }, 3000)
       }, 1000)
+    },
+    getUrl(name) {
+      return md5Url(`img/pictures/credits/${name}`)
     }
   },
   mounted() {

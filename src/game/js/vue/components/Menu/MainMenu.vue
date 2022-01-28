@@ -329,6 +329,8 @@ module.exports = {
       overflow hidden
 
       .img
+        position absolute
+        bottom 0
         width 100%
 
       .main-title
