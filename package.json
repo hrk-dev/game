@@ -7,7 +7,7 @@
     "dist": "node bin/encryption.js",
     "build": "node bin/encryption.js && node bin/packager.js",
     "build:test": "cross-env NODE_ENV=development node bin/encryption.js && node bin/packager.js",
-    "build:dev": "electron-packager src \"Infinite Looping Highschool\" --overwrite --icon=src/game/icon/icon.ico --out=build --ignore=\"(icu$)\""
+    "build:dev": "electron-packager src Dev --executableName=game --overwrite --icon=src/game/icon/icon.ico --out=build --ignore=\"(icu$)\""
   },
   "author": "Blacktunes",
   "repository": {
