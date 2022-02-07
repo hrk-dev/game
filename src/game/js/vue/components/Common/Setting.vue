@@ -77,6 +77,7 @@
 module.exports = {
   data: () => ({
     show: false,
+    ready: false,
     current: 0,
     keydown: 0,
     keepRunning: false,
@@ -106,6 +107,9 @@ module.exports = {
     se() {
       AudioManager.seVolume = this._se
       AudioManager.meVolume = this._se
+      if (this.show && this.ready) {
+        SoundManager.playCursor()
+      }
     },
     current() {
       this.setArrow()
@@ -135,6 +139,7 @@ module.exports = {
     },
     checkInput(buttonName) {
       if (!this.show) return
+      if (!this.ready) this.ready = true
       switch (buttonName) {
         case 'left':
           if (this.current === 1) {
@@ -156,6 +161,7 @@ module.exports = {
           } else {
             --this.current
           }
+          SoundManager.playCursor()
           break
         case 'down':
           if (this.current === 3) {
@@ -163,6 +169,7 @@ module.exports = {
           } else {
             ++this.current
           }
+          SoundManager.playCursor()
           break
         case 'ok':
           this.onKeydown()
@@ -175,6 +182,7 @@ module.exports = {
     onKeydown() {
       switch (this.current) {
         case 0:
+          SoundManager.playOk()
           this.changeKeepRunning()
           break
         case 1:
@@ -224,9 +232,11 @@ module.exports = {
     },
     back() {
       if (!this.show) return
+      SoundManager.playCancel()
       ConfigManager.save()
       this.current = 0
       this.show = false
+      this.ready = false
       this.$emit('back')
     }
   }

@@ -77,6 +77,7 @@ module.exports = {
       this.isShow = true
     },
     hide() {
+      SoundManager.playCancel()
       this.isShow = false
     },
     getInfo() {
@@ -126,20 +127,24 @@ module.exports = {
     up() {
       if (this.itemLength < 2) return
       this.index = this.index - 1 < 0 ? this.itemLength - 1 : --this.index
+      SoundManager.playCursor()
     },
     down() {
       if (this.itemLength < 2) return
       this.index = this.index + 1 >= this.itemLength ? 0 : ++this.index
+      SoundManager.playCursor()
     },
     left() {
       if (this.itemLength <= this.page_num) this.up()
       let temp = this.index - this.page_num
       this.index = temp < 0 ? 0 : temp
+      SoundManager.playCursor()
     },
     right() {
       if (this.itemLength <= this.page_num) this.down()
       let temp = this.index + this.page_num
       this.index = temp > this.itemLength - 1 ? this.itemLength - 1 : temp
+      SoundManager.playCursor()
     }
   },
   created() {

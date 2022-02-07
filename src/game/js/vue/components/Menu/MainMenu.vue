@@ -118,6 +118,7 @@ module.exports = {
           cn: '设置',
           en: 'Setting',
           fn() {
+            SoundManager.playOk()
             this.hideMenu()
             this.$refs.Setting.show = true
           }
@@ -173,7 +174,7 @@ module.exports = {
       const data = DataManager.loadGlobalInfo()
       if (data[0].loop) {
         if (data[0].loop.lock) {
-          Methods.showPopup('', '这是一段解锁动画，但是还没做', 2000)
+          Methods.showPopup('Seems to have unlocked something strange', '好像解锁了一些奇怪的东西', 2000)
           data[0].loop.lock = false
         }
         this.loop.restart = data[0].loop.restart
@@ -252,6 +253,8 @@ module.exports = {
         }
         if (!this.menu.list[this.menu.current].show) {
           this.up()
+        } else {
+          SoundManager.playCursor()
         }
       }
     },
@@ -264,6 +267,8 @@ module.exports = {
         }
         if (!this.menu.list[this.menu.current].show) {
           this.down()
+        } else {
+          SoundManager.playCursor()
         }
       }
     },

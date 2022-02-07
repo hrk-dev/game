@@ -61,6 +61,7 @@ module.exports = {
       }
     },
     changeChoice() {
+      SoundManager.playCursor()
       this.current = !this.current
     },
     choiceKeyDown() {
@@ -69,6 +70,7 @@ module.exports = {
         this.fn()
         this.reset()
       } else {
+        SoundManager.playCancel()
         this.cb()
         this.reset()
       }

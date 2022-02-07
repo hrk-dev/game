@@ -21,6 +21,12 @@ Scene_Title.prototype.isBusy = function () {
 }
 
 Scene_Map.prototype.callMenu = function () {
+  AudioManager.playSe({
+    name: 'menu',
+    pan: 0,
+    pitch: 100,
+    volume: 90
+  })
   SceneManager.push(Scene_Menu)
   Window_MenuCommand.initCommandPosition()
   $gameTemp.clearDestination()

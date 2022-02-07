@@ -231,6 +231,7 @@ module.exports = {
             break
           case 'ok':
             if (Components.Choice.show) return
+            SoundManager.playOk()
             this.menu.list[this.menu.current].fn.call(this)
             break
         }
@@ -250,6 +251,8 @@ module.exports = {
       }
       if (!this.menu.list[this.menu.current].show) {
         this.up()
+      } else {
+        SoundManager.playCursor()
       }
     },
     down() {
@@ -260,11 +263,14 @@ module.exports = {
       }
       if (!this.menu.list[this.menu.current].show) {
         this.down()
+      } else {
+        SoundManager.playCursor()
       }
     },
     back() {
       if (this.show) {
         if (Components.Choice.show) {
+          SoundManager.playCancel()
           Methods.hidePopup()
           Components.Choice.reset()
           return
@@ -272,6 +278,7 @@ module.exports = {
         if (this.menu.show) {
           Methods.hidePopup()
           this.hideMenu()
+           SoundManager.playCancel()
           setTimeout(() => {
             SceneManager.pop()
           }, 200)
