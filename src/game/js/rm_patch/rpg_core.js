@@ -186,6 +186,7 @@ Input._onKeyDown = function (event) {
   Components.Logo.checkInput()
   Components.MainMenu.checkInput(buttonName)
   Components.GameMenu.checkInput(buttonName)
+  Components.Log.checkInput(buttonName)
   Components.Message.checkInput(buttonName)
 }
 

@@ -1,49 +1,47 @@
 <template>
   <div id="game-menu">
-    <transition name="fade">
-      <div v-if="show">
-        <!-- 测试 -->
-        <transition name="slide-right" appear>
-          <div class="test" v-if="test.dev && menu.show">
-            <input type="number" min="1" max="99" v-model.number="test.saveID" />
-            <button @click="save">save</button>
-            <button @click="load">load</button>
-          </div>
-        </transition>
-        <transition name="slide-right" appear>
-          <div class="menu" :style="{ top: `${menu.top}px` }" v-if="menu.show">
-            <template v-for="(item, index) in menu.list">
-              <transition name="btn" :key="index">
-                <div
-                  class="btn game-menu-btn"
-                  :class="{
-                    highlight: item.cn === menu.list[menu.current].cn
-                  }"
-                  v-if="item.show"
-                >
-                  <div class="en">{{ item.en }}</div>
-                  <div class="cn">{{ item.cn }}</div>
-                </div>
-              </transition>
-            </template>
-            <transition name="btn">
-              <div class="time game-menu-btn">
-                <span>
-                  {{ _time }}
-                </span>
+    <div v-if="show">
+      <!-- 测试 -->
+      <transition name="slide-right" appear>
+        <div class="test" v-if="test.dev && menu.show">
+          <input type="number" min="1" max="99" v-model.number="test.saveID" />
+          <button @click="save">save</button>
+          <button @click="load">load</button>
+        </div>
+      </transition>
+      <transition name="slide-right" appear>
+        <div class="menu" :style="{ top: `${menu.top}px` }" v-if="menu.show">
+          <template v-for="(item, index) in menu.list">
+            <transition name="btn" :key="index">
+              <div
+                class="btn game-menu-btn"
+                :class="{
+                  highlight: item.cn === menu.list[menu.current].cn
+                }"
+                v-if="item.show"
+              >
+                <div class="en">{{ item.en }}</div>
+                <div class="cn">{{ item.cn }}</div>
               </div>
             </transition>
-          </div>
-        </transition>
-        <transition name="slide-up" appear>
-          <div class="character" v-if="menu.show">
-            <img :src="menu.img" />
-          </div>
-        </transition>
-        <Item ref="Item"></Item>
-        <Setting ref="Setting" @back="showMenu"></Setting>
-      </div>
-    </transition>
+          </template>
+          <transition name="btn">
+            <div class="time game-menu-btn">
+              <span>
+                {{ _time }}
+              </span>
+            </div>
+          </transition>
+        </div>
+      </transition>
+      <transition name="slide-up" appear>
+        <div class="character" v-if="menu.show">
+          <img :src="menu.img" />
+        </div>
+      </transition>
+      <Item ref="Item"></Item>
+      <Setting ref="Setting" @back="showMenu"></Setting>
+    </div>
   </div>
 </template>
 
@@ -278,7 +276,7 @@ module.exports = {
         if (this.menu.show) {
           Methods.hidePopup()
           this.hideMenu()
-           SoundManager.playCancel()
+          SoundManager.playCancel()
           setTimeout(() => {
             SceneManager.pop()
           }, 200)
@@ -308,9 +306,9 @@ module.exports = {
       this.$nextTick(() => {
         anime({
           targets: '.game-menu-btn',
-          translateX: [-100, 0],
-          easing: 'spring(1, 100, 20, 0)',
-          duration: 500,
+          translateX: ['-100%', 0],
+          easing: 'easeInOutQuad',
+          duration: 300,
           delay: anime.stagger(50)
         })
       })

@@ -298,6 +298,8 @@ module.exports = {
       }
 
       this.message.show = true
+
+      Components.Log.add(this.message.name, this.message.en, this.message.cn)
     },
     setChoices(choices, defaultType, cancelType) {
       choices.forEach(item => {
@@ -319,23 +321,24 @@ module.exports = {
       this.choice.show = true
     },
     checkInput(buttonName) {
-      if (!this.choice.show) return
-      switch (buttonName) {
-        case 'left':
-          this.up()
-          break
-        case 'right':
-          this.down()
-          break
-        case 'up':
-          this.up()
-          break
-        case 'down':
-          this.down()
-          break
-        case 'ok':
-          this.onChoice()
-          break
+      if (this.choice.show) {
+        switch (buttonName) {
+          case 'left':
+            this.up()
+            break
+          case 'right':
+            this.down()
+            break
+          case 'up':
+            this.up()
+            break
+          case 'down':
+            this.down()
+            break
+          case 'ok':
+            this.onChoice()
+            break
+        }
       }
     },
     up() {

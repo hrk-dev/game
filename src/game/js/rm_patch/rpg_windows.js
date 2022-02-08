@@ -41,6 +41,11 @@ Window_Message.prototype.updateWait = function () {
   }
 }
 
+Window_Message.prototype.isTriggered = function () {
+  return ((!Components?.Log?.isShow && (Components?.Log && Components.Log.isHide)) && (Input.isRepeated('ok') || Input.isRepeated('cancel') ||
+    TouchInput.isRepeated()))
+}
+
 Window_ChoiceList.prototype.start = function () {
   this.x = -10
   this.open()

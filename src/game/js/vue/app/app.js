@@ -14,6 +14,7 @@ VueMain.app = new Vue({
     Popup: VueMain.loadComponent('Popup/Popup'),
     Choice: VueMain.loadComponent('Popup/Choice'),
     Message: VueMain.loadComponent('Popup/Message'),
+    Log: VueMain.loadComponent('Popup/Log'),
     CharacterTest: VueMain.loadComponent('Temp/CharacterTest')
   },
   data: () => ({
@@ -25,11 +26,6 @@ VueMain.app = new Vue({
       margin: 'auto',
     }
   }),
-  computed: {
-    _fontSize() {
-      return (this.main.scale * 30) | 0
-    }
-  },
   methods: {
     setReady() {
       this.ready = true

@@ -47,3 +47,16 @@ Scene_Menu.prototype.terminate = function () {
   Components.GameMenu.show = false
 }
 Scene_Menu.prototype.start = function () { }
+
+Scene_Map.prototype.updateCallMenu = function () {
+  if (this.isMenuEnabled()) {
+    if (Components.Log.isHide && this.isMenuCalled()) {
+      this.menuCalling = true
+    }
+    if (this.menuCalling && !$gamePlayer.isMoving()) {
+      this.callMenu()
+    }
+  } else {
+    this.menuCalling = false
+  }
+}
