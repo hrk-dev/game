@@ -10,6 +10,8 @@ Scene_Title.prototype.create = function () {
   return
 }
 Scene_Title.prototype.start = function () {
+  SceneManager.clearStack()
+  this.playTitleMusic()
   Components.MainMenu.show = true
   return
 }
@@ -44,5 +46,4 @@ Scene_Menu.prototype.create = function () {
 Scene_Menu.prototype.terminate = function () {
   Components.GameMenu.show = false
 }
-Scene_Menu.prototype.start = function () {
-}
+Scene_Menu.prototype.start = function () { }

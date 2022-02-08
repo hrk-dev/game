@@ -133,7 +133,8 @@ module.exports = {
     choice: {
       show: false,
       list: [],
-      index: -1
+      index: -1,
+      cancel: null
     }
   }),
   computed: {
@@ -298,7 +299,7 @@ module.exports = {
 
       this.message.show = true
     },
-    setChoices(choices, defaultType) {
+    setChoices(choices, defaultType, cancelType) {
       choices.forEach(item => {
         /**
          * 选项英文|选项中文|开关ID|选择时对话框显示的英文|选择时对话框显示的中文|选择时对话框显示的立绘
@@ -314,6 +315,7 @@ module.exports = {
         })
       })
       this.choice.index = defaultType
+      this.choice.cancel = cancelType
       this.choice.show = true
     },
     checkInput(buttonName) {
@@ -343,7 +345,11 @@ module.exports = {
         this.up()
         return
       }
-      if (!this.choice.list[--this.choice.index].show) this.up()
+      if (!this.choice.list[--this.choice.index].show) {
+        this.up()
+      } else {
+        SoundManager.playCursor()
+      }
     },
     down() {
       if (this.choice.list.length < 1) return
@@ -352,10 +358,19 @@ module.exports = {
         this.down()
         return
       }
-      if (!this.choice.list[++this.choice.index].show) this.down()
+      if (!this.choice.list[++this.choice.index].show) {
+        this.down()
+      } else {
+        SoundManager.playCursor()
+      }
     },
     onChoice() {
       if (this.choice.index == -1) return
+      if (this.choice.index === this.choice.cancel) {
+        SoundManager.playCancel()
+      } else {
+        SoundManager.playOk()
+      }
       SceneManager._scene._messageWindow._choiceWindow.updateInputData()
       SceneManager._scene._messageWindow._choiceWindow.deactivate()
       $gameMessage.onChoice(this.choice.index)
@@ -409,6 +424,7 @@ module.exports = {
       this.choice.list.length = 0
       this.choice.index = -1
       this.choice.show = false
+      this.choice.cancel = null
       this.message.temp.en = ''
       this.message.temp.cn = ''
       this.message.temp.character = ''
