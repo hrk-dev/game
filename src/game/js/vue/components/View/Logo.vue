@@ -71,7 +71,7 @@ module.exports = {
       inset 0
 
     .arrow
-      animation move 0.5s linear infinite alternate
+      animation move 2s ease-in-out infinite
 
 .logo-enter-active
   animation logo 0.5s linear
@@ -87,9 +87,21 @@ module.exports = {
     opacity 1
 
 @keyframes move
-  from
+  0%
     top 0
 
-  to
-    top 10px
+  20%
+    top 0
+
+  40%
+    top 5px
+
+  60%
+    top 0
+
+  80%
+    top 5px
+
+  100%
+    top 0
 </style>
