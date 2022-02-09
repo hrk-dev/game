@@ -183,11 +183,11 @@ Input._onKeyDown = function (event) {
   } else if (buttonName) {
     this._currentState[buttonName] = true
   }
-  Components.Logo.checkInput()
-  Components.MainMenu.checkInput(buttonName)
-  Components.GameMenu.checkInput(buttonName)
-  Components.Log.checkInput(buttonName)
-  Components.Message.checkInput(buttonName)
+  Components?.Logo.checkInput()
+  Components?.MainMenu.checkInput(buttonName)
+  Components?.GameMenu.checkInput(buttonName)
+  Components?.Log.checkInput(buttonName)
+  Components?.Message.checkInput(buttonName)
 }
 
 /**

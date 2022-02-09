@@ -117,8 +117,10 @@ module.exports = {
           cn: '物品',
           en: 'Item',
           fn() {
-            this.hideMenu()
-            this.$refs.Item.show()
+            if (this.$refs.Item) {
+              this.hideMenu()
+              this.$refs.Item.show()
+            }
           }
         },
         {
@@ -126,8 +128,10 @@ module.exports = {
           cn: '设置',
           en: 'Setting',
           fn() {
-            this.hideMenu()
-            this.$refs.Setting.show = true
+            if (this.$refs.Setting) {
+              this.hideMenu()
+              this.$refs.Setting.show = true
+            }
           }
         },
         {
@@ -192,7 +196,7 @@ module.exports = {
     async showTip() {
       Patch.showTip(0)
       await this.$nextTick()
-      this.menu.top = 60 + (Components.Tip.$refs?.tip?.scrollHeight || 50) + 10
+      this.menu.top = 60 + (Components?.Tip.$refs?.tip?.scrollHeight || 50) + 10
     },
     checkSave() {
       this.hasSave = Patch.checkSave()
@@ -203,15 +207,15 @@ module.exports = {
         this.back()
         return
       }
-      if (Components.Popup.isShow) {
+      if (Components?.Popup.isShow) {
         Methods.hidePopup()
         return
       }
       if (Components.Choice.show) {
         Components.Choice.checkInput(buttonName)
-      } else if (this.$refs.Item.isShow) {
+      } else if (this.$refs?.Item.isShow) {
         this.$refs.Item.checkInput(buttonName)
-      } else if (this.$refs.Setting.show) {
+      } else if (this.$refs?.Setting.show) {
         this.$refs.Setting.checkInput(buttonName)
       } else if (this.menu.show) {
         switch (buttonName) {
@@ -282,12 +286,12 @@ module.exports = {
           }, 200)
           return
         }
-        if (this.$refs.Item.isShow) {
+        if (this.$refs?.Item.isShow) {
           this.$refs.Item.hide()
           this.showMenu()
           return
         }
-        if (this.$refs.Setting.show) {
+        if (this.$refs?.Setting.show) {
           this.$refs.Setting.back()
           return
         }

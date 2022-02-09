@@ -118,9 +118,11 @@ module.exports = {
           cn: '设置',
           en: 'Setting',
           fn() {
-            SoundManager.playOk()
-            this.hideMenu()
-            this.$refs.Setting.show = true
+            if (this.$refs.Setting) {
+              SoundManager.playOk()
+              this.hideMenu()
+              this.$refs.Setting.show = true
+            }
           }
         },
         {
