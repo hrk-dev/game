@@ -369,11 +369,11 @@ module.exports = {
     },
     onChoice() {
       if (this.choice.index == -1) return
-      if (this.choice.index === this.choice.cancel) {
-        SoundManager.playCancel()
-      } else {
-        SoundManager.playOk()
-      }
+      // if (this.choice.index === this.choice.cancel) {
+      //   SoundManager.playCancel()
+      // } else {
+      //   SoundManager.playOk()
+      // }
       SceneManager._scene._messageWindow._choiceWindow.updateInputData()
       SceneManager._scene._messageWindow._choiceWindow.deactivate()
       $gameMessage.onChoice(this.choice.index)

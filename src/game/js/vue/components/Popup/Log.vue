@@ -9,6 +9,10 @@
             <div class="cn" v-html="item.cn"></div>
           </div>
         </template>
+        <div class="empty" v-if="list.length < 1">
+          <div class="en">Nothing</div>
+          <div class="cn">什么都没有哦</div>
+        </div>
       </div>
     </transition>
   </div>
@@ -83,7 +87,6 @@ module.exports = {
     },
     checkInput(buttonName) {
       if (SceneManager._scene?.constructor?.name !== 'Scene_Map') return
-      if (this.list.length < 1) return
       if (this.isShow) {
         switch (buttonName) {
           case 'escape':
@@ -167,6 +170,18 @@ $pink = rgba(255, 176, 170, 0.9)
       .cn
         font-size 20px
         line-height 26px
+
+  .empty
+    padding 10px
+    text-align center
+
+    .en
+      font-size 18px
+      line-height 18px
+
+    .cn
+      font-size 20px
+      line-height 26px
 
 .slide-down-enter-active, .slide-down-leave-active
   transition all 0.3s

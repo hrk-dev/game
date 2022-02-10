@@ -55,7 +55,7 @@ Window_ChoiceList.prototype.start = function () {
 Window_ChoiceList.prototype.processOk = function () { }
 
 Window_ChoiceList.prototype.processCancel = function () {
-  SoundManager.playCancel()
+  // SoundManager.playCancel()
   this.updateInputData()
   this.deactivate()
   this.callCancelHandler()
