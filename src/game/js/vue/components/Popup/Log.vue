@@ -107,11 +107,11 @@ module.exports = {
         }
       } else {
         if (buttonName === 'tab') {
-          if (Components.Message.message.show) {
+          if (Components.Message?.message.show) {
             Components.Message.message.show = false
             this.message = true
           }
-          if (Components.Message.choice.show) {
+          if (Components.Message?.choice.show) {
             Components.Message.choice.show = false
             this.choice = true
           }

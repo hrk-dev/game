@@ -38,3 +38,5 @@ VueMain.app = new Vue({
     })
   }
 })
+
+VueMain._current = ['Logo']

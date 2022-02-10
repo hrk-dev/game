@@ -42,15 +42,18 @@ module.exports = {
       }
     },
     toTitleOrStart() {
+      VueMain._current.pop()
       if (!fs.existsSync(StorageManager.localFilePath(1))) {
         SceneManager.goto(Scene_Map)
       } else {
         SceneManager.goto(Scene_Title)
       }
     },
-    checkInput() {
+    checkInput(buttonName) {
       if (this.logo.show) this.logo.show = false
-      if (this.tip.show) this.tip.show = false
+      if (buttonName === 'ok') {
+        if (this.tip.show) this.tip.show = false
+      }
     }
   }
 }
