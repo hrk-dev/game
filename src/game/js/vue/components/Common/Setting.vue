@@ -108,7 +108,13 @@ module.exports = {
       AudioManager.seVolume = this._se
       AudioManager.meVolume = this._se
       if (this.show && this.ready) {
-        SoundManager.playCursor()
+        // SoundManager.playCursor()
+        AudioManager.playSe({
+          name: 'select',
+          pan: 0,
+          pitch: 100,
+          volume: 90
+        })
       }
     },
     current() {

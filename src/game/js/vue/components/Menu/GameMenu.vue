@@ -172,7 +172,12 @@ module.exports = {
     },
     show() {
       if (this.show) {
+        Patch.startWait()
         this.init()
+      } else {
+        this.$nextTick(() => {
+          Patch.stopWait()
+        })
       }
     },
     hasSave() {
