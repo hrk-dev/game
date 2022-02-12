@@ -4,3 +4,5 @@ node_modules
 /temp
 /src/icu
 /src/game/save
+
+steam_appid.txt

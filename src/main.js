@@ -41,11 +41,11 @@ app.whenReady().then(() => {
   ipcMain.on('app:reload', () => {
     mainWindow.webContents.reload()
   })
-  
+
   ipcMain.on('app:min', () => {
     mainWindow.minimize()
   })
-  
+
   ipcMain.on('app:max', e => {
     if (mainWindow.isMaximized()) {
       mainWindow.unmaximize()
@@ -53,7 +53,7 @@ app.whenReady().then(() => {
       mainWindow.maximize()
     }
   })
-  
+
   ipcMain.on('app:quit', () => {
     app.exit()
   })
@@ -104,3 +104,5 @@ ipcMain.on('vue:ready', (_e, dev) => {
 })
 
 require('./module/console')
+
+require('./module/steam')
