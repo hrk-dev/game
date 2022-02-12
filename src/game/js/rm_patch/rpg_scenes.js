@@ -12,6 +12,7 @@ Scene_Title.prototype.create = function () {
 
 Scene_Title.prototype.start = function () {
   SceneManager.clearStack()
+  AudioManager.stopAll()
   this.playTitleMusic()
   Components.MainMenu.show = true
 }
@@ -22,6 +23,7 @@ Scene_Title.prototype.isBusy = function () {
 }
 
 Scene_Title.prototype.terminate = function () {
+  AudioManager.stopAll()
   SceneManager.snapForBackground()
   VueMain._current.pop()
 }
@@ -64,12 +66,12 @@ Scene_Map.prototype.updateCallMenu = function () {
 }
 
 Scene_Map.prototype.callMenu = function () {
-  AudioManager.playSe({
-    name: 'menu',
-    pan: 0,
-    pitch: 100,
-    volume: 90
-  })
+  // AudioManager.playSe({
+  //   name: 'menu',
+  //   pan: 0,
+  //   pitch: 100,
+  //   volume: 90
+  // })
   SceneManager.push(Scene_Menu)
   Window_MenuCommand.initCommandPosition()
   $gameTemp.clearDestination()

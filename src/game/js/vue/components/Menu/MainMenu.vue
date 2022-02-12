@@ -154,7 +154,6 @@ module.exports = {
   },
   methods: {
     init() {
-      AudioManager.stopAll()
       this.menu.current = 1
       Components.GameMenu.menu.current = 0
       for (const i in this.menu.list) {
