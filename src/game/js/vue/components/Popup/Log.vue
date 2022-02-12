@@ -23,6 +23,7 @@ module.exports = {
   data: () => ({
     isShow: false,
     isHide: true,
+    noShow: false,
     message: false,
     choice: false,
     list: []
@@ -110,6 +111,7 @@ module.exports = {
         }
       } else {
         if (buttonName === 'tab') {
+          if ($gamePlayer.isMoving() || SceneManager.isSceneChanging() || this.noShow) return
           if (Components.Message?.message.show) {
             Components.Message.message.show = false
             this.message = true
