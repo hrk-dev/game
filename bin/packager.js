@@ -15,7 +15,7 @@ packager({
   icon: 'src/game/icon/icon.ico',
   out: 'build',
   asar: {
-    unpack: '*.{lib,dll}',
+    unpack: '*.{lib,dll,node}',
     unpackDir: `**/{${md5('audio').substr(8, 16)},${md5('img').substr(8, 16)}}*`
   }
 })

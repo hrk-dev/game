@@ -1,4 +1,5 @@
 const { app, BrowserWindow, ipcMain } = require('electron')
+const { existsSync } = require('fs')
 const { join } = require('path')
 
 require('./module/process')
@@ -81,12 +82,8 @@ function setDev(dev) {
 
     if (!eventNames.includes('dev:vue')) {
       ipcMain.on('dev:vue', () => {
-        try {
+        if (existsSync(join(__dirname, './module/devtools'))) {
           require('./module/devtools')(mainWindow)
-        } catch (err) {
-          if (!app.isPackaged) {
-            console.error(err)
-          }
         }
       })
     }
@@ -104,14 +101,20 @@ function setDev(dev) {
 
 ipcMain.on('vue:ready', (_e, dev) => {
   mainWindow.show()
+
   setDev(dev)
-  try {
-    require('./module/steam')
-  } catch (err) {
-    if (!app.isPackaged) {
-      console.error(err)
+
+  if (dev) {
+    if (existsSync(join(__dirname, './module/steam'))) {
+      require('./module/steam')
     }
+  } else {
+    try {
+      require('./module/steam')
+    } catch (_err) { }
   }
 })
 
-require('./module/console')
+if (app.isPackaged) {
+  console.log('Nya~\n')
+}

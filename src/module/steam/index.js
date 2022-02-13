@@ -17,7 +17,7 @@ function clearAchievement(name) {
   })
 }
 
-try {
+function init() {
   if (greenworks.init()) {
     activateAchievement('FIRST_START')
 
@@ -29,8 +29,6 @@ try {
       clearAchievement(name)
     })
   }
-} catch (err) {
-  if (!app.isPackaged) {
-    console.error(err)
-  }
 }
+
+init()
