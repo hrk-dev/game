@@ -89,51 +89,91 @@ Graphics._defaultStretchMode = function () {
   return true
 }
 
-/** 标题栏适配 */
+/**
+ * @static
+ * @method _createErrorPrinter
+ * @private
+ */
+Graphics._createErrorPrinter = function () {
+  this._errorPrinter = document.createElement('p')
+  this._errorPrinter.id = 'ErrorPrinter'
+  this._updateErrorPrinter()
+  document.getElementById('game').appendChild(this._errorPrinter)
+}
+
+/**
+ * @static
+ * @method _createCanvas
+ * @private
+ */
+Graphics._createCanvas = function () {
+  this._canvas = document.createElement('canvas')
+  this._canvas.id = 'GameCanvas'
+  this._updateCanvas()
+  document.getElementById('game').appendChild(this._canvas)
+}
+
+/**
+ * @static
+ * @method _createVideo
+ * @private
+ */
+Graphics._createVideo = function () {
+  this._video = document.createElement('video')
+  this._video.id = 'GameVideo'
+  this._video.style.opacity = 0
+  this._video.setAttribute('playsinline', '')
+  this._video.volume = this._videoVolume
+  this._updateVideo()
+  makeVideoPlayableInline(this._video)
+  document.getElementById('game').appendChild(this._video)
+}
+
+/**
+ * @static
+ * @method _createUpperCanvas
+ * @private
+ */
+Graphics._createUpperCanvas = function () {
+  this._upperCanvas = document.createElement('canvas')
+  this._upperCanvas.id = 'UpperCanvas'
+  this._updateUpperCanvas()
+  document.getElementById('game').appendChild(this._upperCanvas)
+}
+
+/**
+ * @static
+ * @method _createModeBox
+ * @private
+ */
 Graphics._createModeBox = function () {
   var box = document.createElement('div')
   box.id = 'modeTextBack'
   box.style.position = 'absolute'
-  box.style.left = '5px'
+  box.style.right = '0'
   box.style.top = '35px'
   box.style.width = '119px'
   box.style.height = '58px'
-  box.style.background = 'rgba(0,0,0,0.2)'
-  box.style.zIndex = 999
+  box.style.background = '#000'
+  box.style.zIndex = 899
   box.style.opacity = 0
 
   var text = document.createElement('div')
   text.id = 'modeText'
   text.style.position = 'absolute'
-  text.style.left = '0px'
+  text.style.right = '0'
   text.style.top = '41px'
   text.style.width = '119px'
   text.style.fontSize = '12px'
   text.style.fontFamily = 'monospace'
   text.style.color = 'white'
   text.style.textAlign = 'center'
-  text.style.textShadow = '1px 1px 0 rgba(0,0,0,0.5)'
   text.innerHTML = this.isWebGL() ? 'WebGL mode' : 'Canvas mode'
 
   document.body.appendChild(box)
   box.appendChild(text)
 
   this._modeBox = box
-}
-
-/** 标题栏适配 */
-Graphics._centerElement = function (element) {
-  var width = element.width * this._realScale
-  var height = element.height * this._realScale
-  element.style.position = 'absolute'
-  const margin = (window.innerHeight - 30 - height) / 2
-  element.style.margin = `${margin + 30}px auto ${margin}px auto`
-  element.style.top = 0
-  element.style.left = 0
-  element.style.right = 0
-  element.style.bottom = 0
-  element.style.width = width + 'px'
-  element.style.height = height + 'px'
 }
 
 /** 禁用F3 F4 */

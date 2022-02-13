@@ -59,7 +59,7 @@ module.exports = {
   height 30px
   background-color #f5c1bb
   -webkit-app-region drag
-  z-index 100
+  z-index 999
   color white
   line-height 30px
   transition background-color 0.2s

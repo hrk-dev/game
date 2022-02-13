@@ -4,6 +4,15 @@ body {
   font-family: 'GAMEFONT';
 }
 
+#game {
+  overflow: hidden;
+  position: fixed;
+  top: 30px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
 #ErrorPrinter,
 #modeTextBack {
   pointer-events: none;
