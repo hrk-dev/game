@@ -82,7 +82,7 @@ function setDev(dev) {
 
     if (!eventNames.includes('dev:vue')) {
       ipcMain.on('dev:vue', () => {
-        if (existsSync(join(__dirname, './module/devtools'))) {
+        if (existsSync(join(__dirname, './module/devtools.js'))) {
           require('./module/devtools')(mainWindow)
         }
       })
