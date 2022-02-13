@@ -3,7 +3,7 @@
     <transition name="fade">
       <div class="credits-wrapper" v-if="show">
         <transition name="fade">
-          <div class="img-wrapper" :style="{ left: `-${img.index * 1024}px` }" v-if="img.show">
+          <div class="img-wrapper" :style="{ left: `-${img.index * 1034}px` }" v-if="img.show">
             <div class="text">
               <div class="en">Credits</div>
               <div class="cn">制作组</div>
@@ -142,21 +142,21 @@ module.exports = {
 <style lang="stylus" scoped>
 .credits-wrapper
   z-index 99
-  position fixed
-  inset 0
+  position absolute
+  inset -5px
   background #000
   color #fff
 
   .img-wrapper
     display flex
-    position fixed
+    position absolute
     top 0
     left 0
     transition left 0.5s
 
     .img
-      width 1024px
-      height 720px
+      width 1034px
+      height 730px
 
       img
         height 100%
@@ -166,7 +166,7 @@ module.exports = {
       flex-direction column
       align-items center
       justify-content center
-      width 1024px
+      width 1034px
 
       .en
         font-size 20px
