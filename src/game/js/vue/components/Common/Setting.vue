@@ -148,34 +148,46 @@ module.exports = {
       if (!this.ready) this.ready = true
       switch (buttonName) {
         case 'left':
-          if (this.current === 1) {
+          if (this.current === 0) {
+            this.changeKeepRunning()
+          } else if (this.current === 1) {
             this.bgmDown()
           } else if (this.current === 2) {
             this.seDown()
           }
           break
         case 'right':
-          if (this.current === 1) {
+          if (this.current === 0) {
+            this.changeKeepRunning()
+          } else if (this.current === 1) {
             this.bgmUp()
           } else if (this.current === 2) {
             this.seUp()
           }
           break
         case 'up':
+          if (this.timer) return
           if (this.current === 0) {
             this.current = 3
           } else {
             --this.current
           }
           SoundManager.playCursor()
+          this.timer = setTimeout(() => {
+            this.timer = null
+          }, 100)
           break
         case 'down':
+          if (this.timer) return
           if (this.current === 3) {
             this.current = 0
           } else {
             ++this.current
           }
           SoundManager.playCursor()
+          this.timer = setTimeout(() => {
+            this.timer = null
+          }, 100)
           break
         case 'ok':
           this.onKeydown()
@@ -245,6 +257,9 @@ module.exports = {
       this.ready = false
       this.$emit('back')
     }
+  },
+  crated() {
+    this.timer = null
   }
 }
 </script>
@@ -273,7 +288,7 @@ module.exports = {
       left 35px
       height 45px
       line-height 50px
-      transition top 0.3s
+      transition top 0.1s
 
     .setting-title
       position absolute

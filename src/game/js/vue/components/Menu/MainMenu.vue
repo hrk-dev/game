@@ -10,15 +10,9 @@
         </div>
         <transition name="slide-up" appear>
           <div class="btn-list" v-if="menu.show">
+            <div class="main-highlight" v-show="left > 0" :style="{ left: left + 'px' }"></div>
             <template v-for="(item, index) in menu.list">
-              <div
-                v-if="item.show"
-                class="btn"
-                :class="{
-                  highlight: item.cn === menu.list[menu.current].cn
-                }"
-                :key="index"
-              >
+              <div v-if="item.show" class="btn" :key="index" :data-cn="item.cn" ref="btn">
                 <div class="en">{{ item.en }}</div>
                 <div class="cn">{{ item.cn }}</div>
               </div>
@@ -41,6 +35,7 @@ module.exports = {
     busy: false,
     bg: md5Url('img/system/menu/menu.png'),
     title: md5Url('img/system/menu/title.png'),
+    left: 0,
     loop: {
       restart: false,
       next: 0
@@ -185,6 +180,9 @@ module.exports = {
       DataManager.saveGlobalInfo(data)
       this.menu.show = true
       this.menuShowAnime()
+      this.$nextTick(() => {
+        this.setHighlight()
+      })
     },
     menuShowAnime() {
       this.$nextTick(() => {
@@ -201,6 +199,12 @@ module.exports = {
           easing: 'spring(1, 100, 10, 10)',
           duration: 500
         })
+        anime({
+          targets: '.main-highlight',
+          translateY: [100, 0],
+          easing: 'spring(1, 100, 10, 10)',
+          duration: 500
+        })
       })
     },
     getLastItem() {
@@ -214,6 +218,12 @@ module.exports = {
       return this.menu.list.findIndex(item => {
         return item.cn === name
       })
+    },
+    setHighlight() {
+      const item = this.$refs?.btn.find(item => {
+        return item.dataset?.cn === this.menu.list[this.menu.current].cn
+      })
+      this.left = item?.offsetLeft || 0
     },
     checkInput(buttonName) {
       if (!this.show || this.busy) return
@@ -245,7 +255,8 @@ module.exports = {
         }
       }
     },
-    up() {
+    up(next) {
+      if (!next && this.timer) return
       if (this.menu.show) {
         if (this.menu.current === 0) {
           this.menu.current = this.menu.list.length - 1
@@ -253,13 +264,19 @@ module.exports = {
           --this.menu.current
         }
         if (!this.menu.list[this.menu.current].show) {
-          this.up()
+          this.up(true)
         } else {
+          if (this.timer) return
           SoundManager.playCursor()
+          this.setHighlight()
+          this.timer = setTimeout(() => {
+            this.timer = null
+          }, 150)
         }
       }
     },
-    down() {
+    down(next) {
+      if (!next && this.timer) return
       if (this.menu.show) {
         if (this.menu.current === this.menu.list.length - 1) {
           this.menu.current = 0
@@ -267,9 +284,14 @@ module.exports = {
           ++this.menu.current
         }
         if (!this.menu.list[this.menu.current].show) {
-          this.down()
+          this.down(true)
         } else {
+          if (this.timer) return
           SoundManager.playCursor()
+          this.setHighlight()
+          this.timer = setTimeout(() => {
+            this.timer = null
+          }, 150)
         }
       }
     },
@@ -282,10 +304,14 @@ module.exports = {
       if (this.menu.show) return
       this.menu.show = true
       this.menuShowAnime()
+      this.$nextTick(() => {
+        this.setHighlight()
+      })
     },
     hideMenu() {
       if (!this.menu.show) return
       this.menu.show = false
+      this.left = 0
     },
     chapterEnd() {
       if (this.menu.restart) {
@@ -312,6 +338,9 @@ module.exports = {
         })
       }
     }
+  },
+  crated() {
+    this.timer = null
   }
 }
 </script>
@@ -362,6 +391,14 @@ module.exports = {
       justify-content space-around
       background linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.5) 10px, rgba(0, 0, 0, 0.5) calc(100% - 10px), transparent 100%)
 
+      .main-highlight
+        position absolute
+        height 50px
+        width 120px
+        border 2px solid rgba(255, 176, 170, 0.9)
+        border-radius 10px
+        transition left 0.15s
+
       .btn
         overflow hidden
         position relative
@@ -369,12 +406,10 @@ module.exports = {
         flex-direction column
         align-items center
         justify-content center
-        padding 0 10px
+        padding 0px 10px 4px 10px
         color #fff
+        width 100px
         height 50px
-        border 2px solid transparent
-        border-radius 10px
-        transition border 0.3s
 
         div
           z-index 2
@@ -387,9 +422,6 @@ module.exports = {
         .en
           font-size 16px
           line-height 16px
-
-.highlight
-  border-color rgba(255, 176, 170, 0.9) !important
 
 .fade-enter, .fade-leave-to
   opacity 0
