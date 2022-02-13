@@ -86,3 +86,9 @@ const Plugins = class {
     Galv.ZOOM.restore(time)
   }
 }
+
+const Steam = class {
+  static activateAchievement(name) {
+    electron.ipcRenderer.send('steam:achievement', name)
+  }
+}

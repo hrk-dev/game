@@ -155,7 +155,7 @@
   };
 
   Game_System.prototype.getEventNamesShown = function () {
-    return this._showEventNames == undefined ? true : this._showEventNames
+    return this._showEventNames === undefined ? true : this._showEventNames
   };
 
   //-----------------------------------------------------------------------------
@@ -340,7 +340,7 @@
     if (this._eventNameWindow) {
       this._eventNameWindow.x = this.x - this._eventNameWindow.width / 2 + this._eventNameWindow._offsetX;
       this._eventNameWindow.y = this.y - this._eventNameWindow.height / 2 - 12 - this._frame.height + this._eventNameWindow._offsetY;
-      if (!$gameSystem.getEventNamesShown()) {
+      if ((!this._character._eventNameText && !this._character._eventNamePicture) || !$gameSystem.getEventNamesShown()) {
         this._eventNameWindow.visible = false;
         this._eventNameOpacityNeed = true;
         return;
