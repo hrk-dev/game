@@ -6,6 +6,7 @@
     "start": "chcp 65001 && electron .",
     "dist": "node bin/encryption.js",
     "build": "node bin/encryption.js && node bin/packager.js",
+    "build:steam": "cross-env NODE_ENV=steam node bin/encryption.js && node bin/packager.js",
     "build:test": "cross-env NODE_ENV=development node bin/encryption.js && node bin/packager.js",
     "build:dev": "electron-packager src Dev --executableName=game --overwrite --icon=src/game/icon/icon.ico --out=build --ignore=\"(icu$)\""
   },

@@ -7,21 +7,11 @@ var fs = require('fs');
 
 var greenworks;
 
-if (process.platform == 'darwin') {
+if (process.platform == 'win32') {
   if (process.arch == 'x64')
-    greenworks = require('./lib/greenworks-osx64');
+    greenworks = require('../../lib/greenworks-win64');
   else if (process.arch == 'ia32')
-    greenworks = require('./lib/greenworks-osx32');
-} else if (process.platform == 'win32') {
-  if (process.arch == 'x64')
-    greenworks = require('./lib/greenworks-win64');
-  else if (process.arch == 'ia32')
-    greenworks = require('./lib/greenworks-win32');
-} else if (process.platform == 'linux') {
-  if (process.arch == 'x64')
-    greenworks = require('./lib/greenworks-linux64');
-  else if (process.arch == 'ia32')
-    greenworks = require('./lib/greenworks-linux32');
+    greenworks = require('../../lib/greenworks-win32');
 }
 
 function error_process(err, error_callback) {

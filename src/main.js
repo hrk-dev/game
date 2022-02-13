@@ -83,7 +83,11 @@ function setDev(dev) {
       ipcMain.on('dev:vue', () => {
         try {
           require('./module/devtools')(mainWindow)
-        } catch (_err) { }
+        } catch (err) {
+          if (!app.isPackaged) {
+            console.error(err)
+          }
+        }
       })
     }
   } else {
@@ -101,8 +105,13 @@ function setDev(dev) {
 ipcMain.on('vue:ready', (_e, dev) => {
   mainWindow.show()
   setDev(dev)
+  try {
+    require('./module/steam')
+  } catch (err) {
+    if (!app.isPackaged) {
+      console.error(err)
+    }
+  }
 })
 
 require('./module/console')
-
-require('./module/steam')

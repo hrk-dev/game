@@ -1,8 +1,36 @@
 const greenworks = require('./greenworks')
+const { app, ipcMain } = require('electron')
+
+function activateAchievement(name) {
+  greenworks.activateAchievement(name, () => {
+    if (!app.isPackaged) {
+      console.log('激活成就: ', name)
+    }
+  })
+}
+
+function clearAchievement(name) {
+  greenworks.clearAchievement(name, () => {
+    if (!app.isPackaged) {
+      console.warn('移除成就: ', name)
+    }
+  })
+}
 
 try {
-  greenworks.init()
-  greenworks.activateAchievement('FIRST_START', () => { })
+  if (greenworks.init()) {
+    activateAchievement('FIRST_START')
+
+    ipcMain.on('steam:achievement', (_e, name) => {
+      activateAchievement(name)
+    })
+
+    ipcMain.on('steam:clear-achievement', (_e, name) => {
+      clearAchievement(name)
+    })
+  }
 } catch (err) {
-  console.error(err)
+  if (!app.isPackaged) {
+    console.error(err)
+  }
 }
