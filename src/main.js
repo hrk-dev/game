@@ -99,19 +99,23 @@ function setDev(dev) {
 
 }
 
+let steamSDK = false
 ipcMain.on('vue:ready', (_e, dev) => {
   mainWindow.show()
 
   setDev(dev)
 
-  if (dev) {
-    if (existsSync(join(__dirname, './module/steam'))) {
-      require('./module/steam')
+  if (!steamSDK) {
+    steamSDK = true
+    if (dev) {
+      if (existsSync(join(__dirname, './module/steam'))) {
+        require('./module/steam')
+      }
+    } else {
+      try {
+        require('./module/steam')
+      } catch (_err) { }
     }
-  } else {
-    try {
-      require('./module/steam')
-    } catch (_err) { }
   }
 })
 
