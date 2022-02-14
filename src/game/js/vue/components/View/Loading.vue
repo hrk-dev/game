@@ -35,7 +35,7 @@ $size = 96px
     justify-content center
     align-items center
     position absolute
-    inset 0
+    inset -5px
     color #fff
     background #000
 

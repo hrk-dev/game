@@ -637,7 +637,7 @@ $pink = rgba(255, 176, 170, 0.9)
 
 .large-text
   .en
-    font-size 25px
+    font-size 24px
     line-height 25px
 
   .cn
