@@ -1,8 +1,17 @@
 Scene_Boot.prototype.start = function () {
   Scene_Base.prototype.start.call(this)
   SoundManager.preloadImportantSounds()
-  this.checkPlayerLocation()
-  DataManager.setupNewGame()
+  this.resizeScreen()
+  this.updateDocumentTitle()
+}
+
+Scene_Boot.prototype.resizeScreen = function () {
+  const screenWidth = $dataSystem.advanced.screenWidth
+  const screenHeight = $dataSystem.advanced.screenHeight
+  Graphics.resize(screenWidth, screenHeight)
+  this.adjustBoxSize()
+  this.adjustWindow()
+  Components.Main.setup(Graphics.width, Graphics.height)
 }
 
 /** VUE主菜单适配 */
@@ -11,6 +20,7 @@ Scene_Title.prototype.create = function () {
 }
 
 Scene_Title.prototype.start = function () {
+  Scene_Base.prototype.start.call(this)
   SceneManager.clearStack()
   AudioManager.stopAll()
   this.playTitleMusic()
@@ -23,14 +33,19 @@ Scene_Title.prototype.isBusy = function () {
 }
 
 Scene_Title.prototype.terminate = function () {
+  Scene_Base.prototype.terminate.call(this)
   AudioManager.stopAll()
   SceneManager.snapForBackground()
+  if (this._gameTitleSprite) {
+    this._gameTitleSprite.bitmap.destroy();
+  }
   VueMain._current.pop()
 }
 
 /** VUE游戏菜单适配 */
 Scene_Menu.prototype.create = function () {
-  Scene_MenuBase.prototype.create.call(this)
+  Scene_Base.prototype.create.call(this);
+  this.createBackground()
   Methods.hideTip()
   Components.Movetip.hide()
   Components.GameMenu.show = true
@@ -45,10 +60,15 @@ Scene_Menu.prototype.terminate = function () {
 }
 
 Scene_Map.prototype.create = function () {
-  Scene_Base.prototype.create.call(this)
+  Scene_Message.prototype.create.call(this)
   this._transfer = $gamePlayer.isTransferring()
-  var mapId = this._transfer ? $gamePlayer.newMapId() : $gameMap.mapId()
-  DataManager.loadMapData(mapId)
+  this._lastMapWasNull = !$dataMap
+  if (this._transfer) {
+    DataManager.loadMapData($gamePlayer.newMapId())
+    this.onTransfer()
+  } else if (!$dataMap || $dataMap.id !== $gameMap.mapId()) {
+    DataManager.loadMapData($gameMap.mapId())
+  }
   VueMain._current.push('Log')
 }
 
@@ -80,24 +100,22 @@ Scene_Map.prototype.callMenu = function () {
 }
 
 Scene_Map.prototype.terminate = function () {
-  Scene_Base.prototype.terminate.call(this)
+  Scene_Message.prototype.terminate.call(this)
   if (!SceneManager.isNextScene(Scene_Battle)) {
     this._spriteset.update()
     this._mapNameWindow.hide()
+    this.hideMenuButton()
     SceneManager.snapForBackground()
-  } else {
-    ImageManager.clearRequest()
   }
-
-  if (SceneManager.isNextScene(Scene_Map)) {
-    ImageManager.clearRequest()
-  }
-
   $gameScreen.clearZoom()
 
-  this.removeChild(this._fadeSprite)
-  this.removeChild(this._mapNameWindow)
-  this.removeChild(this._windowLayer)
-  this.removeChild(this._spriteset)
   VueMain._current.pop()
+}
+
+Scene_Message.prototype.messageWindowRect = function () {
+  const ww = Graphics.boxWidth
+  const wh = this.calcWindowHeight(4, false) + 8
+  const wx = -Graphics.boxWidth * 1.2
+  const wy = 0
+  return new Rectangle(wx, wy, ww, wh)
 }

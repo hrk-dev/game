@@ -6,6 +6,7 @@ let num = 0
 
 const ignore = [
   'Game.rpgproject',
+  'game.rmmzproject',
   'src/icu',
   'src/module/devtools.js',
   'src/game/js/env/dev.js$'

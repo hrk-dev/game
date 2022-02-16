@@ -117,22 +117,22 @@
   // Game_Interpreter
   //
 
-  var _Game_Interpreter_pluginCommand = Game_Interpreter.prototype.pluginCommand;
-  Game_Interpreter.prototype.pluginCommand = function (command, args) {
-    _Game_Interpreter_pluginCommand.call(this, command, args);
-    if (command.toLowerCase() === "eventnames") {
-      switch (args[0].toUpperCase()) {
-        case 'SHOW':
-          {
-            $gameSystem.showEventNames();
-          } break;
-        case 'HIDE':
-          {
-            $gameSystem.hideEventNames();
-          } break;
-      }
-    }
-  };
+  // var _Game_Interpreter_pluginCommand = Game_Interpreter.prototype.pluginCommand;
+  // Game_Interpreter.prototype.pluginCommand = function (command, args) {
+  //   _Game_Interpreter_pluginCommand.call(this, command, args);
+  //   if (command.toLowerCase() === "eventnames") {
+  //     switch (args[0].toUpperCase()) {
+  //       case 'SHOW':
+  //         {
+  //           $gameSystem.showEventNames();
+  //         } break;
+  //       case 'HIDE':
+  //         {
+  //           $gameSystem.hideEventNames();
+  //         } break;
+  //     }
+  //   }
+  // };
 
   //-----------------------------------------------------------------------------
   // Game_System
@@ -293,7 +293,7 @@
   Sprite_Character.prototype.initialize = function (character) {
     _SpriteCharacter_initialize.call(this, character);
     if (this._character.createEventNameWindow()) {
-      this._eventNameWindow = new Window_EventName(0, 0, 40, 40);
+      this._eventNameWindow = new Window_EventName(0, 0, 48, 48);
       this._eventNameAdded = false;
     }
   };
@@ -349,24 +349,24 @@
         this._eventNameOpacityNeed = false;
         this._eventNameWindow.visible = true;
         if (this._eventNameWindow._range < Math.abs(($gamePlayer.x - this._character.x)) + Math.abs(($gamePlayer.y - this._character.y)))
-          this._eventNameWindow.contentsOpacity = 0;
+          this._eventNameWindow.opacity = 0;
         else
-          this._eventNameWindow.contentsOpacity = 255;
+          this._eventNameWindow.opacity = 255;
       }
       if (this._eventNameWindow._range < Math.abs(($gamePlayer.x - this._character.x)) + Math.abs(($gamePlayer.y - this._character.y))) {
         if (paramFade) {
-          if (this._eventNameWindow.contentsOpacity !== 0) {
-            this._eventNameWindow.contentsOpacity -= 255 / paramFadeTimer;
-            if (this._eventNameWindow.contentsOpacity < 0) this._eventNameWindow.contentsOpacity = 0;
+          if (this._eventNameWindow.opacity !== 0) {
+            this._eventNameWindow.opacity -= 255 / paramFadeTimer;
+            if (this._eventNameWindow.opacity < 0) this._eventNameWindow.opacity = 0;
           }
         }
         else this._eventNameWindow.visible = false;
       }
       else {
         if (paramFade) {
-          if (this._eventNameWindow.contentsOpacity !== 255) {
-            this._eventNameWindow.contentsOpacity += 255 / paramFadeTimer;
-            if (this._eventNameWindow.contentsOpacity > 255) this._eventNameWindow.contentsOpacity = 255;
+          if (this._eventNameWindow.opacity !== 255) {
+            this._eventNameWindow.opacity += 255 / paramFadeTimer;
+            if (this._eventNameWindow.opacity > 255) this._eventNameWindow.opacity = 255;
           }
         }
         else this._eventNameWindow.visible = true;
@@ -382,10 +382,13 @@
     this.initialize.apply(this, arguments);
   };
 
-  Window_EventName.prototype = Object.create(Window_Base.prototype);
+  Window_EventName.prototype = Object.create(Sprite.prototype);
   Window_EventName.prototype.constructor = Window_EventName;
 
-  Window_EventName.prototype.initialize = function (x, y, w, h) {
+  Window_EventName.prototype.initialize = function () {
+    Sprite.prototype.initialize.call(this)
+    this._tileWidth = $gameMap.tileWidth();
+    this._tileHeight = $gameMap.tileHeight();
     this._fontSize = paramFontSize;
     this._font = paramFontName;
     this._range = paramDefaultRange;
@@ -393,7 +396,6 @@
     this._picture = null;
     this._offsetX = 0;
     this._offsetY = 0;
-    Window_Base.prototype.initialize.call(this, x, y, w, h);
     this.opacity = 0;
     this._needUpdate = true;
     this.timer = 0
@@ -426,8 +428,7 @@
       this.drawTextEx(this._text, 0, 0);
     }
     if (this._picture) {
-      this.createContents();
-      this.contents = ImageManager.loadSystem(this._picture);
+      this.bitmap = ImageManager.loadSystem(this._picture);
     }
   };
 

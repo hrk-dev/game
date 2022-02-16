@@ -1,5 +1,5 @@
 <template>
-  <div id="title-bar" :style="{ background: color }">
+  <div id="title-bar" :style="{ background: color }" v-show="show">
     <div class="title-icon-text">
       <div class="title-icon">
         <img style="height: 60%" src="./icon/icon.ico" />
@@ -22,6 +22,7 @@
 <script>
 module.exports = {
   data: () => ({
+    show: true,
     test: false,
     dev: false,
     title: '',

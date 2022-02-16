@@ -35,7 +35,7 @@ module.exports = {
       }, 2000)
     },
     logoEnd() {
-      if (!fs.existsSync(StorageManager.localFilePath(0))) {
+      if (!fs.existsSync(StorageManager.filePath('nirro'))) {
         this.tip.show = true
       } else {
         this.toTitleOrStart()
@@ -43,7 +43,8 @@ module.exports = {
     },
     toTitleOrStart() {
       VueMain._current.pop()
-      if (!fs.existsSync(StorageManager.localFilePath(1))) {
+      if (!fs.existsSync(StorageManager.filePath('hiiro'))) {
+        DataManager.setupNewGame()
         SceneManager.goto(Scene_Map)
       } else {
         SceneManager.goto(Scene_Title)

@@ -12,51 +12,44 @@ const Patch = class {
     electron.shell.openExternal(url)
   }
 
-  /** 获取全局存档数据 */
-  static getGlobalInfo() {
-    return DataManager.loadGlobalInfo()[0]
+  static loopData = {}
+
+  static saveLoopData = async function () {
+    await StorageManager.saveObject("hirro", this.loopData)
+  }
+
+  static loadLoopData = async function () {
+    try {
+      this.loopData = await StorageManager.loadObject("hirro")
+    } catch (_e) {
+      this.loopData = {}
+    }
   }
 
   /** 增加全局存档数据 */
-  static addGlobalInfo(name, data) {
-    const globalInfo = DataManager.loadGlobalInfo()
-    if (!globalInfo[0]) globalInfo[0] = {}
-    globalInfo[0][name] = { ...globalInfo[0][name], ...data }
-
-    DataManager.saveGlobalInfo(globalInfo)
-  }
-
-  /** 修改全局存档数据属性 */
-  static setGlobalInfo(name, key, data) {
-    const globalInfo = DataManager.loadGlobalInfo()
-    if (!globalInfo[0]) globalInfo[0] = {}
-    if (!globalInfo[0][name]) globalInfo[0][name] = {}
-    globalInfo[0][name][key] = data
-
-    DataManager.saveGlobalInfo(globalInfo)
+  static addLoopData(obj) {
+    this.loopData = { ...this.loopData, ...obj }
+    this.saveLoopData()
   }
 
   /** 清空周目数据 */
   static delLoop() {
-    const globalInfo = DataManager.loadGlobalInfo()
-    if (!globalInfo[0]) globalInfo[0] = {}
-    globalInfo[0]['loop'] = {}
-
-    DataManager.saveGlobalInfo(globalInfo)
+    this.loopData = {}
+    this.saveLoopData()
   }
 
-  static save() {
+  static async save() {
     $gameSystem.onBeforeSave()
-    if (DataManager.saveGame(1)) {
-      StorageManager.cleanBackup(1)
+    try {
+      await DataManager.saveGame(1)
       Methods.showPopup('Save success', '保存成功', 1000)
-    } else {
+    } catch (e) {
       Methods.showPopup('Save failed', '保存失败', 1000)
     }
   }
 
   static checkSave() {
-    return fs.existsSync(StorageManager.localFilePath(1))
+    return fs.existsSync(StorageManager.filePath('hiiro'))
   }
 
   static showTip(time) {
@@ -66,15 +59,17 @@ const Patch = class {
   }
 
   static restart() {
-    Components.Loading.loadingShow()
+    document.getElementById('gameCanvas').style.opacity = 0
     AudioManager.stopAll()
     setTimeout(() => {
       DataManager.setupNewGame()
       SceneManager.goto(Scene_Map)
-      Components.Loading.loadingHide()
-    }, 300)
+      $gameTemp.reserveCommonEvent(99)
+    }, 400)
   }
 }
+
+Patch.loadLoopData()
 
 /** 插件方法 */
 const Plugins = class {

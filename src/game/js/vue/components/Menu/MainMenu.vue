@@ -64,20 +64,23 @@ module.exports = {
               this.hideMenu()
               Components.Loading.loadingShow()
               setTimeout(() => {
-                if (DataManager.loadGame(1)) {
-                  this.show = false
-                  $gameMap._interpreter.command115()
-                  $gameVariables.setValue(1, this.loop.next)
-                  $gameTemp.reserveCommonEvent(97)
-                  Methods.clearTip()
-                  AudioManager.stopAll()
-                  SceneManager.goto(Scene_Map)
-                  $gameSystem.onAfterLoad()
-                } else {
-                  Methods.showPopup('Error', '奇怪的错误', 1500)
-                  Components.Loading.loadingHide()
-                  this.showMenu()
-                }
+                DataManager.loadGame(1)
+                  .then(() => {
+                    this.show = false
+                    $gameMap._interpreter.command115()
+                    $gameVariables.setValue(1, this.loop.next)
+                    $gameTemp.reserveCommonEvent(97)
+                    Methods.clearTip()
+                    AudioManager.stopAll()
+                    SceneManager.goto(Scene_Map)
+                    $gameSystem.onAfterLoad()
+                  })
+                  .catch((err) => {
+                    console.error(err)
+                    Methods.showPopup('Error', '奇怪的错误', 1500)
+                    Components.Loading.loadingHide()
+                    this.showMenu()
+                  })
               }, 300)
             }
           }
@@ -94,16 +97,18 @@ module.exports = {
               this.hideMenu()
               Components.Loading.loadingShow()
               setTimeout(() => {
-                if (DataManager.loadGame(1)) {
-                  this.show = false
-                  $gameTemp.reserveCommonEvent(98)
-                  SceneManager.goto(Scene_Map)
-                  $gameSystem.onAfterLoad()
-                } else {
-                  Methods.showPopup('Error', '奇怪的错误', 1500)
-                  Components.Loading.loadingHide()
-                  this.showMenu()
-                }
+                DataManager.loadGame(1)
+                  .then(() => {
+                    this.show = false
+                    $gameTemp.reserveCommonEvent(98)
+                    SceneManager.goto(Scene_Map)
+                    $gameSystem.onAfterLoad()
+                  })
+                  .catch(() => {
+                    Methods.showPopup('Error', '奇怪的错误', 1500)
+                    Components.Loading.loadingHide()
+                    this.showMenu()
+                  })
               }, 300)
             }
           }
@@ -167,17 +172,21 @@ module.exports = {
           }
         }
       }
-      const data = DataManager.loadGlobalInfo()
-      if (data[0].loop) {
-        if (data[0].loop.lock) {
+
+      if (Patch.loopData) {
+        if (Patch.loopData.lock) {
           Methods.showPopup('Seems to have unlocked something strange', '好像解锁了一些奇怪的东西', 2000)
-          data[0].loop.lock = false
+          Patch.loopData.lock = false
         }
-        this.loop.restart = data[0].loop.restart
-        this.loop.next = data[0].loop.next
-        if (data[0].loop.load === false) this.menu.list[1].show = false
+        this.loop.restart = Patch.loopData.restart
+        this.loop.next = Patch.loopData.next
+        if (Patch.loopData.load === false) {
+          this.menu.list[1].show = false
+          this.menu.current = 0
+        }
       }
-      DataManager.saveGlobalInfo(data)
+      Patch.saveLoopData()
+
       this.menu.show = true
       this.menuShowAnime()
       this.$nextTick(() => {
@@ -334,7 +343,8 @@ module.exports = {
           }
           this.menu.current = 0
           this.showMenu()
-          Patch.setGlobalInfo('loop', 'load', false)
+          Patch.loopData.load = false
+          Patch.saveLoopData()
         })
       }
     }

@@ -3,10 +3,9 @@
 var $plugins =
 [
 {"name":"ULDS","status":true,"description":"无限图层(经过修改，不具备通用性)","parameters":{"Default Path":"parallaxes","Default Z":"0.5"}},
-{"name":"TerraxLighting","status":true,"description":"v1.5.1 Creates an extra layer that darkens a map and adds lightsources!","parameters":{"Player radius":"50","Add to options":"No","Option menu entry":"Lighting effects","Reset Lights":"No","Save DaynightHours":"0","Save DaynightMinutes":"0","Save DaynightSeconds":"0","Flashlight offset":"0","Screensize X":"1024","Screensize Y":"726","Kill Switch":"No"}},
-{"name":"Community_Basic","status":true,"description":"Plugin used to set basic parameters.","parameters":{"cacheLimit":"10","screenWidth":"1024","screenHeight":"720","changeWindowWidthTo":"1024","changeWindowHeightTo":"720","renderingMode":"auto","alwaysDash":"off"}},
+{"name":"TerraxLighting","status":false,"description":"v1.5.1 Creates an extra layer that darkens a map and adds lightsources!","parameters":{"Player radius":"50","Add to options":"No","Option menu entry":"Lighting effects","Reset Lights":"No","Save DaynightHours":"0","Save DaynightMinutes":"0","Save DaynightSeconds":"0","Flashlight offset":"0","Screensize X":"1024","Screensize Y":"726","Kill Switch":"No"}},
 {"name":"UTA_MessageSkip","status":true,"description":"Skip message on pressing a particular key.","parameters":{"Skip Key":"control","Show Trace":"false"}},
 {"name":"Galv_ScreenZoom","status":true,"description":"用于放大画面(经过修改)","parameters":{"Battle Zoom":"1"}},
-{"name":"GALV_ActionIndicators","status":true,"description":"用于显示事件上的浮动图标(经过修改，不具备通用性)","parameters":{"Y Offset":"-10","Z Position":"99","Auto Hide":"true","Icon Opacity":"200"}},
-{"name":"MrTS_EventNames","status":true,"description":"用于靠近时显示浮动图标(经过修改，不具备通用性)","parameters":{"Default Range":"5","Font Size":"24","Font Name":"GameFont","Fade":"True","Fade Timer":"30"}}
+{"name":"MrTS_EventNames","status":true,"description":"用于靠近时显示浮动图标(经过修改，不具备通用性)","parameters":{"Default Range":"5","Font Size":"24","Font Name":"GameFont","Fade":"True","Fade Timer":"30"}},
+{"name":"GALV_ActionIndicatorsMZ","status":true,"description":"用于显示事件上的浮动图标(经过修改，不具备通用性)","parameters":{"yOffset":"-10","zPosition":"5","autoHide":"true","iconOpacity":"200"}}
 ];

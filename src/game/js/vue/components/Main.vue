@@ -1,8 +1,5 @@
 <template>
-  <div
-    id="main"
-    :style="{ width: width + 'px', height: height + 'px', margin: margin }"
-  >
+  <div id="main" :style="{ width: width + 'px', height: height + 'px', margin: margin }">
     <div
       class="wrapper"
       :style="{
@@ -32,8 +29,10 @@ module.exports = {
   }),
   methods: {
     setup(width, height) {
-      this.wrapper.width = width
-      this.wrapper.height = height
+      if (width && height) {
+        this.wrapper.width = width
+        this.wrapper.height = height
+      }
       this.$nextTick(() => {
         this.$emit('ready')
       })

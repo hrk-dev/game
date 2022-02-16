@@ -2,8 +2,8 @@ const electron = require('electron')
 const fs = require('fs')
 const path = require('path')
 
-var dev = false
-var test = false
+let dev = false
+let test = false
 
 const md5Url = (str) => {
   if (dev) return str
@@ -15,23 +15,43 @@ const md5Url = (str) => {
   return `${list.join('/')}`
 }
 
+class Test {
+  static setup() {
+    const list = fs.readdirSync(path.join(__dirname, 'js/env')) || []
+    if (list.includes('dev.js')) {
+      dev = true
+      const devtools = require(path.join(__dirname, 'js/env/dev.js'))
+      electron.ipcRenderer.once('show-vue-devtools', () => {
+        devtools()
+      })
+
+    }
+    if (list.includes('test.js')) {
+      test = true
+    }
+  }
+}
+
 class ScriptManager {
-  static setup(dir) {
+  static setup(dir, defer) {
     const list = fs.readdirSync(path.join(__dirname, dir)) || []
     list.forEach(name => {
-      ScriptManager.loadScript(dir, name)
+      ScriptManager.loadScript(dir, name, defer)
     })
   }
 
-  static loadScript(dir, name) {
+  static loadScript(dir, name, defer) {
     if (name === 'main.js') return
     const url = dir + name
     const script = document.createElement('script')
     script.src = url
     script.async = false
+    if (defer) {
+      script.defer = true
+    }
     script._url = url
     document.body.appendChild(script)
   }
 }
 
-ScriptManager.setup('js/env/')
+Test.setup()

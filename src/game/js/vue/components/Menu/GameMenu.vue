@@ -95,19 +95,21 @@ module.exports = {
               this.show = false
               Components.Loading.loadingShow()
               setTimeout(() => {
-                if (DataManager.loadGame(1)) {
-                  Patch.startWait()
-                  // $gameTemp.reserveCommonEvent(98)
-                  SceneManager.goto(Scene_Map)
-                  $gameSystem.onAfterLoad()
-                  Components.Loading.loadingHide()
-                  Patch.showTip()
-                  Patch.stopWait()
-                } else {
-                  Methods.showPopup('Load failed', '读取失败', 1500)
-                  Components.Loading.loadingHide()
-                  this.show = true
-                }
+                DataManager.loadGame(1)
+                  .then(() => {
+                    Patch.startWait()
+                    // $gameTemp.reserveCommonEvent(98)
+                    SceneManager.goto(Scene_Map)
+                    $gameSystem.onAfterLoad()
+                    Components.Loading.loadingHide()
+                    Patch.showTip()
+                    Patch.stopWait()
+                  })
+                  .catch(() => {
+                    Methods.showPopup('Load failed', '读取失败', 1500)
+                    Components.Loading.loadingHide()
+                    this.show = true
+                  })
               }, 300)
             })
           }
@@ -328,15 +330,15 @@ module.exports = {
       }
     },
     // 测试
-    save() {
+    async save() {
       if (!this.show) return
       Components.Choice.reset()
       $gameSystem.onBeforeSave()
-      if (DataManager.saveGame(this.test.saveID + 1)) {
-        StorageManager.cleanBackup(this.test.saveID + 1)
-        Methods.showPopup('Save success', '保存成功', 1500)
-      } else {
-        Methods.showPopup('Save failed', '保存失败', 1500)
+      try {
+        await DataManager.saveGame(this.test.saveID + 1)
+        Methods.showPopup('Save success', '保存成功', 1000)
+      } catch (e) {
+        Methods.showPopup('Save failed', '保存失败', 1000)
       }
     },
     load() {
@@ -345,18 +347,20 @@ module.exports = {
       this.show = false
       Components.Loading.loadingShow()
       setTimeout(() => {
-        if (DataManager.loadGame(this.test.saveID + 1)) {
-          Patch.startWait()
-          SceneManager.goto(Scene_Map)
-          $gameSystem.onAfterLoad()
-          Components.Loading.loadingHide()
-          Patch.showTip()
-          Patch.stopWait()
-        } else {
-          Methods.showPopup('Load failed', '读取失败', 1500)
-          Components.Loading.loadingHide()
-          this.show = true
-        }
+        DataManager.loadGame(this.test.saveID + 1)
+          .then(() => {
+            Patch.startWait()
+            SceneManager.goto(Scene_Map)
+            $gameSystem.onAfterLoad()
+            Components.Loading.loadingHide()
+            Patch.showTip()
+            Patch.stopWait()
+          })
+          .catch(() => {
+            Methods.showPopup('Load failed', '读取失败', 1000)
+            Components.Loading.loadingHide()
+            this.show = true
+          })
       }, 300)
     }
   },

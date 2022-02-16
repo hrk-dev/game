@@ -1,28 +1,16 @@
-/** 修改默认字体 */
-Window_Base.prototype.standardFontFace = function () {
-  if ($gameSystem.isChinese()) {
-    return 'GameFont, SimHei, Heiti TC, sans-serif'
-  } else if ($gameSystem.isKorean()) {
-    return 'GameFont, Dotum, AppleGothic, sans-serif'
-  } else {
-    return 'GameFont'
-  }
-}
-
 Window_Message.prototype.startMessage = function () {
-  this._textState = {}
-  this._textState.index = 0
-  this._textState.text = this.convertEscapeCharacters($gameMessage.allText())
-  this.newPage()
+  const text = $gameMessage.allText()
+  const textState = this.createTextState(text, 0, 0, 0)
+  textState.x = this.newLineX(textState)
+  textState.startX = textState.x
+  this._textState = textState
+  this.newPage(this._textState)
   this.open()
+  this._nameBoxWindow.start()
 }
 
 Window_Message.prototype.newPage = function () {
   this.contents.clear()
-}
-
-Window_Message.prototype.windowWidth = function () {
-  return 0
 }
 
 Window_Message.prototype.updateShowFast = function () {

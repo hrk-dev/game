@@ -1,4 +1,4 @@
-const devtools = () => {
+module.exports = () => {
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -24149,9 +24149,3 @@ const devtools = () => {
   /******/ });
   //# sourceMappingURL=backend.js.map
 }
-
-dev = true
-
-electron.ipcRenderer.once('show-vue-devtools', () => {
-  devtools()
-})
