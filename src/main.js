@@ -15,7 +15,7 @@ function createWindow() {
     minWidth: 1024,
     minHeight: 720 + 30,
     frame: false,
-    fullscreenable: false,
+    fullscreenable: true,
     webPreferences: {
       // devTools: !app.isPackaged,
       nodeIntegration: true,
@@ -53,6 +53,11 @@ app.whenReady().then(() => {
     } else {
       mainWindow.maximize()
     }
+  })
+
+  ipcMain.on('app:fullscreen', (e, flag) => {
+    mainWindow.setFullScreen(flag ?? !mainWindow.isFullScreen())
+    e.returnValue = mainWindow.isFullScreen()
   })
 
   ipcMain.on('app:quit', () => {

@@ -8,6 +8,24 @@
           </div>
           <div class="setting">
             <div class="arrow" :style="{ top: `${top}px` }">→</div>
+            <div class="item" ref="fullscreen">
+              <div class="text">
+                <div class="en">FullScreen</div>
+                <div class="cn">全屏</div>
+              </div>
+              <div class="switch">
+                <transition name="switch">
+                  <div v-if="fullscreen">
+                    <div>○</div>
+                  </div>
+                </transition>
+                <transition name="switch">
+                  <div v-if="!fullscreen">
+                    <div>×</div>
+                  </div>
+                </transition>
+              </div>
+            </div>
             <div class="item" ref="run">
               <div class="text">
                 <div class="en">Keep Running</div>
@@ -78,6 +96,7 @@ module.exports = {
   data: () => ({
     show: false,
     ready: false,
+    fullscreen: false,
     current: 0,
     keydown: 0,
     keepRunning: false,
@@ -126,18 +145,21 @@ module.exports = {
       this.keepRunning = ConfigManager.alwaysDash
       this.bgm = AudioManager.bgmVolume / 10
       this.se = AudioManager.seVolume / 10
+      this.fullscreen = ConfigManager.fullscreen
       this.setArrow()
     },
     setArrow() {
       this.$nextTick(() => {
         let top = this.top
         if (this.current === 0) {
-          top = this.$refs?.run?.offsetTop
+          top = this.$refs?.fullscreen?.offsetTop
         } else if (this.current === 1) {
-          top = this.$refs?.bgm?.offsetTop
+          top = this.$refs?.run?.offsetTop
         } else if (this.current === 2) {
-          top = this.$refs?.se?.offsetTop
+          top = this.$refs?.bgm?.offsetTop
         } else if (this.current === 3) {
+          top = this.$refs?.se?.offsetTop
+        } else if (this.current === 4) {
           top = this.$refs?.back?.offsetTop
         }
         this.top = top
@@ -149,26 +171,30 @@ module.exports = {
       switch (buttonName) {
         case 'left':
           if (this.current === 0) {
-            this.changeKeepRunning()
+            this.changeFullscreen()
           } else if (this.current === 1) {
-            this.bgmDown()
+            this.changeKeepRunning()
           } else if (this.current === 2) {
+            this.bgmDown()
+          } else if (this.current === 3) {
             this.seDown()
           }
           break
         case 'right':
           if (this.current === 0) {
-            this.changeKeepRunning()
+            this.changeFullscreen()
           } else if (this.current === 1) {
-            this.bgmUp()
+            this.changeKeepRunning()
           } else if (this.current === 2) {
+            this.bgmUp()
+          } else if (this.current === 3) {
             this.seUp()
           }
           break
         case 'up':
           if (this.timer) return
           if (this.current === 0) {
-            this.current = 3
+            this.current = 4
           } else {
             --this.current
           }
@@ -179,7 +205,7 @@ module.exports = {
           break
         case 'down':
           if (this.timer) return
-          if (this.current === 3) {
+          if (this.current === 4) {
             this.current = 0
           } else {
             ++this.current
@@ -201,23 +227,27 @@ module.exports = {
       switch (this.current) {
         case 0:
           SoundManager.playOk()
-          this.changeKeepRunning()
+          this.changeFullscreen()
           break
         case 1:
+          SoundManager.playOk()
+          this.changeKeepRunning()
+          break
+        case 2:
           if (this.bgm === 10) {
             this.bgm = 0
           } else {
             ++this.bgm
           }
           break
-        case 2:
+        case 3:
           if (this.se === 10) {
             this.se = 0
           } else {
             ++this.se
           }
           break
-        case 3:
+        case 4:
           this.back()
           break
       }
@@ -256,6 +286,20 @@ module.exports = {
       this.show = false
       this.ready = false
       this.$emit('back')
+    },
+    changeFullscreen() {
+      this.fullscreen = electron.ipcRenderer.sendSync('app:fullscreen')
+      ConfigManager.fullscreen = this.fullscreen
+      if (this.fullscreen) {
+        Components.TitleBar.show = false
+        document.getElementById('game').style.top = 0
+        document.getElementById('fpsCounterBox').style.top = 0
+      } else {
+        Components.TitleBar.show = true
+        document.getElementById('game').style.top = '30px'
+        document.getElementById('fpsCounterBox').style.top = '30px'
+      }
+      Graphics._updateRealScale()
     }
   },
   crated() {
