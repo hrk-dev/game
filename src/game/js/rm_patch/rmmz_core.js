@@ -17,6 +17,8 @@ Graphics._updateRealScale = function () {
       VueMain.app.main.scale = this._realScale
       const margin = (window.innerHeight - _margin - VueMain.app.main.height) / 2
       VueMain.app.main.margin = `${margin + _margin}px auto ${margin}px auto`
+
+      Components.Main.save.top = 10 + _margin
     }
   } else {
     this._realScale = this._defaultScale

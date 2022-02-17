@@ -10,6 +10,16 @@
     >
       <slot></slot>
     </div>
+    <transition name="fade">
+      <div class="save" :style="{ top: save.top + 'px' }" v-if="save.show">
+        <svg viewBox="0 0 1024 1024" version="1.1" width="30" height="30">
+          <path
+            d="M512 64c247.2 0 448 200.8 448 448h-64c0-212-172-384-384-384V64z m0 832c-212 0-384-172-384-384H64c0 247.2 200.8 448 448 448v-64z"
+            fill="#FFB0AA"
+          ></path>
+        </svg>
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -22,6 +32,10 @@ module.exports = {
     margin: String
   },
   data: () => ({
+    save: {
+      show: false,
+      top: 40
+    },
     wrapper: {
       width: 1024,
       height: 720
@@ -41,7 +55,7 @@ module.exports = {
 }
 </script>
 
-<style lang="stylus">
+<style lang="stylus" scoped>
 #main
   overflow hidden
   position absolute
@@ -53,6 +67,24 @@ module.exports = {
   .wrapper
     transform-origin left top
 
+  .save
+    z-index 999
+    position fixed
+    top 40px
+    right 7px
+    width 30px
+    height 30px
+    animation 1.5s linear 0s infinite normal none running spin
+
+@keyframes spin
+  from
+    transform rotate(0deg)
+
+  to
+    transform rotate(360deg)
+</style>
+
+<style lang="stylus">
 .fade-enter, .fade-leave-to
   opacity 0 !important
 

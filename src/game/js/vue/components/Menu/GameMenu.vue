@@ -78,11 +78,9 @@ module.exports = {
             if (this.hasSave) {
               Methods.showChoice('Do you wish to overwrite this save file', '是否覆盖存档', () => {
                 Patch.save()
-                this.checkSave()
               })
             } else {
               Patch.save()
-              this.checkSave()
             }
           }
         },
@@ -183,7 +181,9 @@ module.exports = {
       }
     },
     hasSave() {
-      this.menu.list[1].show = this.hasSave
+      if (this.hasSave) {
+        this.menu.list[1].show = this.hasSave
+      }
     },
     tipShow() {
       if (this.tipShow) {
@@ -490,7 +490,7 @@ $pink = rgba(255, 176, 170, 0.9)
 // 测试
 .test
   position fixed
-  top 0px
+  bottom 0px
   left 0px
   display flex
   height 40px

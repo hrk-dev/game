@@ -20,6 +20,49 @@ StorageManager.filePath = function (saveName) {
   return dir + saveName
 }
 
+DataManager.saveGame = function (savefileId) {
+  Components.Main.save.show = true
+
+  const contents = this.makeSaveContents()
+  const saveName = this.makeSavename(savefileId)
+  return StorageManager.saveObject(saveName, contents).then(() => {
+    this._globalInfo[savefileId] = this.makeSavefileInfo()
+    this.saveGlobalInfo()
+    return 0
+  })
+}
+
+StorageManager.saveToLocalFile = function (saveName, zip) {
+  const dirPath = this.fileDirectoryPath()
+  const filePath = this.filePath(saveName)
+  const backupFilePath = filePath + '_'
+  return new Promise((resolve, reject) => {
+    this.fsMkdir(dirPath)
+    this.fsUnlink(backupFilePath)
+    this.fsRename(filePath, backupFilePath)
+    try {
+      this.fsWriteFile(filePath, zip)
+      this.fsUnlink(backupFilePath)
+      resolve()
+    } catch (e) {
+      try {
+        this.fsUnlink(filePath)
+        this.fsRename(backupFilePath, filePath)
+      } catch (e2) {
+        //
+      }
+      reject(e)
+    } finally {
+      if (Components.Main.save.show) {
+        Components.Main.save.show = false
+        if (Components.GameMenu.show) {
+          Components.GameMenu.checkSave()
+        }
+      }
+    }
+  })
+}
+
 ConfigManager.save = function () {
   StorageManager.saveObject('niiro', this.makeData())
 }
