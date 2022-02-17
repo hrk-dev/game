@@ -59,28 +59,6 @@ Galv.ZOOM = Galv.ZOOM || {};          // Galv's stuff
  * only. It does not zoom or pan the map itself. That means if your map is
  * the same size as the screen and you zoom in, player movement will not pan
  * the zoomed screen.
- *
- * @command 聚焦到事件
- * @text 聚焦到事件
- * @desc 聚焦到事件
- *
- * @arg id
- * @default 0
- * @text ID
- * @type number
- * @desc 需要聚焦的ID
- *
- * @arg scale
- * @default 2
- * @text scale
- * @type number
- * @desc 放大倍数
- *
- * @arg time
- * @default 30
- * @text time
- * @type number
- * @desc 持续时间
  */
 
 
@@ -303,8 +281,3 @@ Galv.ZOOM = Galv.ZOOM || {};          // Galv's stuff
   };
 
 })();
-
-PluginManager.registerCommand('Galv_ScreenZoom', "聚焦到事件", ({ id, scale, time }) => {
-  console.log(id, scale, time)
-  Galv.ZOOM.target(Number(id), Number(scale), Number(time))
-})
