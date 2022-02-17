@@ -41,12 +41,23 @@ module.exports = {
       index: 0,
       list: [
         '咸鱼.png',
-        '小白.png',
-        '月饼.png',
-        '极致西瓜.jpg',
+        'TAKUKO.png',
+        '陌诺.jpg',
+        'Ahnna.png',
+        '淼.png',
+        'Fifth_J.png',
         '囧-Smith.png',
-        '黄豆人.jpg',
-        '其它.png'
+        'Lysinelai.png',
+        '极致西瓜.jpg',
+        'Alexis.jpg',
+        '-M0M0-.png',
+        'ShawnTheMaroon.png',
+        '小白.png',
+        '咸鱼黄豆人.jpg',
+        'Echo小生.jpg',
+        '星铸E3n.jpg',
+        '月饼.png',
+        '安安安迪生AnDition.png'
       ]
     },
     hiiro: {
@@ -130,7 +141,7 @@ module.exports = {
       }, 1000)
     },
     getUrl(name) {
-      return md5Url(`img/pictures/credits/${name}`)
+      return `../credits/${name}`
     }
   },
   mounted() {
