@@ -13,8 +13,8 @@ VueMain.app = new Vue({
     Tip: VueMain.loadComponent('Popup/Tip'),
     Popup: VueMain.loadComponent('Popup/Popup'),
     Choice: VueMain.loadComponent('Popup/Choice'),
-    Message: VueMain.loadComponent('Popup/Message'),
-    Log: VueMain.loadComponent('Popup/Log'),
+    Message: VueMain.loadComponent('Message/Message'),
+    Log: VueMain.loadComponent('Message/Log'),
     CharacterTest: VueMain.loadComponent('Temp/CharacterTest')
   },
   data: () => ({
