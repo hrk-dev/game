@@ -10,4 +10,8 @@ Spriteset_Map.prototype.updateParallax = function () {
   }
 }
 
+Sprite_Button.prototype.loadButtonImage = function () {
+  this.bitmap = ImageManager._emptyBitmap
+}
+
 Sprite_Button.prototype.checkBitmap = function () { }

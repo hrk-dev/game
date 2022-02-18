@@ -52,7 +52,9 @@ Scene_Menu.prototype.create = function () {
   VueMain._current.push('GameMenu')
 }
 
-Scene_Menu.prototype.start = function () { }
+Scene_Menu.prototype.start = function () {
+  Scene_MenuBase.prototype.start.call(this)
+}
 
 Scene_Menu.prototype.terminate = function () {
   Components.GameMenu.show = false
@@ -115,7 +117,7 @@ Scene_Map.prototype.terminate = function () {
 Scene_Message.prototype.messageWindowRect = function () {
   const ww = Graphics.boxWidth
   const wh = this.calcWindowHeight(4, false) + 8
-  const wx = -Graphics.boxWidth * 1.2
-  const wy = 0
+  const wx = 0
+  const wy = -Graphics.boxHeight * 1.2
   return new Rectangle(wx, wy, ww, wh)
 }

@@ -85,16 +85,7 @@ ConfigManager.load = function () {
     .then(config => this.applyData(config || {}))
     .catch(() => 0)
     .then(() => {
-      if (electron.ipcRenderer.sendSync('app:fullscreen', ConfigManager.fullscreen ?? false)) {
-        Components.TitleBar.show = false
-        document.getElementById('game').style.top = 0
-        document.getElementById('fpsCounterBox').style.top = 0
-      } else {
-        Components.TitleBar.show = true
-        document.getElementById('game').style.top = '30px'
-        document.getElementById('fpsCounterBox').style.top = '30px'
-      }
-      Graphics._updateRealScale()
+      Patch.changeFullscreen(electron.ipcRenderer.sendSync('app:fullscreen', ConfigManager.fullscreen ?? false))
 
       this._isLoaded = true
       return 0

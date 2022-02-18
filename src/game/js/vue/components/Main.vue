@@ -1,5 +1,5 @@
 <template>
-  <div id="main" :style="{ width: width + 'px', height: height + 'px', margin: margin }">
+  <div id="main" :style="{ width: width + 'px', height: height + 'px', top: top + 'px' }">
     <div
       class="wrapper"
       :style="{
@@ -29,7 +29,7 @@ module.exports = {
     scale: Number,
     width: Number,
     height: Number,
-    margin: String
+    top: Number
   },
   data: () => ({
     save: {
@@ -60,9 +60,11 @@ module.exports = {
   overflow hidden
   position absolute
   inset 0px
+  top 30px
   z-index 90
   font-size 30px
   line-height 30px
+  margin auto
 
   .wrapper
     transform-origin left top

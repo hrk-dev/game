@@ -67,6 +67,19 @@ const Patch = class {
       $gameTemp.reserveCommonEvent(99)
     }, 400)
   }
+
+  static changeFullscreen(fullscreen) {
+    Components.TitleBar.show = !fullscreen
+    const top = fullscreen ? 0 : 30
+
+    Graphics._canvas.style.top = `${top}px`
+    Video._element.style.top = `${top}px`
+    document.getElementById('fpsCounterBox').style.top = `${top}px`
+    document.getElementById('fpsCounterBox').style.top = `${top}px`
+
+    VueMain.app.main.top = top
+    Components.Main.save.top = 10 + top
+  }
 }
 
 Patch.loadLoopData()

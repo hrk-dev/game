@@ -290,18 +290,7 @@ module.exports = {
     changeFullscreen() {
       this.fullscreen = electron.ipcRenderer.sendSync('app:fullscreen')
       ConfigManager.fullscreen = this.fullscreen
-      if (this.fullscreen) {
-        Components.TitleBar.show = false
-        document.getElementById('game').style.top = 0
-        document.getElementById('fpsCounterBox').style.top = 0
-        Components.Main.save.top = 40
-      } else {
-        Components.TitleBar.show = true
-        document.getElementById('game').style.top = '30px'
-        document.getElementById('fpsCounterBox').style.top = '30px'
-        Components.Main.save.top = 10
-      }
-      Graphics._updateRealScale()
+      Patch.changeFullscreen(this.fullscreen)
     }
   },
   crated() {

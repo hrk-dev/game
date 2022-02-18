@@ -9,15 +9,6 @@ img {
   -webkit-user-drag: none;
 }
 
-#game {
-  overflow: hidden;
-  position: fixed;
-  top: 30px;
-  left: 0;
-  right: 0;
-  bottom: 0;
-}
-
 #gameCanvas {
   transition: filter 0.2s, opacity 0.2s;
 }

@@ -490,7 +490,7 @@ $pink = rgba(255, 176, 170, 0.9)
 // 测试
 .test
   position fixed
-  bottom 0px
+  bottom 10px
   left 0px
   display flex
   height 40px

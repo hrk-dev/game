@@ -6,35 +6,36 @@ Utils.isNwjs = function () {
 Graphics._updateRealScale = function () {
   if (this._stretchEnabled && this._width > 0 && this._height > 0) {
     const h = this._stretchWidth() / this._width
-    const v = this._stretchHeight() / this._height
+    const v = this._stretchHeight() / (this._height + ConfigManager.fullscreen ? 0 : 30)
     this._realScale = Math.min(h, v)
     window.scrollTo(0, 0)
 
     if (VueMain.app) {
-      let _margin = ConfigManager.fullscreen ? 0 : 30
       VueMain.app.main.width = this._width * this._realScale
       VueMain.app.main.height = this._height * this._realScale
       VueMain.app.main.scale = this._realScale
-      const margin = (window.innerHeight - _margin - VueMain.app.main.height) / 2
-      VueMain.app.main.margin = `${margin + _margin}px auto ${margin}px auto`
-
-      Components.Main.save.top = 10 + _margin
     }
   } else {
     this._realScale = this._defaultScale
   }
 }
 
+Graphics._centerElement = function (element) {
+  const width = element.width * this._realScale
+  const height = element.height * this._realScale
+  element.style.position = 'absolute'
+  element.style.margin = 'auto'
+  element.style.top = ConfigManager.fullscreen ? 0 : 30
+  element.style.left = 0
+  element.style.right = 0
+  element.style.bottom = 0
+  element.style.width = width + 'px'
+  element.style.height = height + 'px'
+}
+
 /** 默认开启自适应 */
 Graphics._defaultStretchMode = function () {
   return true
-}
-
-Graphics._createCanvas = function () {
-  this._canvas = document.createElement("canvas")
-  this._canvas.id = "gameCanvas"
-  this._updateCanvas()
-  document.getElementById('game').appendChild(this._canvas)
 }
 
 /** 禁用F3 F4 */
@@ -45,22 +46,6 @@ Graphics._onKeyDown = function (event) {
       this._switchFPSCounter()
     }
   }
-}
-
-Video._createElement = function () {
-  this._element = document.createElement("video")
-  this._element.id = "gameVideo"
-  this._element.style.position = "absolute"
-  this._element.style.margin = "auto"
-  this._element.style.top = 0
-  this._element.style.left = 0
-  this._element.style.right = 0
-  this._element.style.bottom = 0
-  this._element.style.opacity = 0
-  this._element.style.zIndex = 2
-  this._element.setAttribute("playsinline", "")
-  this._element.oncontextmenu = () => false
-  document.getElementById('game').appendChild(this._element)
 }
 
 Input.keyMapper = {

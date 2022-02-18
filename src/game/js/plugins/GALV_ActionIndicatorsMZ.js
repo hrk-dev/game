@@ -101,7 +101,7 @@ Galv.AI.checkActionIcon = function () {
 
 	// CHECK EVENT STANDING ON
 	$gameMap.eventsXy($gamePlayer._x, $gamePlayer._y).forEach(function (event) {
-		if (event.isNormalPriority()) {
+		if (event._trigger === 0) {
 			action = Galv.AI.checkEventForIcon(event);
 		}
 	});
