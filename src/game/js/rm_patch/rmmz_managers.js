@@ -63,6 +63,15 @@ StorageManager.saveToLocalFile = function (saveName, zip) {
   })
 }
 
+ConfigManager.touchUI = false
+
+Object.defineProperty(ConfigManager, 'touchUI', {
+  get: function () {
+    return false
+  },
+  configurable: true
+})
+
 ConfigManager.save = function () {
   StorageManager.saveObject('niiro', this.makeData())
 }
