@@ -73,7 +73,6 @@ module.exports = {
                     Methods.clearTip()
                     AudioManager.stopAll()
                     SceneManager.goto(Scene_Map)
-                    $gameSystem.onAfterLoad()
                   })
                   .catch((err) => {
                     console.error(err)
@@ -102,7 +101,6 @@ module.exports = {
                     this.show = false
                     $gameTemp.reserveCommonEvent(98)
                     SceneManager.goto(Scene_Map)
-                    $gameSystem.onAfterLoad()
                   })
                   .catch(() => {
                     Methods.showPopup('Error', '奇怪的错误', 1500)

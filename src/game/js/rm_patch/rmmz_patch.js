@@ -62,8 +62,10 @@ const Patch = class {
     document.getElementById('gameCanvas').style.opacity = 0
     AudioManager.stopAll()
     setTimeout(() => {
+      const frameCount = this._framesOnSave
       DataManager.setupNewGame()
       SceneManager.goto(Scene_Map)
+      Graphics.frameCount = frameCount
       $gameTemp.reserveCommonEvent(99)
     }, 400)
   }
