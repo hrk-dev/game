@@ -520,6 +520,7 @@ $pink = rgba(255, 176, 170, 0.9)
     left 50%
     text-align center
     padding 10px
+    width fit-content
 
     .item
       padding 5px 25px

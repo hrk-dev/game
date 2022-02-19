@@ -170,6 +170,10 @@ ImageManager.loadBitmapFromUrl = function (url) {
   return cache[url]
 }
 
+AudioManager._bgmVolume = 50
+AudioManager._bgsVolume = 50
+AudioManager._meVolume = 50
+AudioManager._seVolume = 50
 AudioManager._path = dev ? 'audio/' : `${md5('audio').substr(8, 16)}/`
 
 AudioManager.createBuffer = function (folder, name) {

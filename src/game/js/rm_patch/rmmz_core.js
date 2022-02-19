@@ -6,7 +6,7 @@ Utils.isNwjs = function () {
 Graphics._updateRealScale = function () {
   if (this._stretchEnabled && this._width > 0 && this._height > 0) {
     const h = this._stretchWidth() / this._width
-    const v = this._stretchHeight() / (this._height + ConfigManager.fullscreen ? 0 : 30)
+    const v = this._stretchHeight() / (this._height + (ConfigManager.fullscreen ? 0 : 30))
     this._realScale = Math.min(h, v)
     window.scrollTo(0, 0)
 
