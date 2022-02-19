@@ -28,7 +28,7 @@
             </div>
             <div class="item" ref="run">
               <div class="text">
-                <div class="en">Keep Running</div>
+                <div class="en">Always Dash</div>
                 <div class="cn">持续奔跑</div>
               </div>
               <div class="switch">

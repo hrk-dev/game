@@ -131,6 +131,12 @@ module.exports = {
       setTimeout(() => {
         this.end.anime = true
         this.end.text = 'Hirro'
+        AudioManager.playSe({
+          name: 'Paralyze1',
+          pan: 0,
+          pitch: 100,
+          volume: 100
+        })
         Components.TitleBar.title = 'Hirro'
         setTimeout(() => {
           this.end.show = false

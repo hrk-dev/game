@@ -214,15 +214,15 @@ module.exports = {
         this.back()
         return
       }
-      if (Components?.Popup.isShow) {
+      if (Components?.Popup?.isShow) {
         Methods.hidePopup()
         return
       }
       if (Components.Choice.show) {
         Components.Choice.checkInput(buttonName)
-      } else if (this.$refs?.Item.isShow) {
+      } else if (this.$refs?.Item?.isShow) {
         this.$refs.Item.checkInput(buttonName)
-      } else if (this.$refs?.Setting.show) {
+      } else if (this.$refs?.Setting?.show) {
         this.$refs.Setting.checkInput(buttonName)
       } else if (this.menu.show) {
         switch (buttonName) {
