@@ -147,14 +147,13 @@ void function () {
     settings = assign({}, DEFAULT_SETTINGS, settings);
     var spriteClass = settings.loop ? ULDS.TilingSprite : ULDS.Sprite;
     var bitmap = ImageManager.loadBitmap('img/' + settings.path + '/',
-      settings.name, settings.hue, settings.smooth);
+      settings.name);
+    bitmap.smooth = false
     var sprite = new spriteClass(bitmap);
 
     delete settings.path;
     delete settings.name;
     delete settings.loop;
-    delete settings.hue;
-    delete settings.smooth;
 
     sprite.assignSettings(settings);
 
