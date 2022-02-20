@@ -82,6 +82,15 @@ const Patch = class {
     VueMain.app.main.top = top
     Components.Main.save.top = 10 + top
   }
+
+  static checkAudio(folder, audio) {
+    const name = audio?.name
+    if (!name) return false
+    const ext = AudioManager.audioFileExt()
+    const filename = dev ? (name + ext) : md5(name + ext).substr(8, 16)
+    const url = AudioManager._path + (dev ? folder : md5Url(folder)) + filename
+    return fs.existsSync(path.join(__dirname, url))
+  }
 }
 
 Patch.loadLoopData()
