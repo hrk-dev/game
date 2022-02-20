@@ -19,12 +19,12 @@ module.exports = {
   data: () => ({
     logo: {
       show: false,
-      bg: md5Url('img/system/logo/logo.png')
+      bg: md5Url('img/vue/logo/logo.png')
     },
     tip: {
       show: false,
-      bg1: md5Url('img/system/logo/tips_1.png'),
-      bg2: md5Url('img/system/logo/tips_2.png')
+      bg1: md5Url('img/vue/logo/tips_1.png'),
+      bg2: md5Url('img/vue/logo/tips_2.png')
     }
   }),
   methods: {

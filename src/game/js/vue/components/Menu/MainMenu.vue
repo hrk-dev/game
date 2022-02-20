@@ -33,8 +33,8 @@ module.exports = {
   data: () => ({
     show: false,
     busy: false,
-    bg: md5Url('img/system/menu/menu.png'),
-    title: md5Url('img/system/menu/title.png'),
+    bg: md5Url('img/vue/menu/menu.png'),
+    title: md5Url('img/vue/menu/title.png'),
     left: 0,
     loop: {
       restart: false,

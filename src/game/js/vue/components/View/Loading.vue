@@ -12,7 +12,7 @@
 module.exports = {
   data: () => ({
     show: false,
-    url: md5Url('img/system/loading/loading.png')
+    url: md5Url('img/vue/loading/loading.png')
   }),
   methods: {
     loadingShow() {
