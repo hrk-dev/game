@@ -68,7 +68,7 @@ module.exports = {
       show: false,
       top: 130,
       current: 0,
-      img: md5Url('img/pictures/汐/震惊-思考.png'),
+      img: md5Url('img/faces/汐/震惊-思考.png'),
       list: [
         {
           show: true,

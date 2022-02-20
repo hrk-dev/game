@@ -83,7 +83,7 @@ module.exports = {
     getInfo() {
       if (this.list[this.current]) {
         this.img = this.list[this.current].meta?.img
-          ? md5Url('img/pictures/' + this.list[this.current].meta.img)
+          ? md5Url('img/items/' + this.list[this.current].meta.img)
           : ''
         this.text.en = this.list[this.current].meta?.infoEn || ''
         this.text.cn = this.list[this.current].meta?.infoCn || ''

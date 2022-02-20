@@ -433,7 +433,7 @@ module.exports = {
       this.message.temp.character = ''
     },
     getUrl(str) {
-      return str ? md5Url(`img/pictures/${str}.png`) : null
+      return str ? md5Url(`img/faces/${str}.png`) : null
     },
     getName(id) {
       return NAME[id] || id
