@@ -57,7 +57,9 @@ module.exports = {
         'Echo小生.jpg',
         '星铸E3n.jpg',
         '月饼.png',
-        '安安安迪生AnDition.png'
+        '安安安迪生AnDition.png',
+        'pv.png',
+        'test.png'
       ]
     },
     hiiro: {
@@ -167,7 +169,7 @@ module.exports = {
   .img-wrapper
     display flex
     position absolute
-    top 0
+    top 1px
     left 0
     transition left 0.5s
 
