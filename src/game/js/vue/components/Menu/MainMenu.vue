@@ -36,10 +36,6 @@ module.exports = {
     bg: md5Url('img/vue/menu/menu.png'),
     title: md5Url('img/vue/menu/title.png'),
     left: 0,
-    loop: {
-      restart: false,
-      next: 0
-    },
     menu: {
       show: true,
       current: 1,
@@ -51,7 +47,8 @@ module.exports = {
           en: 'Restart',
           fn() {
             Methods.hidePopup()
-            if (!this.loop.next) {
+            // 第一章需移除条件Patch.loopData.newGame
+            if (Patch.loopData.newGame || !Patch.loopData.next) {
               this.hideMenu()
               DataManager.setupNewGame()
               SceneManager.goto(Scene_Map)
@@ -68,7 +65,7 @@ module.exports = {
                   .then(() => {
                     this.show = false
                     $gameMap._interpreter.command115()
-                    $gameVariables.setValue(1, this.loop.next)
+                    $gameVariables.setValue(1, Patch.loopData.next)
                     $gameTemp.reserveCommonEvent(97)
                     Methods.clearTip()
                     AudioManager.stopAll()
@@ -90,7 +87,7 @@ module.exports = {
           en: 'Continue',
           fn() {
             Methods.hidePopup()
-            if (this.loop.restart) {
+            if (Patch.loopData.restart) {
               this.chapterEnd()
             } else {
               this.hideMenu()
@@ -152,6 +149,7 @@ module.exports = {
   },
   methods: {
     init() {
+      Components.Loading.loadingHide()
       this.menu.current = 1
       Components.GameMenu.menu.current = 0
       for (const i in this.menu.list) {
@@ -171,17 +169,13 @@ module.exports = {
         }
       }
 
-      if (Patch.loopData) {
-        if (Patch.loopData.lock) {
-          Methods.showPopup('Seems to have unlocked something strange', '好像解锁了一些奇怪的东西', 2000)
-          Patch.loopData.lock = false
-        }
-        this.loop.restart = Patch.loopData.restart
-        this.loop.next = Patch.loopData.next
-        if (Patch.loopData.load === false) {
-          this.menu.list[1].show = false
-          this.menu.current = 0
-        }
+      if (Patch.loopData.lock) {
+        Methods.showPopup('Seems to have unlocked something strange', '好像解锁了一些奇怪的东西', 2000)
+        Patch.loopData.lock = false
+      }
+      if (Patch.loopData.load === false) {
+        this.menu.list[1].show = false
+        this.menu.current = 0
       }
       Patch.saveLoopData()
 

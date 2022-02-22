@@ -195,6 +195,7 @@ module.exports = {
   },
   methods: {
     init() {
+      this.menu.list[1].show = false
       this.showTip()
       this.checkSave()
       // this.menu.current = 0
@@ -206,7 +207,7 @@ module.exports = {
       this.menu.top = 60 + (Components?.Tip.$refs?.tip?.scrollHeight || 50) + 10
     },
     checkSave() {
-      this.hasSave = Patch.checkSave()
+      this.hasSave = Patch.loopData.load !== false && Patch.checkSave()
     },
     checkInput(buttonName) {
       if (!this.show) return

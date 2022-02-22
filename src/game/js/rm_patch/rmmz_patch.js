@@ -43,6 +43,9 @@ const Patch = class {
     try {
       await DataManager.saveGame(1)
       Methods.showPopup('Save success', '保存成功', 1000)
+      if (!Patch.loopData.load) {
+        Patch.loopData.load = true
+      }
     } catch (e) {
       Methods.showPopup('Save failed', '保存失败', 1000)
     }
@@ -63,10 +66,12 @@ const Patch = class {
     document.getElementById('gameCanvas').style.opacity = 0
     AudioManager.stopAll()
     setTimeout(() => {
-      const frameCount = $gameSystem._framesOnSave
+      // 第一章需取消注释
+      // const frameCount = $gameSystem._framesOnSave
       DataManager.setupNewGame()
       SceneManager.goto(Scene_Map)
-      Graphics.frameCount = frameCount
+      // Graphics.frameCount = frameCount
+      Components.Loading.loadingHide()
       $gameTemp.reserveCommonEvent(99)
     }, 400)
   }
