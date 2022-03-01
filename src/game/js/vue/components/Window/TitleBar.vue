@@ -33,7 +33,7 @@ module.exports = {
       electron.ipcRenderer.send(type)
     },
     reset() {
-      this.title = '与你相遇的那天是轮回高校的日常这也是合理的吗？'
+      this.title = '和你相遇的那天是轮回高校的日常这也是合理的吗？'
     }
   },
   mounted() {

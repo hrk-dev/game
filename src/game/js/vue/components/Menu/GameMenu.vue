@@ -180,11 +180,6 @@ module.exports = {
         })
       }
     },
-    hasSave() {
-      if (this.hasSave) {
-        this.menu.list[1].show = this.hasSave
-      }
-    },
     tipShow() {
       if (this.tipShow) {
         this.showTip()
@@ -207,7 +202,8 @@ module.exports = {
       this.menu.top = 60 + (Components?.Tip.$refs?.tip?.scrollHeight || 50) + 10
     },
     checkSave() {
-      this.hasSave = Patch.loopData.load !== false && Patch.checkSave()
+      this.hasSave = Patch.checkSave()
+      this.menu.list[1].show = Patch.loopData.load !== false && this.hasSave
     },
     checkInput(buttonName) {
       if (!this.show) return
