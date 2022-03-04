@@ -2,7 +2,8 @@
   <div id="message">
     <transition :name="_transition">
       <div class="message-wrapper" :class="_pos" v-if="message.show">
-        <div class="text" :class="[_align, _size, _bg, _color]" ref="text">
+        <transition name="fade" @after-enter="messageHide">
+        <div class="text" :class="[_align, _size, _bg, _color]" ref="text" v-if="!hide.flag">
           <div class="name" :class="_nameAlign" v-show="message.name && message.pos != 2">
             <div class="name-cn">
               {{ nameObj.cn }}
@@ -37,6 +38,7 @@
             ></div>
           </div>
         </div>
+        </transition>
         <div class="character" v-show="_showCharacter">
           <transition name="slide-up">
             <img
@@ -64,8 +66,8 @@
         </div>
       </div>
     </transition>
-    <transition name="fade">
-      <div class="choice-wrapper" :class="_choicePos" v-show="choice.show">
+    <transition name="fade" @after-enter="messageHide">
+      <div class="choice-wrapper" :class="_choicePos" v-show="choice.show && !hide.flag">
         <template v-for="(item, index) in choice.list">
           <div
             v-show="item.show"
@@ -96,6 +98,10 @@ const NAME = {
 
 module.exports = {
   data: () => ({
+    hide: {
+      flag: false,
+      end: true
+    },
     message: {
       show: false,
       noHide: false,
@@ -320,7 +326,23 @@ module.exports = {
       this.choice.cancel = cancelType
       this.choice.show = true
     },
+    messageHide() {
+      this.hide.end = true
+    },
     checkInput(buttonName) {
+      if (this.hide.flag) {
+        if (buttonName === 'escape' || buttonName === 'shift') {
+          this.hide.flag = false
+        }
+        return
+      }
+      if (this.message.show || this.choice.show) {
+        if (buttonName === 'shift') {
+          this.hide.flag = true
+          this.hide.end = false
+          return
+        }
+      }
       if (this.choice.show) {
         switch (buttonName) {
           case 'left':
@@ -424,9 +446,9 @@ module.exports = {
       }
     },
     resetChoice() {
+      this.choice.show = false
       this.choice.list.length = 0
       this.choice.index = -1
-      this.choice.show = false
       this.choice.cancel = null
       this.message.temp.en = ''
       this.message.temp.cn = ''
@@ -687,6 +709,9 @@ $pink = rgba(255, 176, 170, 0.9)
 
 .multiline-fade-enter-active
   transition opacity 0.2s
+
+.fade-enter-active, .fade-leave-active
+  transition opacity 0.25s !important
 
 @keyframes fade
   from

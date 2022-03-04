@@ -30,7 +30,7 @@ Window_Message.prototype.updateWait = function () {
 }
 
 Window_Message.prototype.isTriggered = function () {
-  return ((!Components?.Log?.isShow && (Components?.Log && Components.Log.isHide)) && (Input.isRepeated('ok') || Input.isRepeated('cancel') ||
+  return ((!Components?.Message?.hide?.flag && Components?.Message?.hide?.end) && (!Components?.Log?.isShow && (Components?.Log && Components.Log.isHide)) && (Input.isRepeated('ok') || Input.isRepeated('cancel') ||
     TouchInput.isRepeated()))
 }
 
