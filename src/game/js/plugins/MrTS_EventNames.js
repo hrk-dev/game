@@ -190,13 +190,29 @@
       for (action of this.list()) {
         if (action.code == "108" || action.code == "408") {
           var a = action.parameters[0];
+          if ((/<top:check>/i).test(a)) {
+            this._eventNamePicture = 'check'
+            this._eventNamePictureWidth = 48
+            this._eventNamePictureHeight = 48
+            this._eventNameOffsetX = 24
+            this._eventNameOffsetY = -96 - 12
+            continue
+          }
           if ((/<top>/i).test(a)) {
             this._eventNamePicture = 'move'
             this._eventNamePictureWidth = 48
             this._eventNamePictureHeight = 48
             this._eventNameOffsetX = 24
             this._eventNameOffsetY = -96 - 12
-            break
+            continue
+          }
+          if ((/<right:check>/i).test(a)) {
+            this._eventNamePicture = 'check'
+            this._eventNamePictureWidth = 48
+            this._eventNamePictureHeight = 48
+            this._eventNameOffsetX = 24
+            this._eventNameOffsetY = -48
+            continue
           }
           if ((/<right>/i).test(a)) {
             this._eventNamePicture = 'move'
@@ -204,7 +220,15 @@
             this._eventNamePictureHeight = 48
             this._eventNameOffsetX = 24
             this._eventNameOffsetY = -48
-            break
+            continue
+          }
+          if ((/<left:check>/i).test(a)) {
+            this._eventNamePicture = 'check'
+            this._eventNamePictureWidth = 48
+            this._eventNamePictureHeight = 48
+            this._eventNameOffsetX = -24
+            this._eventNameOffsetY = -48
+            continue
           }
           if ((/<left>/i).test(a)) {
             this._eventNamePicture = 'move'
@@ -212,7 +236,7 @@
             this._eventNamePictureHeight = 48
             this._eventNameOffsetX = -24
             this._eventNameOffsetY = -48
-            break
+            continue
           }
           var matchText = regexEventNameText.exec(a);
           if (matchText) {
@@ -331,7 +355,7 @@
       if (this._eventNameWindow._range < Math.abs(($gamePlayer.x - this._character.x)) + Math.abs(($gamePlayer.y - this._character.y)))
         this._eventNameWindow.contentsOpacity = 0;
       else
-        this._eventNameWindow.contentsOpacity = 255;
+        this._eventNameWindow.contentsOpacity = 210;
 
     }
   };
@@ -351,12 +375,12 @@
         if (this._eventNameWindow._range < Math.abs(($gamePlayer.x - this._character.x)) + Math.abs(($gamePlayer.y - this._character.y)))
           this._eventNameWindow.opacity = 0;
         else
-          this._eventNameWindow.opacity = 255;
+          this._eventNameWindow.opacity = 210;
       }
       if (this._eventNameWindow._range < Math.abs(($gamePlayer.x - this._character.x)) + Math.abs(($gamePlayer.y - this._character.y))) {
         if (paramFade) {
           if (this._eventNameWindow.opacity !== 0) {
-            this._eventNameWindow.opacity -= 255 / paramFadeTimer;
+            this._eventNameWindow.opacity -= 210 / paramFadeTimer;
             if (this._eventNameWindow.opacity < 0) this._eventNameWindow.opacity = 0;
           }
         }
@@ -364,9 +388,9 @@
       }
       else {
         if (paramFade) {
-          if (this._eventNameWindow.opacity !== 255) {
-            this._eventNameWindow.opacity += 255 / paramFadeTimer;
-            if (this._eventNameWindow.opacity > 255) this._eventNameWindow.opacity = 255;
+          if (this._eventNameWindow.opacity !== 210) {
+            this._eventNameWindow.opacity += 210 / paramFadeTimer;
+            if (this._eventNameWindow.opacity > 210) this._eventNameWindow.opacity = 210;
           }
         }
         else this._eventNameWindow.visible = true;
