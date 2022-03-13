@@ -65,8 +65,12 @@ Input.keyMapper = {
   38: 'up',       // up arrow
   39: 'right',    // right arrow
   40: 'down',     // down arrow
-  81: 'pageup',   // Q
-  87: 'pagedown', // W
+  65: 'left',     // A
+  68: 'right',    // D
+  74: 'ok',       // J
+  75: 'escape',   // K
+  83: 'down',     // S
+  87: 'up',       // W
   88: 'escape',   // X
   90: 'ok',       // Z
 }
