@@ -3292,7 +3292,7 @@ Game_Variables.prototype.SetFirstRun = function (value) {
 };
 Game_Variables.prototype.GetScriptActive = function () {
 	if (typeof this._Community_Lighting_ScriptActive == 'undefined') {
-		this._Community_Lighting_ScriptActive = true;
+		this._Community_Lighting_ScriptActive = false;
 	}
 	return this._Community_Lighting_ScriptActive;
 };
