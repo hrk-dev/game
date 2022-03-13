@@ -34,6 +34,52 @@ module.exports = {
     },
     reset() {
       this.title = '和你相遇的那天是轮回高校的日常这也是合理的吗？'
+    },
+    checkInput(code) {
+      if (Components?.Credits.show) return
+      if (this.title === 'Hiir' && code === 79) {
+        this.title = 'Hiiro'
+        Methods.showPopup('', 'M~U~A~', 1000)
+          .then(() => {
+            this.reset()
+          })
+        return
+      }
+      if (this.title === 'Hirr' && code === 79) {
+        this.title = 'Hirro'
+        Methods.showPopup('', '我打你啊！', 1000)
+          .then(() => {
+            this.reset()
+          })
+        return
+      }
+      if (this.title === 'Hii' && code === 82) {
+        this.title = 'Hiir'
+        return
+      }
+      if (this.title === 'Hir' && code === 82) {
+        this.title = 'Hirr'
+        return
+      }
+      if (this.title === 'Hi') {
+        if (code === 73) {
+          this.title = 'Hii'
+          return
+        }
+        if (code === 82) {
+          this.title = 'Hir'
+          return
+        }
+      }
+      if (this.title === 'H' && code === 73) {
+        this.title = 'Hi'
+        return
+      }
+      if (this.title !== 'H' && code === 72) {
+        this.title = 'H'
+      } else {
+        this.reset()
+      }
     }
   },
   mounted() {

@@ -89,6 +89,7 @@ Input._onKeyDown = function (event) {
   }
   (Components[VueMain._current[VueMain._current.length - 1]])?.checkInput(buttonName)
   Components?.Message.checkInput(buttonName)
+  Components?.TitleBar.checkInput(event.keyCode)
 }
 
 /** 禁用触摸操作 */
