@@ -2,6 +2,7 @@
 /*:
  * @plugindesc 插件工具类
  *
+ * @target MZ
  * @author Blacktunes
  *
  * @command 切换滤镜
