@@ -15,3 +15,8 @@ Sprite_Button.prototype.loadButtonImage = function () {
 }
 
 Sprite_Button.prototype.checkBitmap = function () { }
+
+Sprite_Timer.prototype.updatePosition = function () {
+  this.x = (Graphics.width - this.bitmap.width) / 2
+  this.y = Graphics.boxHeight / 2
+}

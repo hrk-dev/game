@@ -3,6 +3,12 @@ Utils.isNwjs = function () {
   return false
 }
 
+Bitmap.prototype._makeFontNameText = function () {
+  const italic = this.fontItalic ? 'Italic ' : ''
+  const bold = this.fontBold ? 'Bold ' : ''
+  return italic + bold + this.fontSize + 'px ' + 'GameFont'
+}
+
 Graphics._updateRealScale = function () {
   if (this._stretchEnabled && this._width > 0 && this._height > 0) {
     const h = this._stretchWidth() / this._width

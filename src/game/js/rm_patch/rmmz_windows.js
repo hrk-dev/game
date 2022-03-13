@@ -48,3 +48,16 @@ Window_ChoiceList.prototype.processCancel = function () {
   this.deactivate()
   this.callCancelHandler()
 }
+
+Window_NumberInput.prototype.updatePlacement = function () {
+  const messageY = Graphics.boxHeight / 2
+  const spacing = 8
+  this.width = this.windowWidth()
+  this.height = this.windowHeight()
+  this.x = (Graphics.boxWidth - this.width) / 2
+  if (messageY >= Graphics.boxHeight / 2) {
+    this.y = messageY - this.height - spacing
+  } else {
+    this.y = messageY + this._messageWindow.height + spacing
+  }
+}
