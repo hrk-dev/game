@@ -23,10 +23,10 @@ module.exports = {
   },
   methods: {
     showTip(en, cn, time) {
-      if (!en || !cn) return
+      if (!en && !cn) return
 
-      this.enText = en
-      this.cnText = cn
+      this.enText = en || ''
+      this.cnText = cn || ''
 
       if (!$gameSystem.tipData) {
         $gameSystem.tipData = {}
