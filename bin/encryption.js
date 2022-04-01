@@ -5,14 +5,13 @@ const md5 = require('md5-js')
 let num = 0
 
 const ignore = [
-  'Game.rpgproject',
   'game.rmmzproject',
   'src/icu',
   'src/module/devtools.js',
   'src/game/js/env/dev.js$'
 ]
 
-if (process.env.NODE_ENV != 'steam') {
+if (!process.env.STEAM) {
   ignore.push('src/lib')
   ignore.push('src/module/steam')
 }
@@ -20,6 +19,8 @@ if (process.env.NODE_ENV != 'steam') {
 if (process.env.NODE_ENV != 'development') {
   ignore.push('src/game/js/env/test.js$')
 }
+
+console.log(process.env.STEAM, process.env.NODE_ENV)
 
 function md5Dir(dir, name) {
   const oldDir = path.join(dir, name)
