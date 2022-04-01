@@ -43,9 +43,6 @@ const Patch = class {
     try {
       await DataManager.saveGame(1)
       Methods.showPopup('Save success', '保存成功', 1000)
-      if (!Patch.loopData.load) {
-        Patch.loopData.load = true
-      }
     } catch (e) {
       Methods.showPopup('Save failed', '保存失败', 1000)
     }

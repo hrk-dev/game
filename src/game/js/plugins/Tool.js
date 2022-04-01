@@ -88,12 +88,22 @@
  * @text 保存
  * @desc 保存
  *
+ * @command 保存周目存档
+ * @text 保存周目存档
+ * @desc 保存周目存档
+ *
+ * @arg next
+ * @text NEXT
+ * @type number
+ * @desc 下一章节
+ *
  * @command 解锁成就
  * @text 解锁成就
  * @desc 解锁成就
  *
  * @arg id
  * @text ID
+ * @type number
  * @desc 成就ID
  */
 
@@ -126,6 +136,10 @@ void function () {
     保存: () => {
       $gameSystem.onBeforeSave()
       DataManager.saveGame(1)
+    },
+    保存周目存档: ({ next }) => {
+      $gameSystem.onBeforeSave()
+      DataManager.saveGame(Number(next) + 100)
     },
     解锁成就: ({ id }) => {
       Steam.activateAchievement(id)

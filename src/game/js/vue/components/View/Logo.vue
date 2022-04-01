@@ -35,7 +35,7 @@ module.exports = {
       }, 2000)
     },
     logoEnd() {
-      if (!fs.existsSync(StorageManager.filePath('nirro'))) {
+      if (!Patch.checkSave()) {
         this.tip.show = true
       } else {
         this.toTitleOrStart()

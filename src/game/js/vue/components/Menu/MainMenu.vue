@@ -48,7 +48,7 @@ module.exports = {
           fn() {
             Methods.hidePopup()
             // 第一章需移除条件Patch.loopData.newGame
-            if (Patch.loopData.newGame || !Patch.loopData.next) {
+            if (!Patch.loopData.next) {
               this.hideMenu()
               DataManager.setupNewGame()
               SceneManager.goto(Scene_Map)
@@ -61,7 +61,7 @@ module.exports = {
               this.hideMenu()
               Components.Loading.loadingShow()
               setTimeout(() => {
-                DataManager.loadGame(1)
+                DataManager.loadGame(Number(Patch.loopData.next) + 100)
                   .then(() => {
                     this.show = false
                     $gameMap._interpreter.command115()

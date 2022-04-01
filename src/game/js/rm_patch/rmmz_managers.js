@@ -20,16 +20,13 @@ StorageManager.filePath = function (saveName) {
   return dir + saveName
 }
 
-DataManager.saveGame = function (savefileId) {
+DataManager.saveGame = async function (savefileId) {
   Components.Main.save.show = true
 
   const contents = this.makeSaveContents()
   const saveName = this.makeSavename(savefileId)
-  return StorageManager.saveObject(saveName, contents).then(() => {
-    this._globalInfo[savefileId] = this.makeSavefileInfo()
-    this.saveGlobalInfo()
-    return 0
-  })
+  await StorageManager.saveObject(saveName, contents)
+  return 0
 }
 
 StorageManager.saveToLocalFile = function (saveName, zip) {
@@ -113,30 +110,27 @@ ConfigManager.applyData = function (config) {
   this.fullscreen = this.readFlag(config, 'fullscreen', false)
 }
 
-DataManager.saveGlobalInfo = function () {
-  StorageManager.saveObject('nirro', this._globalInfo)
-}
+DataManager._globalInfo = []
+DataManager.saveGlobalInfo = function () { }
 
 DataManager.loadGlobalInfo = function () {
-  StorageManager.loadObject('nirro')
-    .then(globalInfo => {
-      this._globalInfo = globalInfo
-      this.removeInvalidGlobalInfo()
-      return 0
-    })
-    .catch(() => {
-      this._globalInfo = []
-    })
+  return 0
 }
 
 DataManager.makeSavename = function (savefileId) {
-  let name
+  let temp = ''
+  savefileId = Number(savefileId) ?? 0
   if (savefileId === 1) {
-    name = 'hiiro'
-  } else {
-    name = 'file%1'.format(savefileId)
+    return 'hiiro'
   }
-  return name
+  if (savefileId > 100) {
+    savefileId -= 100
+    for (let i = 0; i <= savefileId; i++) {
+      temp += 'i'
+    }
+    return `hi${temp}ro`
+  }
+  return `test-${savefileId}`
 }
 
 SceneManager.onKeyDown = function (event) {
