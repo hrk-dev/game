@@ -674,6 +674,7 @@ $pink = rgba(255, 176, 170, 0.9)
 
 .lowlight
   filter brightness(0.5)
+  width 380px !important
 
 .shio-left
   right calc(100% - 400px) !important
