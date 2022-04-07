@@ -20,6 +20,20 @@
           </div>
         </transition>
         <Setting ref="Setting" @back="showMenu"></Setting>
+        <transition name="fade">
+          <div class="chapter" v-if="chapter.show">
+            <div class="text">
+              Chapter
+              <transition name="slide-up-text" @after-enter="setEnd" @after-leave="setEnd">
+                <span class="number" v-if="!chapter.flag">{{ chapter.next_1 }}</span>
+              </transition>
+              <transition name="slide-up-text">
+                <span class="number" v-if="chapter.flag">{{ chapter.next_2 }}</span>
+              </transition>
+              <div class="arrow">_</div>
+            </div>
+          </div>
+        </transition>
       </div>
     </transition>
   </div>
@@ -33,6 +47,13 @@ module.exports = {
   data: () => ({
     show: false,
     busy: false,
+    chapter: {
+      show: false,
+      flag: true,
+      end: true,
+      next_1: 0,
+      next_2: 1
+    },
     bg: md5Url('img/vue/menu/menu.png'),
     title: md5Url('img/vue/menu/title.png'),
     left: 0,
@@ -47,37 +68,16 @@ module.exports = {
           en: 'Restart',
           fn() {
             Methods.hidePopup()
-            // 第一章需移除条件Patch.loopData.newGame
             if (!Patch.loopData.next) {
-              this.hideMenu()
-              DataManager.setupNewGame()
-              SceneManager.goto(Scene_Map)
-              Patch.startWait()
-              setTimeout(() => {
-                this.show = false
-                Patch.stopWait()
-              }, 300)
+              this.startGame()
             } else {
               this.hideMenu()
-              Components.Loading.loadingShow()
-              setTimeout(() => {
-                DataManager.loadGame(Number(Patch.loopData.next) + 100)
-                  .then(() => {
-                    this.show = false
-                    $gameMap._interpreter.command115()
-                    $gameVariables.setValue(1, Patch.loopData.next)
-                    $gameTemp.reserveCommonEvent(97)
-                    Methods.clearTip()
-                    AudioManager.stopAll()
-                    SceneManager.goto(Scene_Map)
-                  })
-                  .catch((err) => {
-                    console.error(err)
-                    Methods.showPopup('Error', '奇怪的错误', 1500)
-                    Components.Loading.loadingHide()
-                    this.showMenu()
-                  })
-              }, 300)
+              if (Patch.loopData.newGame) {
+                this.setNext(Patch.loopData.next)
+                this.chapter.show = true
+              } else {
+                this.startLoop(Number(Patch.loopData.next))
+              }
             }
           }
         },
@@ -226,9 +226,86 @@ module.exports = {
       })
       this.left = item?.offsetLeft || 0
     },
+    startGame() {
+      this.hideMenu()
+      DataManager.setupNewGame()
+      SceneManager.goto(Scene_Map)
+      Patch.startWait()
+      setTimeout(() => {
+        this.show = false
+        Patch.stopWait()
+      }, 300)
+    },
+    startLoop(next) {
+      if (next === 0) {
+        this.startGame()
+        return
+      }
+      Components.Loading.loadingShow()
+      setTimeout(() => {
+        DataManager.loadGame(next + 100)
+          .then(() => {
+            this.show = false
+            $gameMap._interpreter.command115()
+            $gameVariables.setValue(1, next)
+            $gameTemp.reserveCommonEvent(97)
+            Methods.clearTip()
+            AudioManager.stopAll()
+            SceneManager.goto(Scene_Map)
+          })
+          .catch((err) => {
+            console.error(err)
+            Methods.showPopup('Error', '奇怪的错误', 1500)
+            Components.Loading.loadingHide()
+            this.showMenu()
+          })
+      }, 300)
+    },
+    setNext(next) {
+      if (this.chapter.flag) {
+        this.chapter.next_1 = next
+      } else {
+        this.chapter.next_2 = next
+      }
+      this.chapter.flag = !this.chapter.flag
+    },
+    setEnd() {
+      this.chapter.end = true
+    },
     checkInput(buttonName) {
       if (!this.show || this.busy) return
       if (Components.Credits.show) return
+      if (this.chapter.show) {
+        switch (buttonName) {
+          case 'left':
+            this.chapterUp()
+            break
+          case 'right':
+            this.chapterDown()
+            break
+          case 'up':
+            this.chapterUp()
+            break
+          case 'down':
+            this.chapterDown()
+            break
+          case 'ok':
+            this.chapter.show = false
+            if (this.chapter.flag) {
+              console.log(this.chapter.next_2)
+              this.startLoop(this.chapter.next_2)
+            } else {
+              console.log(this.chapter.next_1)
+              this.startLoop(this.chapter.next_1)
+            }
+            break
+          case 'escape':
+            this.chapter.show = false
+            this.showMenu()
+            break
+        }
+        return
+      }
       if (this.$refs?.Setting?.show) {
         this.$refs.Setting.checkInput(buttonName)
       } else if (this.menu.show) {
@@ -255,6 +332,36 @@ module.exports = {
             break
         }
       }
+    },
+    chapterUp() {
+      if (!this.chapter.end) return
+      this.chapter.end = false
+
+      let temp = 0
+      if (this.chapter.flag) {
+        temp = this.chapter.next_2 - 1
+      } else {
+        temp = this.chapter.next_1 - 1
+      }
+      if (temp < 0) {
+        temp = Patch.loopData.next
+      }
+      this.setNext(temp)
+    },
+    chapterDown() {
+      if (!this.chapter.end) return
+      this.chapter.end = false
+
+      let temp = 0
+      if (this.chapter.flag) {
+        temp = this.chapter.next_2 + 1
+      } else {
+        temp = this.chapter.next_1 + 1
+      }
+      if (temp > Patch.loopData.next) {
+        temp = 0
+      }
+      this.setNext(temp)
     },
     up(next) {
       if (!next && this.timer) return
@@ -425,6 +532,37 @@ module.exports = {
           font-size 16px
           line-height 16px
 
+    .chapter
+      display flex
+      flex-direction column
+      justify-content center
+      align-items center
+      position absolute
+      top 0
+      left 0
+      width 100%
+      height 100%
+      background rgba(0, 0, 0, 0.5)
+      color #fff
+
+      .text
+        position relative
+        text-align center
+        line-height 50px
+        font-size 50px
+        padding-right 15px
+
+        .number
+          position absolute
+          bottom -5px
+          margin-left 15px
+
+        .arrow
+          position absolute
+          bottom 0
+          left -45px
+          animation arrow 0.8s linear alternate infinite
+
 .fade-enter, .fade-leave-to
   opacity 0
 
@@ -458,4 +596,30 @@ module.exports = {
 
 .slide-up-enter-active, .slide-up-leave-active
   transition all 0.3s
+
+.slide-up-text-enter-active
+  transition all 0.35s
+  transition-delay 0.1s
+
+.slide-up-text-leave-active
+  transition all 0.35s
+
+.slide-up-text-enter-to, .slide-up-text-leave
+  bottom -5px !important
+  opacity 1
+
+.slide-up-text-enter
+  bottom -40px !important
+  opacity 0
+
+.slide-up-text-leave-to
+  bottom 40px !important
+  opacity 0
+
+@keyframes arrow
+  from
+    opacity 0
+
+  to
+    opacity 1
 </style>

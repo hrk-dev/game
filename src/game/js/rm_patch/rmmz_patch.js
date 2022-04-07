@@ -43,6 +43,10 @@ const Patch = class {
     try {
       await DataManager.saveGame(1)
       Methods.showPopup('Save success', '保存成功', 1000)
+      if (!this.loopData.newGame && $gameVariables.value(1) === this.loopData.next) {
+        this.loopData.newGame = true
+        this.saveLoopData()
+      }
     } catch (e) {
       Methods.showPopup('Save failed', '保存失败', 1000)
     }
