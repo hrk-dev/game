@@ -2,11 +2,12 @@
   <div>
     <transition name="fade">
       <div class="item-list-wrapper" v-if="isShow">
+        <div class="empty" v-if="itemLength <= 0">Empty</div>
         <div class="item-list-frame">
-          <div class="item-title">
+          <!-- <div class="item-title">
             <div>物品 Item</div>
-          </div>
-          <div class="item-list">
+          </div> -->
+          <div class="item-list" v-if="itemLength > 0">
             <div class="pre" v-show="page > 0"></div>
             <div
               class="next"
@@ -22,7 +23,7 @@
               <div class="cn">{{ item.meta?.cn || item.name }}</div>
             </div>
           </div>
-          <div class="item-info">
+          <div class="item-info" v-if="itemLength > 0">
             <div class="img">
               <img :src="img" />
             </div>
@@ -157,6 +158,15 @@ module.exports = {
 .item-list-wrapper
   position absolute
   inset 0
+
+  .empty
+    z-index 1
+    position absolute
+    top 50%
+    left 50%
+    transform translate(-50%, -50%)
+    color #fff
+    font-size 35px
 
   .item-list-frame
     overflow hidden

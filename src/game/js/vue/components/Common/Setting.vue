@@ -3,9 +3,9 @@
     <transition name="fade">
       <div class="setting-wrapper" v-if="show">
         <div class="setting-frame">
-          <div class="setting-title">
+          <!-- <div class="setting-title">
             <div>设置 Setting</div>
-          </div>
+          </div> -->
           <div class="setting">
             <div class="arrow" :style="{ top: `${top}px` }">→</div>
             <div class="item" ref="fullscreen">
