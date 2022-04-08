@@ -3,9 +3,9 @@
     <transition name="fade">
       <div class="main-menu" v-if="show">
         <div class="bg">
-          <img class="img" :src="bg" alt draggable="false" />
+          <img class="img" :src="bg" draggable="false" />
           <transition name="title" appear>
-            <img class="main-title" :src="title" alt draggable="false" v-if="menu.show" />
+            <img class="main-title" :src="title" draggable="false" v-if="menu.show" />
           </transition>
         </div>
         <transition name="slide-up" appear>
@@ -394,6 +394,7 @@ module.exports = {
         position absolute
         bottom 0
         width 100%
+        animation bg 30s alternate infinite
 
       .main-title
         display block
@@ -425,6 +426,7 @@ module.exports = {
         border 2px solid rgba(255, 176, 170, 0.9)
         border-radius 10px
         transition left 0.15s
+        animation highlight-fade 1s alternate infinite
 
       .btn
         overflow hidden
@@ -483,4 +485,18 @@ module.exports = {
 
 .slide-up-enter-active, .slide-up-leave-active
   transition all 0.3s
+
+@keyframes bg
+  from
+    filter hue-rotate(0deg)
+
+  to
+    filter hue-rotate(45deg)
+
+@keyframes highlight-fade
+  from
+    opacity 0.5
+
+  to
+    opacity 1
 </style>
