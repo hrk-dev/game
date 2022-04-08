@@ -10,7 +10,7 @@
           <transition :name="transition">
             <span class="number" v-if="flag">{{ next_2 }}</span>
           </transition>
-          <div class="arrow">_</div>
+          <div class="arrow" v-show="!anime">_</div>
         </div>
       </div>
     </transition>
@@ -20,6 +20,7 @@
 <script>
 module.exports = {
   data: () => ({
+    anime: false,
     isShow: false,
     flag: true,
     end: true,
@@ -28,8 +29,29 @@ module.exports = {
     transition: 'slide-up-text'
   }),
   methods: {
-    show() {
+    show(anime) {
+      if (anime) {
+        this.anime = anime
+        this.setNext(Number(Patch.loopData.next) - 1)
+      } else {
+        this.setNext(Patch.loopData.next)
+      }
       this.isShow = true
+      if (anime) {
+        setTimeout(() => {
+          this.setNext(Patch.loopData.next)
+          setTimeout(() => {
+            this.hide()
+          }, 1000)
+        }, 500)
+      }
+    },
+    hide() {
+      this.isShow = false
+      this.anime = false
+      setTimeout(() => {
+        this.$emit('back')
+      }, 300)
     },
     setNext(next) {
       if (this.flag) {
@@ -43,6 +65,7 @@ module.exports = {
       this.end = true
     },
     checkInput(buttonName) {
+      if (this.anime) return
       switch (buttonName) {
         case 'left':
           this.up()
@@ -61,8 +84,7 @@ module.exports = {
           this.$emit('start', (this.flag ? this.next_2 : this.next_1))
           break
         case 'escape':
-          this.isShow = false
-          this.$emit('back')
+          this.hide()
           break
       }
     },
@@ -102,12 +124,16 @@ module.exports = {
       }
       this.setNext(temp)
     }
+  },
+  created() {
+    // this.show(true)
   }
 }
 </script>
 
 <style lang="stylus" scoped>
 .chapter
+  z-index 90
   display flex
   flex-direction column
   justify-content center
@@ -175,11 +201,4 @@ module.exports = {
 .slide-down-text-leave-to
   bottom -40px !important
   opacity 0
-
-@keyframes fade
-  from
-    opacity 0
-
-  to
-    opacity 1
 </style>

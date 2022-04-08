@@ -3,7 +3,9 @@
     <transition name="fade">
       <div class="main-menu" v-if="show">
         <div class="bg">
-          <img class="img" :src="bg" draggable="false" />
+          <div class="img-wrapper" :style="{ filter: `blur(${blur}px)` }">
+            <img class="img" :src="bg" draggable="false" />
+          </div>
           <transition name="title" appear>
             <img class="main-title" :src="title" draggable="false" v-if="menu.show" />
           </transition>
@@ -20,9 +22,9 @@
           </div>
         </transition>
         <Setting ref="Setting" @back="showMenu"></Setting>
-        <Chapters ref="Chapter" @start="startLoop" @back="showMenu"></Chapters>
       </div>
     </transition>
+    <Chapters ref="Chapter" @start="startLoop" @back="showMenu"></Chapters>
   </div>
 </template>
 
@@ -35,6 +37,7 @@ module.exports = {
   data: () => ({
     show: false,
     busy: false,
+    blur: 0,
     chapter: {
       show: false,
       flag: true,
@@ -46,7 +49,7 @@ module.exports = {
     title: md5Url('img/vue/menu/title.png'),
     left: 0,
     menu: {
-      show: true,
+      show: false,
       current: 1,
       restart: true,
       list: [
@@ -61,7 +64,6 @@ module.exports = {
             } else {
               this.hideMenu()
               if (Patch.loopData.newGame) {
-                this.$refs?.Chapter?.setNext(Patch.loopData.next)
                 this.$refs?.Chapter?.show()
               } else {
                 this.startLoop(Number(Patch.loopData.next))
@@ -137,6 +139,7 @@ module.exports = {
   },
   methods: {
     init() {
+      this.blur = 0
       Components.Loading.loadingHide()
       this.menu.current = 1
       Components.GameMenu.menu.current = 0
@@ -158,8 +161,18 @@ module.exports = {
       }
 
       if (Patch.loopData.lock) {
-        Methods.showPopup('Seems to have unlocked something strange', '好像解锁了一些奇怪的东西', 2000)
-        Patch.loopData.lock = false
+        this.blur = (Patch.loopData.next - 1) || 0
+        this.$nextTick(() => {
+          if (this.$refs?.Chapter) {
+            Patch.loopData.lock = false
+            this.$refs?.Chapter?.show(true)
+          } else {
+            this.initMenu()
+          }
+        })
+      } else {
+        this.initMenu()
+        this.blur = Patch.loopData.next || 0
       }
       if (Patch.loopData.load === false) {
         this.menu.list[1].show = false
@@ -167,6 +180,8 @@ module.exports = {
       }
       Patch.saveLoopData()
 
+    },
+    initMenu() {
       this.menu.show = true
       this.menuShowAnime()
       this.$nextTick(() => {
@@ -328,6 +343,7 @@ module.exports = {
     },
     showMenu() {
       if (this.menu.show) return
+      this.blur = Patch.loopData.next || 0
       this.menu.show = true
       this.menuShowAnime()
       this.$nextTick(() => {
@@ -390,11 +406,14 @@ module.exports = {
       top 0
       overflow hidden
 
-      .img
+      .img-wrapper
         position absolute
-        bottom 0
-        width 100%
-        animation bg 30s alternate infinite
+        inset 0
+        transition filter 0.8s linear
+
+        .img
+          width 100%
+          animation bg 30s alternate infinite
 
       .main-title
         display block
@@ -491,11 +510,11 @@ module.exports = {
     filter hue-rotate(0deg)
 
   to
-    filter hue-rotate(45deg)
+    filter hue-rotate(35deg)
 
 @keyframes highlight-fade
   from
-    opacity 0.5
+    opacity 0.3
 
   to
     opacity 1
