@@ -21,7 +21,7 @@
             </template>
           </div>
         </transition>
-        <Setting ref="Setting" @back="showMenu"></Setting>
+        <Setting ref="Setting" @back="settingExit"></Setting>
       </div>
     </transition>
     <Chapters ref="Chapter" @start="startLoop" @back="showMenu"></Chapters>
@@ -340,6 +340,11 @@ module.exports = {
       if (!this.show) return
       this.$refs?.Setting?.back()
       this.showMenu()
+    },
+    settingExit() {
+      setTimeout(() => {
+        this.showMenu()
+      }, 200)
     },
     showMenu() {
       if (this.menu.show) return
