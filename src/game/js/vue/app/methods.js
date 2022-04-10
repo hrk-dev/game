@@ -7,8 +7,8 @@ global.Methods = class {
     Components.TitleBar.title = title
   }
 
-  static showTip(en, cn, time) {
-    Components.Tip.showTip(en, cn, time)
+  static showTip(en, cn, time, other) {
+    Components.Tip.showTip(en, cn, time, other)
   }
 
   static hideTip() {

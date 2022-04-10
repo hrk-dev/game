@@ -34,10 +34,8 @@
           </transition>
         </div>
       </transition>
-      <transition name="slide-up" appear>
-        <div class="character" v-if="menu.show">
-          <img :src="menu.img" />
-        </div>
+      <transition name="slide-left" appear>
+        <Todo v-if="menu.show"></Todo>
       </transition>
       <Item ref="Item"></Item>
       <Setting ref="Setting" @back="showMenu"></Setting>
@@ -48,6 +46,7 @@
 <script>
 module.exports = {
   components: {
+    Todo: VueMain.loadComponent('Common/Todo'),
     Item: VueMain.loadComponent('Common/ItemList'),
     Setting: VueMain.loadComponent('Common/Setting')
   },
@@ -68,7 +67,6 @@ module.exports = {
       show: false,
       top: 130,
       current: 0,
-      img: md5Url('img/faces/汐/震惊-思考.png'),
       list: [
         {
           show: true,
@@ -154,9 +152,6 @@ module.exports = {
     }
   }),
   computed: {
-    tipShow() {
-      return this.show && this.menu.show
-    },
     _time() {
       const hour = Math.floor(this.time / 60 / 60)
       const min = Math.floor(this.time / 60) % 60
@@ -179,19 +174,11 @@ module.exports = {
           Patch.stopWait()
         })
       }
-    },
-    tipShow() {
-      if (this.tipShow) {
-        this.showTip()
-      } else {
-        Methods.hideTip()
-      }
     }
   },
   methods: {
     init() {
       this.menu.list[1].show = false
-      this.showTip()
       this.checkSave()
       // this.menu.current = 0
       this.showMenu()
@@ -427,16 +414,6 @@ $pink = rgba(255, 176, 170, 0.9)
     padding 0 10px
     margin 10px 0
 
-.character
-  position absolute
-  right 0
-  bottom 0
-  width 350px
-
-  img
-    display block
-    width 100%
-
 .highlight
   padding-left 30px !important
   width 120px !important
@@ -464,15 +441,15 @@ $pink = rgba(255, 176, 170, 0.9)
 .slide-right-enter-active, .slide-right-leave-active
   transition all 0.3s ease
 
-.slide-up-enter-to, .slide-up-leave
-  transform translateY(0)
+.slide-left-enter-to, .slide-left-leave
+  transform translateX(0)
   opacity 1
 
-.slide-up-enter, .slide-up-leave-to
-  transform translateY(100%)
+.slide-left-enter, .slide-left-leave-to
+  transform translateX(100%)
   opacity 0
 
-.slide-up-enter-active, .slide-up-leave-active
+.slide-left-enter-active, .slide-left-leave-active
   transition all 0.3s
 
 .fade-enter, .fade-leave-to

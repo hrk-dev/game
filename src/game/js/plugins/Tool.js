@@ -84,6 +84,28 @@
  * @text 消除提示
  * @desc 消除提示
  *
+ * @command 设置支线提示
+ * @text 设置提示
+ * @desc 设置提示
+ *
+ * @arg en
+ * @text en
+ * @desc 英文提示
+ *
+ * @arg cn
+ * @text cn
+ * @desc 中文提示
+ *
+ * @arg time
+ * @default 3000
+ * @text time
+ * @type number
+ * @desc 持续时间
+ *
+ * @command 消除支线提示
+ * @text 消除提示
+ * @desc 消除提示
+ *
  * @command 保存
  * @text 保存
  * @desc 保存
@@ -132,6 +154,12 @@ void function () {
     },
     消除提示: () => {
       Methods.clearTip()
+    },
+    设置支线提示: ({ en, cn, time }) => {
+      Methods.showTip(en, cn, Number(time), true)
+    },
+    消除支线提示: () => {
+      Methods.clearTip(true)
     },
     保存: () => {
       $gameSystem.onBeforeSave()

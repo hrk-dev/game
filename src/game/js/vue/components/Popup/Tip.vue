@@ -22,7 +22,7 @@ module.exports = {
     }
   },
   methods: {
-    showTip(en, cn, time) {
+    showTip(en, cn, time, other) {
       if (!en && !cn) return
 
       this.enText = en || ''
@@ -31,10 +31,15 @@ module.exports = {
       if (!$gameSystem.tipData) {
         $gameSystem.tipData = {}
       }
-      $gameSystem.tipData.show = true
-      $gameSystem.tipData.en = en
-      $gameSystem.tipData.cn = cn
-      $gameSystem.tipData.time = time || 3000
+      if (other) {
+        $gameSystem.tipData.en_2 = en
+        $gameSystem.tipData.cn_2 = cn
+      } else {
+        $gameSystem.tipData.show = true
+        $gameSystem.tipData.en = en
+        $gameSystem.tipData.cn = cn
+        $gameSystem.tipData.time = time || 3000
+      }
 
       time = time ?? 3000
 
@@ -50,15 +55,20 @@ module.exports = {
       this.clearTimer()
       this.show = false
     },
-    clear() {
+    clear(other) {
       this.show = false
       this.enText = ''
       this.cnText = ''
       if ($gameSystem && $gameSystem.tipData) {
-        $gameSystem.tipData.show = false
-        $gameSystem.tipData.en = ''
-        $gameSystem.tipData.cn = ''
-        $gameSystem.tipData.time = 2000
+        if (other) {
+          $gameSystem.tipData.en_2 = ''
+          $gameSystem.tipData.cn_2 = ''
+        } else {
+          $gameSystem.tipData.show = false
+          $gameSystem.tipData.en = ''
+          $gameSystem.tipData.cn = ''
+          $gameSystem.tipData.time = 3000
+        }
       }
     },
     clearTimer() {
