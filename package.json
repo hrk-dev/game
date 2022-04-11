@@ -25,13 +25,12 @@
   },
   "homepage": "https://github.com/hrk-dev/game#readme",
   "devDependencies": {
+    "@vue/devtools": "5.3.4",
     "cross-env": "^7.0.3",
-    "electron": "^12.0.7",
-    "electron-packager": "^15.2.0",
-    "fs-extra": "^10.0.0",
-    "md5-js": "^0.0.3",
-    "nodemon": "^2.0.7",
-    "@vue/devtools": "^5.3.4"
+    "electron": "^18.0.3",
+    "electron-packager": "^15.4.0",
+    "fs-extra": "^10.0.1",
+    "md5-js": "^0.0.3"
   },
   "prettier": {
     "trailingComma": "none",
