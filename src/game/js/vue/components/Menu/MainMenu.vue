@@ -3,9 +3,14 @@
     <transition name="fade">
       <div class="main-menu" v-if="show">
         <div class="bg">
-          <div class="img-wrapper" :style="{ filter: `blur(${blur}px)` }">
-            <img class="img" :src="bg" draggable="false" />
-          </div>
+          <video
+            class="video"
+            :style="{ filter: `blur(${blur}px)` }"
+            :poster="bg"
+            :src="video"
+            autoplay
+            loop
+          ></video>
           <transition name="title" appear>
             <img class="main-title" :src="title" draggable="false" v-if="menu.show" />
           </transition>
@@ -46,6 +51,7 @@ module.exports = {
       next_2: 1
     },
     bg: md5Url('img/vue/menu/menu.png'),
+    video: md5Url('movies/menu.mp4'),
     title: md5Url('img/vue/menu/title.png'),
     left: 0,
     menu: {
@@ -411,14 +417,12 @@ module.exports = {
       top 0
       overflow hidden
 
-      .img-wrapper
+      .video
         position absolute
-        inset 0
+        top 0
+        left 0
+        width 100%
         transition filter 0.8s linear
-
-        .img
-          width 100%
-          animation bg 30s alternate infinite
 
       .main-title
         display block
@@ -509,13 +513,6 @@ module.exports = {
 
 .slide-up-enter-active, .slide-up-leave-active
   transition all 0.3s
-
-@keyframes bg
-  from
-    filter hue-rotate(0deg)
-
-  to
-    filter hue-rotate(35deg)
 
 @keyframes highlight-fade
   from
