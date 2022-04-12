@@ -144,7 +144,7 @@ module.exports = {
     }
   },
   methods: {
-    init() {
+    async init() {
       this.blur = 0
       Components.Loading.loadingHide()
       this.menu.current = 1
@@ -168,14 +168,13 @@ module.exports = {
 
       if (Patch.loopData.lock) {
         this.blur = (Patch.loopData.next - 1) || 0
-        this.$nextTick(() => {
-          if (this.$refs?.Chapter) {
-            Patch.loopData.lock = false
-            this.$refs?.Chapter?.show(true)
-          } else {
-            this.initMenu()
-          }
-        })
+        await this.$nextTick()
+        if (this.$refs?.Chapter) {
+          Patch.loopData.lock = false
+          this.$refs?.Chapter?.show(true)
+        } else {
+          this.initMenu()
+        }
       } else {
         this.initMenu()
         this.blur = Patch.loopData.next || 0
@@ -185,36 +184,33 @@ module.exports = {
         this.menu.current = 0
       }
       Patch.saveLoopData()
-
     },
-    initMenu() {
+    async initMenu() {
       this.menu.show = true
       this.menuShowAnime()
-      this.$nextTick(() => {
-        this.setHighlight()
-      })
+      await this.$nextTick()
+      this.setHighlight()
     },
-    menuShowAnime() {
-      this.$nextTick(() => {
-        anime({
-          targets: '.btn',
-          translateY: [100, 0],
-          easing: 'spring(1, 100, 10, 10)',
-          duration: 500,
-          delay: anime.stagger(50)
-        })
-        anime({
-          targets: '.main-title',
-          top: [0, '30%'],
-          easing: 'spring(1, 100, 10, 10)',
-          duration: 500
-        })
-        anime({
-          targets: '.main-highlight',
-          translateY: [100, 0],
-          easing: 'spring(1, 100, 10, 10)',
-          duration: 500
-        })
+    async menuShowAnime() {
+      await this.$nextTick()
+      anime({
+        targets: '.btn',
+        translateY: [100, 0],
+        easing: 'spring(1, 100, 10, 10)',
+        duration: 500,
+        delay: anime.stagger(50)
+      })
+      anime({
+        targets: '.main-title',
+        top: [0, '30%'],
+        easing: 'spring(1, 100, 10, 10)',
+        duration: 500
+      })
+      anime({
+        targets: '.main-highlight',
+        translateY: [100, 0],
+        easing: 'spring(1, 100, 10, 10)',
+        duration: 500
       })
     },
     getLastItem() {
@@ -352,14 +348,13 @@ module.exports = {
         this.showMenu()
       }, 200)
     },
-    showMenu() {
+    async showMenu() {
       if (this.menu.show) return
       this.blur = Patch.loopData.next || 0
       this.menu.show = true
       this.menuShowAnime()
-      this.$nextTick(() => {
-        this.setHighlight()
-      })
+      await this.$nextTick()
+      this.setHighlight()
     },
     hideMenu() {
       if (!this.menu.show) return

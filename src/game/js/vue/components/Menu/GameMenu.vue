@@ -37,7 +37,9 @@
       <transition name="slide-left" appear>
         <Todo v-if="menu.show"></Todo>
       </transition>
-      <Item ref="Item"></Item>
+      <transition name="fade">
+        <Item v-if="item" ref="Item"></Item>
+      </transition>
       <Setting ref="Setting" @back="showMenu"></Setting>
     </div>
     <div class="bg"></div>
@@ -60,10 +62,8 @@ module.exports = {
     show: false,
     hasSave: false,
     time: 0,
-    tip: {
-      en: '',
-      cn: ''
-    },
+    // 是否显示物品栏
+    item: false,
     menu: {
       show: false,
       current: 0,
@@ -115,10 +115,8 @@ module.exports = {
           cn: '物品',
           en: 'Item',
           fn() {
-            if (this.$refs.Item) {
-              this.hideMenu()
-              this.$refs.Item.show()
-            }
+            this.hideMenu()
+            this.item = true
           }
         },
         {
@@ -165,14 +163,13 @@ module.exports = {
       if (this.test.saveID > 99) this.test.saveID = 99
       if (this.test.saveID < 1) this.test.saveID = 1
     },
-    show() {
+    async show() {
       if (this.show) {
         Patch.startWait()
         this.init()
       } else {
-        this.$nextTick(() => {
-          Patch.stopWait()
-        })
+        await this.$nextTick()
+        Patch.stopWait()
       }
     }
   },
@@ -199,7 +196,7 @@ module.exports = {
       }
       if (Components.Choice.show) {
         Components.Choice.checkInput(buttonName)
-      } else if (this.$refs?.Item?.isShow) {
+      } else if (this.item) {
         this.$refs.Item.checkInput(buttonName)
       } else if (this.$refs?.Setting?.show) {
         this.$refs.Setting.checkInput(buttonName)
@@ -272,8 +269,9 @@ module.exports = {
           }, 200)
           return
         }
-        if (this.$refs?.Item.isShow) {
-          this.$refs.Item.hide()
+        if (this.item) {
+          SoundManager.playCancel()
+          this.item = false
           this.showMenu()
           return
         }
@@ -292,15 +290,14 @@ module.exports = {
       if (!this.menu.show) return
       this.menu.show = false
     },
-    menuShowAnime() {
-      this.$nextTick(() => {
-        anime({
-          targets: '.game-menu-btn',
-          translateX: ['-100%', 0],
-          easing: 'easeInOutQuad',
-          duration: 300,
-          delay: anime.stagger(50)
-        })
+    async menuShowAnime() {
+      await this.$nextTick()
+      anime({
+        targets: '.game-menu-btn',
+        translateX: ['-100%', 0],
+        easing: 'easeInOutQuad',
+        duration: 300,
+        delay: anime.stagger(50)
       })
     },
     setTime() {
@@ -442,7 +439,11 @@ $pink = rgba(255, 176, 170, 0.9)
 .slide-left-enter, .slide-left-leave-to
   transform translateX(100%)
 
-.slide-left-enter-active, .slide-left-leave-active
+.slide-left-enter-active
+  transition all 0.3s
+  transition-delay 0.1s
+
+.slide-left-leave-active
   transition all 0.3s
 
 .fade-enter, .fade-leave-to

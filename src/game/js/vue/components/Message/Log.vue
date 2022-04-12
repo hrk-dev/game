@@ -39,14 +39,13 @@ module.exports = {
         this.list.shift()
       }
     },
-    show() {
+    async show() {
       Methods.hideTip()
       this.isHide = false
       Patch.startWait()
       this.isShow = true
-      this.$nextTick(() => {
-        this.$refs.log.scrollTop = this.$refs.log.scrollHeight
-      })
+      await this.$nextTick()
+      this.$refs.log.scrollTop = this.$refs.log.scrollHeight
     },
     hide() {
       this.isShow = false

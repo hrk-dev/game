@@ -713,11 +713,4 @@ $pink = rgba(255, 176, 170, 0.9)
 
 .fade-enter-active, .fade-leave-active
   transition opacity 0.25s !important
-
-@keyframes fade
-  from
-    opacity 0
-
-  to
-    opacity 1
 </style>
