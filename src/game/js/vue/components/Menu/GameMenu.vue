@@ -10,7 +10,7 @@
         </div>
       </transition>
       <transition name="slide-right" appear>
-        <div class="menu" :style="{ top: `${menu.top}px` }" v-if="menu.show">
+        <div class="menu" v-if="menu.show">
           <template v-for="(item, index) in menu.list">
             <transition name="btn" :key="index">
               <div
@@ -40,6 +40,7 @@
       <Item ref="Item"></Item>
       <Setting ref="Setting" @back="showMenu"></Setting>
     </div>
+    <div class="bg"></div>
   </div>
 </template>
 
@@ -65,7 +66,6 @@ module.exports = {
     },
     menu: {
       show: false,
-      top: 130,
       current: 0,
       list: [
         {
@@ -182,11 +182,6 @@ module.exports = {
       this.checkSave()
       // this.menu.current = 0
       this.showMenu()
-    },
-    async showTip() {
-      Patch.showTip(0)
-      await this.$nextTick()
-      this.menu.top = 60 + (Components?.Tip.$refs?.tip?.scrollHeight || 50) + 10
     },
     checkSave() {
       this.hasSave = Patch.checkSave()
@@ -443,11 +438,9 @@ $pink = rgba(255, 176, 170, 0.9)
 
 .slide-left-enter-to, .slide-left-leave
   transform translateX(0)
-  opacity 1
 
 .slide-left-enter, .slide-left-leave-to
   transform translateX(100%)
-  opacity 0
 
 .slide-left-enter-active, .slide-left-leave-active
   transition all 0.3s

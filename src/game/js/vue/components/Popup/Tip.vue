@@ -1,6 +1,6 @@
 <template>
   <div id="tip">
-    <transition name="slide-right">
+    <transition name="slide-left">
       <div class="tip" v-if="show" ref="tip">
         <div class="en" v-html="enText"></div>
         <div class="cn" v-html="cnText"></div>
@@ -87,9 +87,10 @@ module.exports = {
 <style lang="stylus" scoped>
 #tip
   .tip
+    z-index 50
     position absolute
     top 60px
-    left 0
+    right 0
     padding 5px 10px
     text-align left
     background rgba(40, 40, 40, 0.7)
@@ -98,9 +99,9 @@ module.exports = {
     max-width 80%
     min-height 50px
     border 2px solid rgba(255, 176, 170, 0.9)
-    border-left none
-    border-top-right-radius 10px
-    border-bottom-right-radius 10px
+    border-right none
+    border-top-left-radius 10px
+    border-bottom-left-radius 10px
 
   hr
     margin 0 0 5px 0
@@ -115,12 +116,12 @@ module.exports = {
     font-size 20px
     line-height 22px
 
-.slide-right-enter, .slide-right-leave-to
-  transform translateX(-100%)
+.slide-left-enter, .slide-left-leave-to
+  transform translateX(100%)
 
-.slide-right-enter-to, .slide-right-leave
+.slide-left-enter-to, .slide-left-leave
   transform translateX(0)
 
-.slide-right-enter-active, .slide-right-leave-active
+.slide-left-enter-active, .slide-left-leave-active
   transition transform 0.3s ease
 </style>

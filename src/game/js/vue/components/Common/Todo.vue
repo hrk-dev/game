@@ -2,12 +2,12 @@
   <div class="todo">
     <div class="main" v-if="mainShow">
       <div class="title">TODO</div>
-      <div class="en">{{ main.en }}</div>
-      <div class="cn">{{ main.cn }}</div>
+      <div class="en" v-html="main.en"></div>
+      <div class="cn" v-html="main.cn"></div>
     </div>
     <div class="other" v-if="otherShow">
-      <div class="en">{{ main.en }}</div>
-      <div class="cn">{{ main.cn }}</div>
+      <div class="en" v-html="other.en"></div>
+      <div class="cn" v-html="other.cn"></div>
     </div>
   </div>
 </template>
@@ -47,9 +47,10 @@ module.exports = {
 $pink = rgba(255, 176, 170, 0.9)
 
 .todo
+  z-index 60
   overflow hidden
   position absolute
-  top 130px
+  top 60px
   right 0
   max-width 40%
   color #fff
