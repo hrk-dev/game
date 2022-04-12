@@ -3,7 +3,7 @@
     <transition name="fade">
       <div class="chapter" v-if="isShow">
         <div class="text">
-          Chapter
+          <span>Chapter</span>
           <transition :name="transition" @after-enter="setEnd" @after-leave="setEnd">
             <span class="number" v-if="!flag">{{ next_1 }}</span>
           </transition>
@@ -12,6 +12,7 @@
           </transition>
           <div class="arrow" v-show="!anime">_</div>
         </div>
+        <div class="tip">Select</div>
       </div>
     </transition>
   </div>
@@ -162,7 +163,18 @@ module.exports = {
       position absolute
       bottom 0
       left -45px
-      animation fade 0.8s linear alternate infinite
+
+  .tip
+    position absolute
+    bottom 5px
+    left 50%
+    transform translateX(-50%)
+    font-size 12px
+    line-height 15px
+    border 1px solid
+    padding 2px 5px
+    border-radius 5px
+    animation fade 0.8s linear alternate infinite
 
 .slide-up-text-enter-active
   transition all 0.35s
