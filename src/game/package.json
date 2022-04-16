@@ -1,0 +1,12 @@
+{
+    "name": "rmmz-game",
+    "main": "index.html",
+    "chromium-args": "--force-color-profile=srgb",
+    "window": {
+        "title": "与你相遇的那天是轮回高校的日常这也是合理的吗？",
+        "width": 1024,
+        "height": 720,
+        "position": "center",
+        "icon": "icon/icon.png"
+    }
+}

@@ -6,6 +6,7 @@
       <div class="cn" v-html="main.cn"></div>
     </div>
     <div class="other" v-if="otherShow">
+      <div class="title" v-if="!mainShow">TODO</div>
       <div class="en" v-html="other.en"></div>
       <div class="cn" v-html="other.cn"></div>
     </div>
@@ -29,7 +30,7 @@ module.exports = {
       return this.main.en || this.main.cn
     },
     otherShow() {
-      return this.mainShow && (this.other.en || this.other.cn)
+      return this.other.en || this.other.cn
     }
   },
   created() {
@@ -65,10 +66,6 @@ $pink = rgba(255, 176, 170, 0.9)
     padding 2px 10px 15px 10px
     background $pink
 
-    .title
-      font-size 20px
-      font-weight bold
-
     .en
       font-size 18px
       line-height 20px
@@ -89,4 +86,8 @@ $pink = rgba(255, 176, 170, 0.9)
       margin-top 2px
       font-size 18px
       line-height 20px
+
+.title
+  font-size 20px
+  font-weight bold
 </style>

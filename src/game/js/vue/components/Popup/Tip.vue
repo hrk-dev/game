@@ -51,6 +51,22 @@ module.exports = {
         }, time)
       }
     },
+    tempTip(en, cn, time) {
+      if (!en && !cn) return
+
+      this.enText = en || ''
+      this.cnText = cn || ''
+
+      time = time ?? 3000
+
+      this.clearTimer()
+      this.show = true
+      if (time) {
+        this.timer = setTimeout(() => {
+          this.hideTip()
+        }, time)
+      }
+    },
     hideTip() {
       this.clearTimer()
       this.show = false
