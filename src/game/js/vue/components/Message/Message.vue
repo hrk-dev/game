@@ -234,11 +234,11 @@ module.exports = {
   },
   methods: {
     characterError() {
-      Components.CharacterTest.add(this.message.character.list.shio)
+      Components.Debug.add(this.message.character.list.shio)
       this.message.character.list.shio = ''
     },
     otherCharacterError() {
-      Components.CharacterTest.add(this.message.character.list.other)
+      Components.Debug.add(this.message.character.list.other)
       this.message.character.list.other = ''
     },
     add(code, msg) {

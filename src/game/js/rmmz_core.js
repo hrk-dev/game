@@ -626,6 +626,7 @@ Graphics.printError = function(name, message, error = null) {
     if (!this._errorPrinter) {
         this._createErrorPrinter();
     }
+    this._errorPrinter.style.zIndex = 999
     this._errorPrinter.innerHTML = this._makeErrorHtml(name, message, error);
     this._wasLoading = this.endLoading();
     this._applyCanvasFilter();

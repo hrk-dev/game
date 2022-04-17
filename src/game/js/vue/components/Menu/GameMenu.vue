@@ -1,14 +1,6 @@
 <template>
   <div id="game-menu">
     <div v-if="show">
-      <!-- 测试 -->
-      <transition name="slide-right" appear>
-        <div class="test" v-if="test.dev && menu.show">
-          <input type="number" min="1" max="99" v-model.number="test.saveID" />
-          <button @click="save">save</button>
-          <button @click="load">load</button>
-        </div>
-      </transition>
       <transition name="slide-right" appear>
         <div class="menu" v-if="menu.show">
           <template v-for="(item, index) in menu.list">
@@ -54,11 +46,6 @@ module.exports = {
     Setting: VueMain.loadComponent('Common/Setting')
   },
   data: () => ({
-    // 测试
-    test: {
-      dev: false,
-      saveID: 1
-    },
     show: false,
     hasSave: false,
     time: 0,
@@ -155,14 +142,12 @@ module.exports = {
       const min = Math.floor(this.time / 60) % 60
       const sec = this.time % 60
       return hour.padZero(2) + ':' + min.padZero(2) + ':' + sec.padZero(2)
+    },
+    _menuShow() {
+      return this.menu.show
     }
   },
   watch: {
-    // 测试
-    saveID() {
-      if (this.test.saveID > 99) this.test.saveID = 99
-      if (this.test.saveID < 1) this.test.saveID = 1
-    },
     async show() {
       if (this.show) {
         Patch.startWait()
@@ -170,6 +155,13 @@ module.exports = {
       } else {
         await this.$nextTick()
         Patch.stopWait()
+      }
+    },
+    _menuShow() {
+      if (this._menuShow) {
+        Components.Debug.show()
+      } else {
+        Components.Debug.hide()
       }
     }
   },
@@ -304,45 +296,6 @@ module.exports = {
       if (this.menu.show) {
         this.time = $gameSystem.playtime()
       }
-    },
-    // 测试
-    async save() {
-      if (!this.show) return
-      Components.Choice.reset()
-      $gameSystem.onBeforeSave()
-      try {
-        await DataManager.saveGame(this.test.saveID + 1)
-        Methods.showPopup('Save success', '保存成功', 1000)
-      } catch (e) {
-        Methods.showPopup('Save failed', '保存失败', 1000)
-      }
-    },
-    load() {
-      if (!this.show) return
-      Components.Choice.reset()
-      this.show = false
-      Components.Loading.loadingShow()
-      setTimeout(() => {
-        DataManager.loadGame(this.test.saveID + 1)
-          .then(() => {
-            Patch.startWait()
-            SceneManager.goto(Scene_Map)
-            $gameSystem.onAfterLoad()
-            Components.Loading.loadingHide()
-            Patch.showTip()
-            Patch.stopWait()
-          })
-          .catch(() => {
-            Methods.showPopup('Load failed', '读取失败', 1000)
-            Components.Loading.loadingHide()
-            this.show = true
-          })
-      }, 300)
-    }
-  },
-  mounted() {
-    if (test || dev) {
-      this.test.dev = true
     }
   }
 }
@@ -454,30 +407,4 @@ $pink = rgba(255, 176, 170, 0.9)
 
 .fade-enter-active, .fade-leave-active
   transition opacity 0.2s
-
-// 测试
-.test
-  position fixed
-  bottom 10px
-  left 0px
-  display flex
-  height 40px
-  margin 0px
-  border-top 2px solid rgba(255, 176, 170, 0.9)
-  border-right 2px solid rgba(255, 176, 170, 0.9)
-  border-bottom 2px solid rgba(255, 176, 170, 0.9)
-  border-left none
-  border-top-right-radius 10px
-  border-bottom-right-radius 10px
-  overflow hidden
-
-  & > *
-    color #fff
-    background rgba(40, 40, 40, 0.7)
-    margin 1px
-    border-radius 5px
-    border 2px solid rgba(255, 176, 170, 0.9)
-
-  input
-    text-align center
 </style>
