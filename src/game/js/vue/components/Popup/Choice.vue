@@ -91,7 +91,7 @@ module.exports = {
 $pink = rgba(255, 176, 170, 0.9)
 
 .choice
-  z-index 20
+  z-index 901
   color #fff
   position absolute
   left 50%

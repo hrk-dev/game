@@ -118,11 +118,21 @@ module.exports = {
           }
         },
         {
+          show: false,
+          cn: '调试',
+          en: 'Debug',
+          fn() {
+              this.hideMenu()
+              Components.Debug.show()
+          }
+        },
+        {
           show: true,
           cn: '退出',
           en: 'Exit',
           fn() {
             Methods.showChoice('Do you wish back to title', '是否返回主菜单', () => {
+              this.hideMenu()
               this.show = false
               setTimeout(() => {
                 Components.Choice.hideChoice()
@@ -142,9 +152,6 @@ module.exports = {
       const min = Math.floor(this.time / 60) % 60
       const sec = this.time % 60
       return hour.padZero(2) + ':' + min.padZero(2) + ':' + sec.padZero(2)
-    },
-    _menuShow() {
-      return this.menu.show
     }
   },
   watch: {
@@ -156,18 +163,12 @@ module.exports = {
         await this.$nextTick()
         Patch.stopWait()
       }
-    },
-    _menuShow() {
-      if (this._menuShow) {
-        Components.Debug.show()
-      } else {
-        Components.Debug.hide()
-      }
     }
   },
   methods: {
     init() {
       this.menu.list[1].show = false
+      this.menu.list[4].show = Components.Debug.dev
       this.checkSave()
       // this.menu.current = 0
       this.showMenu()
@@ -246,6 +247,11 @@ module.exports = {
     },
     back() {
       if (this.show) {
+        if (Components.Debug.isShow) {
+          Components.Debug.hide()
+          this.showMenu()
+          return
+        }
         if (Components.Choice.show) {
           SoundManager.playCancel()
           Methods.hidePopup()

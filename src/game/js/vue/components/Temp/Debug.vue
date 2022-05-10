@@ -109,13 +109,8 @@ module.exports = {
 
 <style lang="stylus" scoped>
 .debug-wrapper
-  z-index 999
   position absolute
-  top 130px
-  left 50%
-  transform translateX(-50%)
-  width 50%
-  height 50%
+  inset 10%
   background rgba(40, 40, 40, 0.7)
   color #fff
   border-radius 10px
