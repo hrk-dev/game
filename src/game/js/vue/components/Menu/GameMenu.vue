@@ -122,8 +122,8 @@ module.exports = {
           cn: '调试',
           en: 'Debug',
           fn() {
-              this.hideMenu()
-              Components.Debug.show()
+            this.hideMenu()
+            Components.Debug.show()
           }
         },
         {
@@ -312,7 +312,7 @@ $pink = rgba(255, 176, 170, 0.9)
 
 .menu
   position absolute
-  top 130px
+  top 120px
   left 0px
   display flex
   flex-direction column

@@ -87,7 +87,6 @@ const Patch = class {
     document.getElementById('fpsCounterBox').style.top = `${top}px`
 
     VueMain.app.main.top = top
-    Components.Main.save.top = 10 + top
   }
 
   static checkAudio(folder, audio) {

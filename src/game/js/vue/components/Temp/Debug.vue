@@ -24,6 +24,7 @@
           fill="#FFB0AA"
         ></path>
       </svg>
+      <span>×{{ list.length }}</span>
     </div>
     <transition name="fade">
       <div class="debug-wrapper" v-if="isShow && dev">
@@ -136,8 +137,11 @@ module.exports = {
 <style lang="stylus" scoped>
 .error
   position absolute
-  top 0
-  left 0
+  top 10px
+  left 7px
+  display flex
+  color #FFB0AA
+  font-size 14px
 
 .debug-wrapper
   position absolute
