@@ -89,9 +89,9 @@
 <script>
 const NAME = {
   0: '汐 Shio',
-  1: '塔库亚 Takuya',
+  1: '王缪可 WangMilk',
   2: '西卡 Ceka',
-  3: '晏城 YanCheng',
+  3: '塔库亚 Takuya',
   4: '雅莉 Ari',
   5: '菲林 Freelyn'
 }
