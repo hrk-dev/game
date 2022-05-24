@@ -3,41 +3,44 @@
     <transition :name="_transition">
       <div class="message-wrapper" :class="_pos" v-if="message.show">
         <transition name="fade" @after-enter="messageHide">
-        <div class="text" :class="[_align, _size, _bg, _color]" ref="text" v-if="!hide.flag">
-          <div class="name" :class="_nameAlign" v-show="message.name && message.pos != 2">
-            <div class="name-cn">
-              {{ nameObj.cn }}
+          <div class="text" :class="[_align, _size, _bg, _color]" ref="text" v-if="!hide.flag">
+            <div class="name" :class="_nameAlign" v-show="message.name && message.pos != 2">
+              <div class="name-cn">
+                {{ nameObj.cn }}
+              </div>
+              <div class="name-en">
+                {{ nameObj.en }}
+              </div>
             </div>
-            <div class="name-en">
-              {{ nameObj.en }}
+            <template v-if="message.pos == 2">
+              <div ref="multiline">
+                <transition-group name="multiline-fade">
+                  <div
+                    class="multiline"
+                    v-for="(item, index) in message.multiline"
+                    :key="'msg' + index"
+                  >
+                    <div class="en" v-html="item.en"></div>
+                    <div class="cn" v-html="item.cn"></div>
+                  </div>
+                </transition-group>
+              </div>
+            </template>
+            <template v-else>
+              <div class="en" v-html="message.en"></div>
+              <div class="cn" v-html="message.cn"></div>
+            </template>
+            <div class="next-wrapper">
+              <div
+                class="next"
+                :class="_iconColor"
+                :style="{
+                  opacity: !choice.show && !message.wait ? 1 : 0,
+                  animation: !choice.show && !message.wait ? null : 'none'
+                }"
+              ></div>
             </div>
           </div>
-          <template v-if="message.pos == 2">
-            <div ref="multiline">
-              <transition-group name="multiline-fade">
-                <div
-                  class="multiline"
-                  v-for="(item, index) in message.multiline"
-                  :key="'msg' + index"
-                >
-                  <div class="en" v-html="item.en"></div>
-                  <div class="cn" v-html="item.cn"></div>
-                </div>
-              </transition-group>
-            </div>
-          </template>
-          <template v-else>
-            <div class="en" v-html="message.en"></div>
-            <div class="cn" v-html="message.cn"></div>
-          </template>
-          <div class="next-wrapper">
-            <div
-              class="next"
-              :class="_iconColor"
-              :style="{ opacity: !choice.show && !message.wait ? 1 : 0 }"
-            ></div>
-          </div>
-        </div>
         </transition>
         <div class="character" v-show="_showCharacter">
           <transition name="slide-up">

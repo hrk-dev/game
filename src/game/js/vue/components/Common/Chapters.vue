@@ -12,7 +12,7 @@
           </transition>
           <div class="arrow" v-show="!anime">_</div>
         </div>
-        <div class="tip">Select</div>
+        <div class="tip" v-show="!anime">Select</div>
       </div>
     </transition>
   </div>
