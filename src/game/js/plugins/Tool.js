@@ -145,6 +145,16 @@
  * @text ID
  * @type number
  * @desc 成就ID
+ *
+ * @command 对话等待
+ * @text 对话等待
+ * @desc 对话等待
+ *
+ * @arg time
+ * @text time
+ * @default 60
+ * @type number
+ * @desc 等待时长
  */
 
 void function () {
@@ -192,6 +202,10 @@ void function () {
     },
     解锁成就: ({ id }) => {
       Steam.activateAchievement(id)
+    },
+    对话等待: ({ time }) => {
+      SceneManager._scene._messageWindow.startWait(Number(time))
+      SceneManager._scene._messageWindow._pauseSkip = true
     }
   }
 

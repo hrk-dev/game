@@ -5,10 +5,10 @@
         <div class="text">
           <span>Chapter</span>
           <transition :name="transition" @after-enter="setEnd" @after-leave="setEnd">
-            <span class="number" v-if="!flag">{{ next_1 }}</span>
+            <span class="number" v-if="!flag">{{ getNumber(next_1) }}</span>
           </transition>
           <transition :name="transition">
-            <span class="number" v-if="flag">{{ next_2 }}</span>
+            <span class="number" v-if="flag">{{ getNumber(next_2) }}</span>
           </transition>
           <div class="arrow" v-show="!anime">_</div>
         </div>
@@ -54,6 +54,9 @@ module.exports = {
         this.$emit('back')
       }, 300)
     },
+    getNumber(num) {
+      return num == 2 ? 0 : num + 1
+    },
     setNext(next) {
       if (this.flag) {
         this.next_1 = next
@@ -89,11 +92,11 @@ module.exports = {
           break
       }
     },
-    async up() {
+    async down() {
       if (!this.end) return
       this.end = false
 
-      this.transition = 'slide-up-text'
+      this.transition = 'slide-down-text'
       await this.$nextTick()
 
       let temp = 0
@@ -107,11 +110,11 @@ module.exports = {
       }
       this.setNext(temp)
     },
-    async down() {
+    async up() {
       if (!this.end) return
       this.end = false
 
-      this.transition = 'slide-down-text'
+      this.transition = 'slide-up-text'
       await this.$nextTick()
 
       let temp = 0
