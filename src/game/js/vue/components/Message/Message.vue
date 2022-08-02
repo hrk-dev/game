@@ -458,7 +458,7 @@ module.exports = {
       this.message.temp.character = ''
     },
     getUrl(str) {
-      return str ? md5Url(`img/faces/${str}.png`) : null
+      return str ? md5Url(`img/faces/${str.trim()}.png`) : null
     },
     getName(id) {
       return NAME[id] || id
