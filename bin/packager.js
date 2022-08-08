@@ -16,7 +16,7 @@ packager({
   out: 'build',
   asar: {
     unpack: '*.{lib,dll,node}',
-    unpackDir: `**/{${md5('audio').substr(8, 16)},${md5('img').substr(8, 16)},/credits}*`
+    unpackDir: `**/{${md5('audio').substr(8, 16)},${md5('img').substr(8, 16)},${md5('movies').substr(8, 16)},/credits}*`
   }
 })
   .then(appPaths => { })

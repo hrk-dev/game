@@ -9,17 +9,17 @@
       }"
     >
       <slot></slot>
+      <transition name="fade">
+        <div class="save" v-if="save.show">
+          <svg viewBox="0 0 1024 1024" version="1.1" width="30" height="30">
+            <path
+              d="M512 64c247.2 0 448 200.8 448 448h-64c0-212-172-384-384-384V64z m0 832c-212 0-384-172-384-384H64c0 247.2 200.8 448 448 448v-64z"
+              fill="#FFB0AA"
+            ></path>
+          </svg>
+        </div>
+      </transition>
     </div>
-    <transition name="fade">
-      <div class="save" :style="{ top: save.top + 'px' }" v-if="save.show">
-        <svg viewBox="0 0 1024 1024" version="1.1" width="30" height="30">
-          <path
-            d="M512 64c247.2 0 448 200.8 448 448h-64c0-212-172-384-384-384V64z m0 832c-212 0-384-172-384-384H64c0 247.2 200.8 448 448 448v-64z"
-            fill="#FFB0AA"
-          ></path>
-        </svg>
-      </div>
-    </transition>
   </div>
 </template>
 
@@ -33,8 +33,7 @@ module.exports = {
   },
   data: () => ({
     save: {
-      show: false,
-      top: 40
+      show: false
     },
     wrapper: {
       width: 1024,
@@ -69,14 +68,14 @@ module.exports = {
   .wrapper
     transform-origin left top
 
-  .save
-    z-index 999
-    position fixed
-    top 40px
-    right 7px
-    width 30px
-    height 30px
-    animation 1.5s linear 0s infinite normal none running spin
+    .save
+      z-index 999
+      position absolute
+      top 10px
+      right 7px
+      width 30px
+      height 30px
+      animation 1.5s linear 0s infinite normal none running spin
 
 @keyframes spin
   from
@@ -95,4 +94,11 @@ module.exports = {
 
 .fade-enter-active, .fade-leave-active
   transition opacity 0.5s !important
+
+@keyframes fade
+  from
+    opacity 0
+
+  to
+    opacity 1
 </style>

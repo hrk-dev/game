@@ -3,9 +3,16 @@
     <transition name="fade">
       <div class="main-menu" v-if="show">
         <div class="bg">
-          <img class="img" :src="bg" alt draggable="false" />
+          <video
+            class="video"
+            :style="{ filter: `blur(${blur}px)` }"
+            :poster="bg"
+            :src="video"
+            autoplay
+            loop
+          ></video>
           <transition name="title" appear>
-            <img class="main-title" :src="title" alt draggable="false" v-if="menu.show" />
+            <img class="main-title" :src="title" draggable="false" v-if="menu.show" />
           </transition>
         </div>
         <transition name="slide-up" appear>
@@ -19,25 +26,36 @@
             </template>
           </div>
         </transition>
-        <Setting ref="Setting" @back="showMenu"></Setting>
+        <Setting ref="Setting" @back="settingExit"></Setting>
       </div>
     </transition>
+    <Chapters ref="Chapter" @start="startLoop" @back="showMenu"></Chapters>
   </div>
 </template>
 
 <script>
 module.exports = {
   components: {
-    Setting: VueMain.loadComponent('Common/Setting')
+    Setting: VueMain.loadComponent('Common/Setting'),
+    Chapters: VueMain.loadComponent('Common/Chapters')
   },
   data: () => ({
     show: false,
     busy: false,
+    blur: 0,
+    chapter: {
+      show: false,
+      flag: true,
+      end: true,
+      next_1: 0,
+      next_2: 1
+    },
     bg: md5Url('img/vue/menu/menu.png'),
+    video: md5Url('movies/menu.mp4'),
     title: md5Url('img/vue/menu/title.png'),
     left: 0,
     menu: {
-      show: true,
+      show: false,
       current: 1,
       restart: true,
       list: [
@@ -47,37 +65,15 @@ module.exports = {
           en: 'Restart',
           fn() {
             Methods.hidePopup()
-            // 第一章需移除条件Patch.loopData.newGame
-            if (Patch.loopData.newGame || !Patch.loopData.next) {
-              this.hideMenu()
-              DataManager.setupNewGame()
-              SceneManager.goto(Scene_Map)
-              Patch.startWait()
-              setTimeout(() => {
-                this.show = false
-                Patch.stopWait()
-              }, 300)
+            if (!Patch.loopData.next) {
+              this.startGame()
             } else {
               this.hideMenu()
-              Components.Loading.loadingShow()
-              setTimeout(() => {
-                DataManager.loadGame(1)
-                  .then(() => {
-                    this.show = false
-                    $gameMap._interpreter.command115()
-                    $gameVariables.setValue(1, Patch.loopData.next)
-                    $gameTemp.reserveCommonEvent(97)
-                    Methods.clearTip()
-                    AudioManager.stopAll()
-                    SceneManager.goto(Scene_Map)
-                  })
-                  .catch((err) => {
-                    console.error(err)
-                    Methods.showPopup('Error', '奇怪的错误', 1500)
-                    Components.Loading.loadingHide()
-                    this.showMenu()
-                  })
-              }, 300)
+              if (Patch.loopData.newGame) {
+                this.$refs?.Chapter?.show()
+              } else {
+                this.startLoop(Number(Patch.loopData.next))
+              }
             }
           }
         },
@@ -148,7 +144,8 @@ module.exports = {
     }
   },
   methods: {
-    init() {
+    async init() {
+      this.blur = 0
       Components.Loading.loadingHide()
       this.menu.current = 1
       Components.GameMenu.menu.current = 0
@@ -170,42 +167,50 @@ module.exports = {
       }
 
       if (Patch.loopData.lock) {
-        Methods.showPopup('Seems to have unlocked something strange', '好像解锁了一些奇怪的东西', 2000)
-        Patch.loopData.lock = false
+        this.blur = (Patch.loopData.next - 1) || 0
+        await this.$nextTick()
+        if (this.$refs?.Chapter) {
+          Patch.loopData.lock = false
+          this.$refs?.Chapter?.show(true)
+        } else {
+          this.initMenu()
+        }
+      } else {
+        this.initMenu()
+        this.blur = Patch.loopData.next || 0
       }
       if (Patch.loopData.load === false) {
         this.menu.list[1].show = false
         this.menu.current = 0
       }
       Patch.saveLoopData()
-
+    },
+    async initMenu() {
       this.menu.show = true
       this.menuShowAnime()
-      this.$nextTick(() => {
-        this.setHighlight()
-      })
+      await this.$nextTick()
+      this.setHighlight()
     },
-    menuShowAnime() {
-      this.$nextTick(() => {
-        anime({
-          targets: '.btn',
-          translateY: [100, 0],
-          easing: 'spring(1, 100, 10, 10)',
-          duration: 500,
-          delay: anime.stagger(50)
-        })
-        anime({
-          targets: '.main-title',
-          top: [0, '30%'],
-          easing: 'spring(1, 100, 10, 10)',
-          duration: 500
-        })
-        anime({
-          targets: '.main-highlight',
-          translateY: [100, 0],
-          easing: 'spring(1, 100, 10, 10)',
-          duration: 500
-        })
+    async menuShowAnime() {
+      await this.$nextTick()
+      anime({
+        targets: '.btn',
+        translateY: [100, 0],
+        easing: 'spring(1, 100, 10, 10)',
+        duration: 500,
+        delay: anime.stagger(50)
+      })
+      anime({
+        targets: '.main-title',
+        top: [0, '30%'],
+        easing: 'spring(1, 100, 10, 10)',
+        duration: 500
+      })
+      anime({
+        targets: '.main-highlight',
+        translateY: [100, 0],
+        easing: 'spring(1, 100, 10, 10)',
+        duration: 500
       })
     },
     getLastItem() {
@@ -226,10 +231,47 @@ module.exports = {
       })
       this.left = item?.offsetLeft || 0
     },
+    startGame() {
+      this.hideMenu()
+      DataManager.setupNewGame()
+      SceneManager.goto(Scene_Map)
+      Patch.startWait()
+      setTimeout(() => {
+        this.show = false
+        Patch.stopWait()
+      }, 300)
+    },
+    startLoop(next) {
+      if (next === 0) {
+        this.startGame()
+        return
+      }
+      Components.Loading.loadingShow()
+      setTimeout(() => {
+        DataManager.loadGame(next + 100)
+          .then(() => {
+            this.show = false
+            $gameMap._interpreter.command115()
+            $gameVariables.setValue(1, next)
+            $gameTemp.reserveCommonEvent(97)
+            Methods.clearTip()
+            AudioManager.stopAll()
+            SceneManager.goto(Scene_Map)
+          })
+          .catch((err) => {
+            console.error(err)
+            Methods.showPopup('Error', '奇怪的错误', 1500)
+            Components.Loading.loadingHide()
+            this.showMenu()
+          })
+      }, 300)
+    },
     checkInput(buttonName) {
       if (!this.show || this.busy) return
       if (Components.Credits.show) return
-      if (this.$refs?.Setting?.show) {
+      if (this.$refs?.Chapter?.isShow) {
+        this.$refs.Chapter.checkInput(buttonName)
+      } else if (this.$refs?.Setting?.show) {
         this.$refs.Setting.checkInput(buttonName)
       } else if (this.menu.show) {
         switch (buttonName) {
@@ -301,13 +343,18 @@ module.exports = {
       this.$refs?.Setting?.back()
       this.showMenu()
     },
-    showMenu() {
+    settingExit() {
+      setTimeout(() => {
+        this.showMenu()
+      }, 200)
+    },
+    async showMenu() {
       if (this.menu.show) return
+      this.blur = Patch.loopData.next || 0
       this.menu.show = true
       this.menuShowAnime()
-      this.$nextTick(() => {
-        this.setHighlight()
-      })
+      await this.$nextTick()
+      this.setHighlight()
     },
     hideMenu() {
       if (!this.menu.show) return
@@ -365,10 +412,12 @@ module.exports = {
       top 0
       overflow hidden
 
-      .img
+      .video
         position absolute
-        bottom 0
+        top 0
+        left 0
         width 100%
+        transition filter 0.8s linear
 
       .main-title
         display block
@@ -400,6 +449,7 @@ module.exports = {
         border 2px solid rgba(255, 176, 170, 0.9)
         border-radius 10px
         transition left 0.15s
+        animation highlight-fade 1s alternate infinite
 
       .btn
         overflow hidden
@@ -458,4 +508,11 @@ module.exports = {
 
 .slide-up-enter-active, .slide-up-leave-active
   transition all 0.3s
+
+@keyframes highlight-fade
+  from
+    opacity 0.3
+
+  to
+    opacity 1
 </style>

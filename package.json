@@ -6,7 +6,8 @@
     "start": "chcp 65001 && electron .",
     "dist": "node bin/encryption.js",
     "build": "node bin/encryption.js && node bin/packager.js",
-    "build:steam": "cross-env NODE_ENV=steam node bin/encryption.js && node bin/packager.js",
+    "build:steam": "cross-env STEAM=true node bin/encryption.js && node bin/packager.js",
+    "build:steam-dev": "cross-env NODE_ENV=development STEAM=true node bin/encryption.js && node bin/packager.js",
     "build:test": "cross-env NODE_ENV=development node bin/encryption.js && node bin/packager.js",
     "build:dev": "electron-packager src Dev --executableName=game --overwrite --icon=src/game/icon/icon.ico --out=build --ignore=\"(icu$)\""
   },
@@ -24,13 +25,12 @@
   },
   "homepage": "https://github.com/hrk-dev/game#readme",
   "devDependencies": {
+    "@vue/devtools": "5.3.4",
     "cross-env": "^7.0.3",
-    "electron": "^12.0.7",
-    "electron-packager": "^15.2.0",
-    "fs-extra": "^10.0.0",
-    "md5-js": "^0.0.3",
-    "nodemon": "^2.0.7",
-    "@vue/devtools": "^5.3.4"
+    "electron": "^18.0.3",
+    "electron-packager": "^15.4.0",
+    "fs-extra": "^10.0.1",
+    "md5-js": "^0.0.3"
   },
   "prettier": {
     "trailingComma": "none",

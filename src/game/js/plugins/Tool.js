@@ -84,9 +84,58 @@
  * @text 消除提示
  * @desc 消除提示
  *
+ * @command 设置支线提示
+ * @text 设置支线提示
+ * @desc 设置支线提示
+ *
+ * @arg en
+ * @text en
+ * @desc 英文提示
+ *
+ * @arg cn
+ * @text cn
+ * @desc 中文提示
+ *
+ * @arg time
+ * @default 3000
+ * @text time
+ * @type number
+ * @desc 持续时间
+ *
+ * @command 消除支线提示
+ * @text 消除支线提示
+ * @desc 消除支线提示
+ *
+ * @command 临时提示
+ * @text 临时提示
+ * @desc 临时提示
+ *
+ * @arg en
+ * @text en
+ * @desc 英文提示
+ *
+ * @arg cn
+ * @text cn
+ * @desc 中文提示
+ *
+ * @arg time
+ * @default 3000
+ * @text time
+ * @type number
+ * @desc 持续时间
+ *
  * @command 保存
  * @text 保存
  * @desc 保存
+ *
+ * @command 保存周目存档
+ * @text 保存周目存档
+ * @desc 保存周目存档
+ *
+ * @arg next
+ * @text NEXT
+ * @type number
+ * @desc 下一章节
  *
  * @command 解锁成就
  * @text 解锁成就
@@ -94,7 +143,18 @@
  *
  * @arg id
  * @text ID
+ * @type number
  * @desc 成就ID
+ *
+ * @command 对话等待
+ * @text 对话等待
+ * @desc 对话等待
+ *
+ * @arg time
+ * @text time
+ * @default 60
+ * @type number
+ * @desc 等待时长
  */
 
 void function () {
@@ -123,12 +183,29 @@ void function () {
     消除提示: () => {
       Methods.clearTip()
     },
+    设置支线提示: ({ en, cn, time }) => {
+      Methods.showTip(en, cn, Number(time), true)
+    },
+    消除支线提示: () => {
+      Methods.clearTip(true)
+    },
+    临时提示: ({ en, cn, time }) => {
+      Components.Tip.tempTip(en, cn, Number(time), true)
+    },
     保存: () => {
       $gameSystem.onBeforeSave()
       DataManager.saveGame(1)
     },
+    保存周目存档: ({ next }) => {
+      $gameSystem.onBeforeSave()
+      DataManager.saveGame(Number(next) + 100)
+    },
     解锁成就: ({ id }) => {
       Steam.activateAchievement(id)
+    },
+    对话等待: ({ time }) => {
+      SceneManager._scene._messageWindow.startWait(Number(time))
+      SceneManager._scene._messageWindow._pauseSkip = true
     }
   }
 

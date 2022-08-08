@@ -131,6 +131,7 @@ module.exports = {
     },
     endingStart() {
       setTimeout(() => {
+        AudioManager.stopBgm()
         this.end.anime = true
         this.end.text = 'Hirro'
         AudioManager.playSe({
@@ -145,6 +146,7 @@ module.exports = {
           this.show = false
           Components.TitleBar.reset()
           Components.MainMenu.showMenu()
+          AudioManager.playBgm($dataSystem.titleBgm)
         }, 3000)
       }, 1000)
     },
@@ -198,6 +200,7 @@ module.exports = {
     top 50%
     left 50%
     transform translate(-50%, -50%)
+    filter blur(1px)
 
   .ending
     position fixed
@@ -206,6 +209,7 @@ module.exports = {
     flex-direction column
     align-items center
     justify-content center
+    filter blur(1px)
 
 .animation
   text-shadow -5px -5px 0px rgba(248, 240, 5, 0.5), 5px 5px 0px rgba(0, 230, 246, 0.5)

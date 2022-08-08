@@ -3,41 +3,44 @@
     <transition :name="_transition">
       <div class="message-wrapper" :class="_pos" v-if="message.show">
         <transition name="fade" @after-enter="messageHide">
-        <div class="text" :class="[_align, _size, _bg, _color]" ref="text" v-if="!hide.flag">
-          <div class="name" :class="_nameAlign" v-show="message.name && message.pos != 2">
-            <div class="name-cn">
-              {{ nameObj.cn }}
+          <div class="text" :class="[_align, _size, _bg, _color]" ref="text" v-if="!hide.flag">
+            <div class="name" :class="_nameAlign" v-show="message.name && message.pos != 2">
+              <div class="name-cn">
+                {{ nameObj.cn }}
+              </div>
+              <div class="name-en">
+                {{ nameObj.en }}
+              </div>
             </div>
-            <div class="name-en">
-              {{ nameObj.en }}
+            <template v-if="message.pos == 2">
+              <div ref="multiline">
+                <transition-group name="multiline-fade">
+                  <div
+                    class="multiline"
+                    v-for="(item, index) in message.multiline"
+                    :key="'msg' + index"
+                  >
+                    <div class="en" v-html="item.en"></div>
+                    <div class="cn" v-html="item.cn"></div>
+                  </div>
+                </transition-group>
+              </div>
+            </template>
+            <template v-else>
+              <div class="en" v-html="message.en"></div>
+              <div class="cn" v-html="message.cn"></div>
+            </template>
+            <div class="next-wrapper">
+              <div
+                class="next"
+                :class="_iconColor"
+                :style="{
+                  opacity: !choice.show && !message.wait ? 1 : 0,
+                  animation: !choice.show && !message.wait ? null : 'none'
+                }"
+              ></div>
             </div>
           </div>
-          <template v-if="message.pos == 2">
-            <div ref="multiline">
-              <transition-group name="multiline-fade">
-                <div
-                  class="multiline"
-                  v-for="(item, index) in message.multiline"
-                  :key="'msg' + index"
-                >
-                  <div class="en" v-html="item.en"></div>
-                  <div class="cn" v-html="item.cn"></div>
-                </div>
-              </transition-group>
-            </div>
-          </template>
-          <template v-else>
-            <div class="en" v-html="message.en"></div>
-            <div class="cn" v-html="message.cn"></div>
-          </template>
-          <div class="next-wrapper">
-            <div
-              class="next"
-              :class="_iconColor"
-              :style="{ opacity: !choice.show && !message.wait ? 1 : 0 }"
-            ></div>
-          </div>
-        </div>
         </transition>
         <div class="character" v-show="_showCharacter">
           <transition name="slide-up">
@@ -89,9 +92,9 @@
 <script>
 const NAME = {
   0: '汐 Shio',
-  1: '塔库亚 Takuya',
+  1: '王缪可 WangMilk',
   2: '西卡 Ceka',
-  3: '晏城 YanCheng',
+  3: '塔库亚 Takuya',
   4: '雅莉 Ari',
   5: '菲林 Freelyn'
 }
@@ -234,11 +237,11 @@ module.exports = {
   },
   methods: {
     characterError() {
-      Components.CharacterTest.add(this.message.character.list.shio)
+      Components.Debug.add(this.message.character.list.shio)
       this.message.character.list.shio = ''
     },
     otherCharacterError() {
-      Components.CharacterTest.add(this.message.character.list.other)
+      Components.Debug.add(this.message.character.list.other)
       this.message.character.list.other = ''
     },
     add(code, msg) {
@@ -455,7 +458,7 @@ module.exports = {
       this.message.temp.character = ''
     },
     getUrl(str) {
-      return str ? md5Url(`img/faces/${str}.png`) : null
+      return str ? md5Url(`img/faces/${str.trim()}.png`) : null
     },
     getName(id) {
       return NAME[id] || id
@@ -674,6 +677,7 @@ $pink = rgba(255, 176, 170, 0.9)
 
 .lowlight
   filter brightness(0.5)
+  width 380px !important
 
 .shio-left
   right calc(100% - 400px) !important
@@ -712,11 +716,4 @@ $pink = rgba(255, 176, 170, 0.9)
 
 .fade-enter-active, .fade-leave-active
   transition opacity 0.25s !important
-
-@keyframes fade
-  from
-    opacity 0
-
-  to
-    opacity 1
 </style>

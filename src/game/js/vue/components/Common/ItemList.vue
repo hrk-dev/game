@@ -1,46 +1,44 @@
 <template>
   <div>
-    <transition name="fade">
-      <div class="item-list-wrapper" v-if="isShow">
-        <div class="item-list-frame">
-          <div class="item-title">
+    <div class="item-list-wrapper">
+      <div class="empty" v-if="itemLength <= 0">Empty</div>
+      <div class="item-list-frame">
+        <!-- <div class="item-title">
             <div>物品 Item</div>
+          </div> -->
+        <div class="item-list" v-if="itemLength > 0">
+          <div class="pre" v-show="page > 0"></div>
+          <div
+            class="next"
+            v-show="itemLength > page_num && page < Math.ceil(itemLength / page_num) - 1"
+          ></div>
+          <div
+            class="item"
+            v-for="(item, index) in list"
+            :key="index"
+            :class="{ select: current == index }"
+          >
+            <div class="en" v-if="item.meta?.en">{{ item.meta.en }}</div>
+            <div class="cn">{{ item.meta?.cn || item.name }}</div>
           </div>
-          <div class="item-list">
-            <div class="pre" v-show="page > 0"></div>
-            <div
-              class="next"
-              v-show="itemLength > page_num && page < Math.ceil(itemLength / page_num) - 1"
-            ></div>
-            <div
-              class="item"
-              v-for="(item, index) in list"
-              :key="index"
-              :class="{ select: current == index }"
-            >
-              <div class="en" v-if="item.meta?.en">{{ item.meta.en }}</div>
-              <div class="cn">{{ item.meta?.cn || item.name }}</div>
-            </div>
+        </div>
+        <div class="item-info" v-if="itemLength > 0">
+          <div class="img">
+            <img :src="img" />
           </div>
-          <div class="item-info">
-            <div class="img">
-              <img :src="img" />
-            </div>
-            <div class="text">
-              <div class="en">{{ text.en }}</div>
-              <div class="cn">{{ text.cn }}</div>
-            </div>
+          <div class="text">
+            <div class="en">{{ text.en }}</div>
+            <div class="cn">{{ text.cn }}</div>
           </div>
         </div>
       </div>
-    </transition>
+    </div>
   </div>
 </template>
 
 <script>
 module.exports = {
   data: () => ({
-    isShow: false,
     itemLength: 0,
     list: [],
     groupList: [],
@@ -69,17 +67,6 @@ module.exports = {
     }
   },
   methods: {
-    show() {
-      this.getItemList()
-      this.list = this.groupList[this.page]
-      if (this.index > this.itemLength) this.index = 0
-      this.getInfo()
-      this.isShow = true
-    },
-    hide() {
-      SoundManager.playCancel()
-      this.isShow = false
-    },
     getInfo() {
       if (this.list[this.current]) {
         this.img = this.list[this.current].meta?.img
@@ -149,6 +136,10 @@ module.exports = {
   },
   created() {
     this.page_num = 10
+    this.getItemList()
+    this.list = this.groupList[this.page]
+    if (this.index > this.itemLength) this.index = 0
+    this.getInfo()
   }
 }
 </script>
@@ -157,6 +148,15 @@ module.exports = {
 .item-list-wrapper
   position absolute
   inset 0
+
+  .empty
+    z-index 1
+    position absolute
+    top 50%
+    left 50%
+    transform translate(-50%, -50%)
+    color #fff
+    font-size 35px
 
   .item-list-frame
     overflow hidden
@@ -276,11 +276,4 @@ module.exports = {
 
 .select
   background rgba(255, 176, 170, 0.9) !important
-
-@keyframes fade
-  from
-    opacity 0
-
-  to
-    opacity 1
 </style>

@@ -1,16 +1,8 @@
 <template>
   <div id="game-menu">
     <div v-if="show">
-      <!-- 测试 -->
       <transition name="slide-right" appear>
-        <div class="test" v-if="test.dev && menu.show">
-          <input type="number" min="1" max="99" v-model.number="test.saveID" />
-          <button @click="save">save</button>
-          <button @click="load">load</button>
-        </div>
-      </transition>
-      <transition name="slide-right" appear>
-        <div class="menu" :style="{ top: `${menu.top}px` }" v-if="menu.show">
+        <div class="menu" v-if="menu.show">
           <template v-for="(item, index) in menu.list">
             <transition name="btn" :key="index">
               <div
@@ -34,41 +26,34 @@
           </transition>
         </div>
       </transition>
-      <transition name="slide-up" appear>
-        <div class="character" v-if="menu.show">
-          <img :src="menu.img" />
-        </div>
+      <transition name="slide-left" appear>
+        <Todo v-if="menu.show"></Todo>
       </transition>
-      <Item ref="Item"></Item>
+      <transition name="fade">
+        <Item v-if="item" ref="Item"></Item>
+      </transition>
       <Setting ref="Setting" @back="showMenu"></Setting>
     </div>
+    <div class="bg"></div>
   </div>
 </template>
 
 <script>
 module.exports = {
   components: {
+    Todo: VueMain.loadComponent('Common/Todo'),
     Item: VueMain.loadComponent('Common/ItemList'),
     Setting: VueMain.loadComponent('Common/Setting')
   },
   data: () => ({
-    // 测试
-    test: {
-      dev: false,
-      saveID: 1
-    },
     show: false,
     hasSave: false,
     time: 0,
-    tip: {
-      en: '',
-      cn: ''
-    },
+    // 是否显示物品栏
+    item: false,
     menu: {
       show: false,
-      top: 130,
       current: 0,
-      img: md5Url('img/faces/汐/震惊-思考.png'),
       list: [
         {
           show: true,
@@ -117,10 +102,8 @@ module.exports = {
           cn: '物品',
           en: 'Item',
           fn() {
-            if (this.$refs.Item) {
-              this.hideMenu()
-              this.$refs.Item.show()
-            }
+            this.hideMenu()
+            this.item = true
           }
         },
         {
@@ -135,11 +118,21 @@ module.exports = {
           }
         },
         {
+          show: false,
+          cn: '调试',
+          en: 'Debug',
+          fn() {
+            this.hideMenu()
+            Components.Debug.show()
+          }
+        },
+        {
           show: true,
           cn: '退出',
           en: 'Exit',
           fn() {
             Methods.showChoice('Do you wish back to title', '是否返回主菜单', () => {
+              this.hideMenu()
               this.show = false
               setTimeout(() => {
                 Components.Choice.hideChoice()
@@ -154,9 +147,6 @@ module.exports = {
     }
   }),
   computed: {
-    tipShow() {
-      return this.show && this.menu.show
-    },
     _time() {
       const hour = Math.floor(this.time / 60 / 60)
       const min = Math.floor(this.time / 60) % 60
@@ -165,41 +155,23 @@ module.exports = {
     }
   },
   watch: {
-    // 测试
-    saveID() {
-      if (this.test.saveID > 99) this.test.saveID = 99
-      if (this.test.saveID < 1) this.test.saveID = 1
-    },
-    show() {
+    async show() {
       if (this.show) {
         Patch.startWait()
         this.init()
       } else {
-        this.$nextTick(() => {
-          Patch.stopWait()
-        })
-      }
-    },
-    tipShow() {
-      if (this.tipShow) {
-        this.showTip()
-      } else {
-        Methods.hideTip()
+        await this.$nextTick()
+        Patch.stopWait()
       }
     }
   },
   methods: {
     init() {
       this.menu.list[1].show = false
-      this.showTip()
+      this.menu.list[4].show = Components.Debug.dev
       this.checkSave()
       // this.menu.current = 0
       this.showMenu()
-    },
-    async showTip() {
-      Patch.showTip(0)
-      await this.$nextTick()
-      this.menu.top = 60 + (Components?.Tip.$refs?.tip?.scrollHeight || 50) + 10
     },
     checkSave() {
       this.hasSave = Patch.checkSave()
@@ -217,7 +189,7 @@ module.exports = {
       }
       if (Components.Choice.show) {
         Components.Choice.checkInput(buttonName)
-      } else if (this.$refs?.Item?.isShow) {
+      } else if (this.item) {
         this.$refs.Item.checkInput(buttonName)
       } else if (this.$refs?.Setting?.show) {
         this.$refs.Setting.checkInput(buttonName)
@@ -275,6 +247,11 @@ module.exports = {
     },
     back() {
       if (this.show) {
+        if (Components.Debug.isShow) {
+          Components.Debug.hide()
+          this.showMenu()
+          return
+        }
         if (Components.Choice.show) {
           SoundManager.playCancel()
           Methods.hidePopup()
@@ -290,8 +267,9 @@ module.exports = {
           }, 200)
           return
         }
-        if (this.$refs?.Item.isShow) {
-          this.$refs.Item.hide()
+        if (this.item) {
+          SoundManager.playCancel()
+          this.item = false
           this.showMenu()
           return
         }
@@ -310,60 +288,20 @@ module.exports = {
       if (!this.menu.show) return
       this.menu.show = false
     },
-    menuShowAnime() {
-      this.$nextTick(() => {
-        anime({
-          targets: '.game-menu-btn',
-          translateX: ['-100%', 0],
-          easing: 'easeInOutQuad',
-          duration: 300,
-          delay: anime.stagger(50)
-        })
+    async menuShowAnime() {
+      await this.$nextTick()
+      anime({
+        targets: '.game-menu-btn',
+        translateX: ['-100%', 0],
+        easing: 'easeInOutQuad',
+        duration: 300,
+        delay: anime.stagger(50)
       })
     },
     setTime() {
       if (this.menu.show) {
         this.time = $gameSystem.playtime()
       }
-    },
-    // 测试
-    async save() {
-      if (!this.show) return
-      Components.Choice.reset()
-      $gameSystem.onBeforeSave()
-      try {
-        await DataManager.saveGame(this.test.saveID + 1)
-        Methods.showPopup('Save success', '保存成功', 1000)
-      } catch (e) {
-        Methods.showPopup('Save failed', '保存失败', 1000)
-      }
-    },
-    load() {
-      if (!this.show) return
-      Components.Choice.reset()
-      this.show = false
-      Components.Loading.loadingShow()
-      setTimeout(() => {
-        DataManager.loadGame(this.test.saveID + 1)
-          .then(() => {
-            Patch.startWait()
-            SceneManager.goto(Scene_Map)
-            $gameSystem.onAfterLoad()
-            Components.Loading.loadingHide()
-            Patch.showTip()
-            Patch.stopWait()
-          })
-          .catch(() => {
-            Methods.showPopup('Load failed', '读取失败', 1000)
-            Components.Loading.loadingHide()
-            this.show = true
-          })
-      }, 300)
-    }
-  },
-  mounted() {
-    if (test || dev) {
-      this.test.dev = true
     }
   }
 }
@@ -374,7 +312,7 @@ $pink = rgba(255, 176, 170, 0.9)
 
 .menu
   position absolute
-  top 130px
+  top 120px
   left 0px
   display flex
   flex-direction column
@@ -427,16 +365,6 @@ $pink = rgba(255, 176, 170, 0.9)
     padding 0 10px
     margin 10px 0
 
-.character
-  position absolute
-  right 0
-  bottom 0
-  width 350px
-
-  img
-    display block
-    width 100%
-
 .highlight
   padding-left 30px !important
   width 120px !important
@@ -464,15 +392,17 @@ $pink = rgba(255, 176, 170, 0.9)
 .slide-right-enter-active, .slide-right-leave-active
   transition all 0.3s ease
 
-.slide-up-enter-to, .slide-up-leave
-  transform translateY(0)
-  opacity 1
+.slide-left-enter-to, .slide-left-leave
+  transform translateX(0)
 
-.slide-up-enter, .slide-up-leave-to
-  transform translateY(100%)
-  opacity 0
+.slide-left-enter, .slide-left-leave-to
+  transform translateX(100%)
 
-.slide-up-enter-active, .slide-up-leave-active
+.slide-left-enter-active
+  transition all 0.3s
+  transition-delay 0.1s
+
+.slide-left-leave-active
   transition all 0.3s
 
 .fade-enter, .fade-leave-to
@@ -483,30 +413,4 @@ $pink = rgba(255, 176, 170, 0.9)
 
 .fade-enter-active, .fade-leave-active
   transition opacity 0.2s
-
-// 测试
-.test
-  position fixed
-  bottom 10px
-  left 0px
-  display flex
-  height 40px
-  margin 0px
-  border-top 2px solid rgba(255, 176, 170, 0.9)
-  border-right 2px solid rgba(255, 176, 170, 0.9)
-  border-bottom 2px solid rgba(255, 176, 170, 0.9)
-  border-left none
-  border-top-right-radius 10px
-  border-bottom-right-radius 10px
-  overflow hidden
-
-  & > *
-    color #fff
-    background rgba(40, 40, 40, 0.7)
-    margin 1px
-    border-radius 5px
-    border 2px solid rgba(255, 176, 170, 0.9)
-
-  input
-    text-align center
 </style>

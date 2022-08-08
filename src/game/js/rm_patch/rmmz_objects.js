@@ -147,3 +147,8 @@ Game_Map.prototype.tileEventsXy = function (x, y) {
     return event.posNt(x, y)
   }) || []
 }
+
+// 修改奔跑速度
+Game_CharacterBase.prototype.realMoveSpeed = function () {
+  return this._moveSpeed + (this.isDashing() ? 1.25 : 0)
+}

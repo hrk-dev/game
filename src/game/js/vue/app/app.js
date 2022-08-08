@@ -15,7 +15,7 @@ VueMain.app = new Vue({
     Choice: VueMain.loadComponent('Popup/Choice'),
     Message: VueMain.loadComponent('Message/Message'),
     Log: VueMain.loadComponent('Message/Log'),
-    CharacterTest: VueMain.loadComponent('Temp/CharacterTest')
+    Debug: VueMain.loadComponent('Temp/Debug')
   },
   data: () => ({
     ready: false,
