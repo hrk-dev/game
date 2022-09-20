@@ -10,7 +10,7 @@
           <transition :name="transition">
             <span class="number" v-if="flag">{{ getNumber(next_2) }}</span>
           </transition>
-          <div class="arrow" v-show="!anime">_</div>
+          <!-- <div class="arrow" v-show="!anime">_</div> -->
         </div>
         <div class="tip" v-show="!anime">Select</div>
       </div>
@@ -55,7 +55,7 @@ module.exports = {
       }, 300)
     },
     getNumber(num) {
-      return num == 2 ? 0 : num + 1
+      return num == 3 ? 0 : num + 1
     },
     setNext(next) {
       if (this.flag) {
@@ -72,10 +72,10 @@ module.exports = {
       if (this.anime) return
       switch (buttonName) {
         case 'left':
-          this.up()
+          this.down()
           break
         case 'right':
-          this.down()
+          this.up()
           break
         case 'up':
           this.up()
