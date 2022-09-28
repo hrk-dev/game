@@ -143,7 +143,7 @@
  *
  * @arg id
  * @text ID
- * @type number
+ * @type string
  * @desc 成就ID
  *
  * @command 对话等待
