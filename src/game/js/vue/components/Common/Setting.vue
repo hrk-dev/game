@@ -16,12 +16,12 @@
               <div class="switch">
                 <transition name="switch">
                   <div v-if="fullscreen">
-                    <div>○</div>
+                    <div style="font-size: 30px">○</div>
                   </div>
                 </transition>
                 <transition name="switch">
                   <div v-if="!fullscreen">
-                    <div>×</div>
+                    <div style="font-size: 36px">×</div>
                   </div>
                 </transition>
               </div>
@@ -34,12 +34,12 @@
               <div class="switch">
                 <transition name="switch">
                   <div v-if="keepRunning">
-                    <div>○</div>
+                    <div style="font-size: 30px">○</div>
                   </div>
                 </transition>
                 <transition name="switch">
                   <div v-if="!keepRunning">
-                    <div>×</div>
+                    <div style="font-size: 36px">×</div>
                   </div>
                 </transition>
               </div>
@@ -364,6 +364,7 @@ module.exports = {
         .switch
           overflow hidden
           position relative
+          left -5px
           font-size 60px
           width 45px
           height 45px
@@ -390,6 +391,7 @@ module.exports = {
             height 55%
             border 1px solid #fff
             transition background 0.2s linear
+            border-radius 50%
 
         .percent
           font-size 25px
