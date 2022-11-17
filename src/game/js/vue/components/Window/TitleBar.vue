@@ -9,6 +9,7 @@
     <div class="title-btn-list">
       <div class="dev-btn" v-if="test">
         <div class="title-btn" @click="ipc('app:reload')" title="刷新页面">Re</div>
+        <div class="title-btn" @click="testEvent" title="测试事件">Test</div>
         <div class="title-btn" @click="ipc('dev:tool')" title="打开devtools">Dev</div>
         <div class="title-btn" @click="ipc('dev:vue')" title="打开vue-devtools" v-if="dev">Vue</div>
       </div>
@@ -29,6 +30,9 @@ module.exports = {
     color: ''
   }),
   methods: {
+    testEvent() {
+      $gameTemp.reserveCommonEvent(100)
+    },
     ipc(type) {
       electron.ipcRenderer.send(type)
     },
