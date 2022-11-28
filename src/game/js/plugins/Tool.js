@@ -124,10 +124,6 @@
  * @type number
  * @desc 持续时间
  *
- * @command 保存
- * @text 保存
- * @desc 保存
- *
  * @command 保存周目存档
  * @text 保存周目存档
  * @desc 保存周目存档
@@ -192,11 +188,25 @@ void function () {
     临时提示: ({ en, cn, time }) => {
       Components.Tip.tempTip(en, cn, Number(time), true)
     },
-    保存: () => {
-      $gameSystem.onBeforeSave()
-      DataManager.saveGame(1)
-    },
     保存周目存档: ({ next }) => {
+      if (Patch.loopData.next) {
+        if (Patch.loopData.next < Number(next)) {
+          Patch.loopData.next = Number(next)
+          Patch.addLoopData({
+            lock: true,
+            skip: true
+          })
+        }
+      } else {
+        Patch.addLoopData({
+          next: 1,
+          lock: true,
+          restart: true,
+          load: true,
+          newGame: false
+        })
+      }
+      Patch.saveLoopData()
       $gameSystem.onBeforeSave()
       DataManager.saveGame(Number(next) + 100)
     },

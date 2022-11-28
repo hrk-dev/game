@@ -22,6 +22,7 @@
 module.exports = {
   data: () => ({
     anime: false,
+    skip: false,
     isShow: false,
     flag: true,
     end: true,
@@ -30,7 +31,8 @@ module.exports = {
     transition: 'slide-up-text'
   }),
   methods: {
-    show(anime) {
+    show(anime, skip) {
+      this.skip = skip
       if (anime) {
         this.anime = anime
         this.setNext(Number(Patch.loopData.next) - 1)
@@ -51,11 +53,20 @@ module.exports = {
       this.isShow = false
       this.anime = false
       setTimeout(() => {
-        this.$emit('back')
+        this.$emit('back', this.skip)
       }, 300)
     },
     getNumber(num) {
-      return num == 3 ? 0 : num + 1
+      switch (num) {
+        case 3:
+          return 3.5
+        case 4:
+          return 4
+        case 5:
+          return 0
+        default:
+          return  num + 1
+      }
     },
     setNext(next) {
       if (this.flag) {
@@ -159,7 +170,6 @@ module.exports = {
 
     .number
       position absolute
-      bottom -5px
       margin-left 15px
 
     .arrow
@@ -187,7 +197,7 @@ module.exports = {
   transition all 0.35s
 
 .slide-up-text-enter-to, .slide-up-text-leave
-  bottom -5px !important
+  bottom 0px !important
   opacity 1
 
 .slide-up-text-enter
@@ -206,7 +216,7 @@ module.exports = {
   transition all 0.35s
 
 .slide-down-text-enter-to, .slide-down-text-leave
-  bottom -5px !important
+  bottom 0px !important
   opacity 1
 
 .slide-down-text-enter

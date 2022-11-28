@@ -29,7 +29,7 @@
         <Setting ref="Setting" @back="settingExit"></Setting>
       </div>
     </transition>
-    <Chapters ref="Chapter" @start="startLoop" @back="showMenu"></Chapters>
+    <Chapters ref="Chapter" @start="startLoop" @back="chapterHide"></Chapters>
   </div>
 </template>
 
@@ -171,7 +171,8 @@ module.exports = {
         await this.$nextTick()
         if (this.$refs?.Chapter) {
           Patch.loopData.lock = false
-          this.$refs?.Chapter?.show(true)
+          this.$refs?.Chapter?.show(true, Patch.loopData.skip)
+          Patch.loopData.skip = false
         } else {
           this.initMenu()
         }
@@ -265,6 +266,13 @@ module.exports = {
             this.showMenu()
           })
       }, 300)
+    },
+    chapterHide(skip) {
+      if (skip) {
+        this.startLoop(Patch.loopData.next)
+      } else {
+        this.showMenu()
+      }
     },
     checkInput(buttonName) {
       if (!this.show || this.busy) return
