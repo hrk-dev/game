@@ -38,10 +38,11 @@ const Patch = class {
     this.saveLoopData()
   }
 
-  static async save() {
+  static async save(id) {
+    console.log('save', 4)
     $gameSystem.onBeforeSave()
     try {
-      await DataManager.saveGame(1)
+      await DataManager.saveGame(id)
       Methods.showPopup('Save success', '保存成功', 1000)
       if (!this.loopData.newGame && $gameVariables.value(1) === this.loopData.next) {
         this.loopData.newGame = true
@@ -53,7 +54,7 @@ const Patch = class {
   }
 
   static checkSave() {
-    return fs.existsSync(StorageManager.filePath('hiiro'))
+    return DataManager.savefileExists(1) || DataManager.savefileExists(2) || DataManager.savefileExists(3) || DataManager.savefileExists(4) || DataManager.savefileExists(5)
   }
 
   static showTip(time) {

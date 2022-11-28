@@ -26,6 +26,10 @@ DataManager.saveGame = async function (savefileId) {
   const contents = this.makeSaveContents()
   const saveName = this.makeSavename(savefileId)
   await StorageManager.saveObject(saveName, contents)
+  if (savefileId <= 5) {
+    this._globalInfo[savefileId] = this.makeSavefileInfo()
+    this.saveGlobalInfo()
+  }
   return 0
 }
 
@@ -110,18 +114,37 @@ ConfigManager.applyData = function (config) {
   this.fullscreen = this.readFlag(config, 'fullscreen', false)
 }
 
-DataManager._globalInfo = []
-DataManager.saveGlobalInfo = function () { }
+// DataManager._globalInfo = []
+DataManager.saveGlobalInfo = function () {
+  StorageManager.saveObject('hiro', this._globalInfo)
+}
 
 DataManager.loadGlobalInfo = function () {
-  return 0
+  StorageManager.loadObject('hiro')
+    .then(globalInfo => {
+      this._globalInfo = globalInfo
+      this.removeInvalidGlobalInfo()
+      return 0;
+    })
+    .catch(() => {
+      this._globalInfo = []
+    })
 }
 
 DataManager.makeSavename = function (savefileId) {
   let temp = ''
   savefileId = Number(savefileId) ?? 0
-  if (savefileId === 1) {
-    return 'hiiro'
+  switch (savefileId) {
+    case 1:
+      return 'hiiro'
+    case 2:
+      return 'hiiroo'
+    case 3:
+      return 'hiirooo'
+    case 4:
+      return 'hiiroooo'
+    case 5:
+      return 'hiirooooo'
   }
   if (savefileId > 100) {
     savefileId -= 100

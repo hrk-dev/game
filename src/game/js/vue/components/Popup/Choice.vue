@@ -96,7 +96,7 @@ $pink = rgba(255, 176, 170, 0.9)
   position absolute
   left 50%
   top 50%
-  background rgba(0, 0, 0, 0.6)
+  background rgba(0, 0, 0, 0.7)
   transform translate(-50%, -50%)
   padding 10px
   text-align center

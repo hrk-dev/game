@@ -26,7 +26,8 @@
             </template>
           </div>
         </transition>
-        <Setting ref="Setting" @back="settingExit"></Setting>
+        <Setting ref="Setting" @back="winClose"></Setting>
+        <Save ref="Save" @load="load" @back="winClose"></Save>
       </div>
     </transition>
     <Chapters ref="Chapter" @start="startLoop" @back="chapterHide"></Chapters>
@@ -36,6 +37,7 @@
 <script>
 module.exports = {
   components: {
+    Save: VueMain.loadComponent('Common/SaveList'),
     Setting: VueMain.loadComponent('Common/Setting'),
     Chapters: VueMain.loadComponent('Common/Chapters')
   },
@@ -86,21 +88,11 @@ module.exports = {
             if (Patch.loopData.restart) {
               this.chapterEnd()
             } else {
-              this.hideMenu()
-              Components.Loading.loadingShow()
-              setTimeout(() => {
-                DataManager.loadGame(1)
-                  .then(() => {
-                    this.show = false
-                    $gameTemp.reserveCommonEvent(98)
-                    SceneManager.goto(Scene_Map)
-                  })
-                  .catch(() => {
-                    Methods.showPopup('Error', '奇怪的错误', 1500)
-                    Components.Loading.loadingHide()
-                    this.showMenu()
-                  })
-              }, 300)
+              if (this.$refs.Save) {
+                SoundManager.playOk()
+                this.hideMenu()
+                this.$refs.Save.show(0, false)
+              }
             }
           }
         },
@@ -274,6 +266,23 @@ module.exports = {
         this.showMenu()
       }
     },
+    load(id) {
+      this.hideMenu()
+      Components.Loading.loadingShow()
+      setTimeout(() => {
+        DataManager.loadGame(id)
+          .then(() => {
+            this.show = false
+            $gameTemp.reserveCommonEvent(98)
+            SceneManager.goto(Scene_Map)
+          })
+          .catch(() => {
+            Methods.showPopup('Error', '奇怪的错误', 1500)
+            Components.Loading.loadingHide()
+            this.showMenu()
+          })
+      }, 300)
+    },
     checkInput(buttonName) {
       if (!this.show || this.busy) return
       if (Components.Credits.show) return
@@ -281,6 +290,8 @@ module.exports = {
         this.$refs.Chapter.checkInput(buttonName)
       } else if (this.$refs?.Setting?.show) {
         this.$refs.Setting.checkInput(buttonName)
+      } else if (this.$refs?.Save?.isShow) {
+        this.$refs.Save.checkInput(buttonName)
       } else if (this.menu.show) {
         switch (buttonName) {
           case 'left':
@@ -351,7 +362,7 @@ module.exports = {
       this.$refs?.Setting?.back()
       this.showMenu()
     },
-    settingExit() {
+    winClose() {
       setTimeout(() => {
         this.showMenu()
       }, 200)
