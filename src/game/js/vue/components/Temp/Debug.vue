@@ -30,11 +30,11 @@
       <div class="debug-wrapper" v-if="isShow && dev">
         <div class="line">
           <div style="padding: 5px">Debug</div>
-          <div class="debug-save">
+          <!-- <div class="debug-save">
             <input type="number" min="1" max="99" v-model.number="saveID" />
             <button @click="save">save</button>
             <button @click="load">load</button>
-          </div>
+          </div> -->
         </div>
         <div class="debug-character" v-if="hasError">
           <div style="margin-bottom: 5px; border-bottom: 1px solid #fff">
@@ -98,7 +98,7 @@ module.exports = {
     async save() {
       $gameSystem.onBeforeSave()
       try {
-        await DataManager.saveGame(this.saveID + 1)
+        await DataManager.saveGame(this.saveID + 5)
         Methods.showPopup('Save success', '保存成功', 1000)
       } catch (e) {
         Methods.showPopup('Save failed', '保存失败', 1000)

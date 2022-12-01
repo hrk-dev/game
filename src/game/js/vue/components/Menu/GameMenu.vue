@@ -101,8 +101,8 @@ module.exports = {
         },
         {
           show: false,
-          cn: '调试',
-          en: 'Debug',
+          cn: '日志',
+          en: 'Log',
           fn() {
             this.hideMenu()
             Components.Debug.show()

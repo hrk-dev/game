@@ -7,8 +7,14 @@
             <div>设置 Setting</div>
           </div> -->
           <div class="setting">
-            <div class="arrow" :style="{ top: `${top}px` }">→</div>
-            <div class="item" ref="fullscreen">
+            <div
+              class="arrow"
+              :style="{
+                top: `${top}px`,
+                backgroundImage: `url('${bgUrl}')`
+              }"
+            ></div>
+            <div class="item" :class="{ 'setting-highlight': current === 0 }" ref="fullscreen">
               <div class="text">
                 <div class="en">FullScreen</div>
                 <div class="cn">全屏</div>
@@ -26,7 +32,7 @@
                 </transition>
               </div>
             </div>
-            <div class="item" ref="run">
+            <div class="item" :class="{ 'setting-highlight': current === 1 }" ref="run">
               <div class="text">
                 <div class="en">Always Dash</div>
                 <div class="cn">持续奔跑</div>
@@ -44,7 +50,7 @@
                 </transition>
               </div>
             </div>
-            <div class="item" ref="bgm">
+            <div class="item" :class="{ 'setting-highlight': current === 2 }" ref="bgm">
               <div class="text">
                 <div class="en">BGM Volume</div>
                 <div class="cn">背景音量</div>
@@ -55,13 +61,13 @@
                   :key="'bgm' + i"
                   class="block"
                   :style="{
-                    background: i <= bgm ? '#fff' : ''
+                    backgroundImage: i <= bgm ? `url('${volUrl}')` : `url('${vol0Url}')`
                   }"
                 ></div>
               </div>
               <div class="percent">{{ _bgm }}%</div>
             </div>
-            <div class="item" ref="se">
+            <div class="item" :class="{ 'setting-highlight': current === 3 }" ref="se">
               <div class="text">
                 <div class="en">SE Volume</div>
                 <div class="cn">特效音量</div>
@@ -72,13 +78,13 @@
                   :key="'bgm' + i"
                   class="block"
                   :style="{
-                    background: i <= se ? '#fff' : ''
+                    backgroundImage: i <= se ? `url('${volUrl}')` : `url('${vol0Url}')`
                   }"
                 ></div>
               </div>
               <div class="percent">{{ _se }}%</div>
             </div>
-            <div class="item" ref="back">
+            <div class="item" :class="{ 'setting-highlight': current === 4 }" ref="back">
               <div class="text">
                 <div class="en">Back</div>
                 <div class="cn">返回</div>
@@ -102,7 +108,10 @@ module.exports = {
     keepRunning: false,
     bgm: 0,
     se: 0,
-    top: 79
+    top: 79,
+    bgUrl: md5Url('img/vue/setting/select.png'),
+    volUrl: md5Url('img/vue/setting/vol.png'),
+    vol0Url: md5Url('img/vue/setting/vol_0.png')
   }),
   computed: {
     _bgm() {
@@ -320,10 +329,12 @@ module.exports = {
 
     .arrow
       position absolute
-      left 35px
+      left 25px
       height 45px
-      line-height 50px
+      width 45px
       transition top 0.1s
+      background-size cover
+      animation select 0.5s infinite step-start alternate
 
     .setting-title
       position absolute
@@ -345,10 +356,11 @@ module.exports = {
         display flex
         align-items center
         height 45px
-        margin-left 80px
+        margin-left 85px
+        transition color 0.1s
 
         .text
-          width 250px
+          width 230px
           display flex
           flex-direction column
           justify-content center
@@ -377,26 +389,37 @@ module.exports = {
             align-items center
             justify-content center
 
+        $slider-width = 380px
+
         .slider
           height 100%
-          width 300px
-          padding 0 5px
+          width $slider-width
+          padding 0 4px
           display flex
           align-items center
 
           .block
             box-sizing border-box
-            margin 3px
+            margin 1px
             width 10%
-            height 55%
-            border 1px solid #fff
-            transition background 0.2s linear
+            height ($slider-width / 10 - @margin * 2)
+            border 2px solid transparent
             border-radius 50%
+            background-size cover
+            background-position center
+            background-repeat no-repeat
+            transition border-color 0.1s
 
         .percent
           font-size 25px
           text-align right
-          width 70px
+          width 60px
+
+.setting-highlight
+  color pink
+
+  .block
+    border-color pink !important
 
 .fade-enter-active
   transition opacity 0.5s
@@ -422,4 +445,14 @@ module.exports = {
 
 .switch-enter-to, .switch-leave
   transform translateX(0)
+
+@keyframes select
+  0%
+    background-position-x 0
+
+  50%
+    background-position-x -100%
+
+  100%
+    background-position-x 0
 </style>
