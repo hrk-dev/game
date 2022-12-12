@@ -28,6 +28,10 @@ function init() {
     ipcMain.on('steam:clear-achievement', (_e, name) => {
       clearAchievement(name)
     })
+
+    ipcMain.on('steam:get-username', (e) => {
+      e.returnValue = greenworks.getSteamId()?.screenName
+    })
   }
 }
 

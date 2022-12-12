@@ -4,12 +4,12 @@
       <div class="credits-wrapper" v-if="show">
         <transition name="fade">
           <div class="img-wrapper" :style="{ left: `-${img.index * 1034}px` }" v-if="img.show">
-            <div class="text">
-              <div class="en">Credits</div>
-              <div class="cn">制作组</div>
-            </div>
             <div class="img" v-for="(name, index) in img.list" :key="index">
               <img :src="getUrl(name)" />
+            </div>
+            <div class="text">
+              <div class="en">Debug</div>
+              <div class="cn">{{ username }}</div>
             </div>
             <div class="text">
               <div class="en">Special Thanks</div>
@@ -36,6 +36,7 @@
 module.exports = {
   data: () => ({
     show: false,
+    username: 'You',
     img: {
       show: false,
       index: 0,
@@ -156,6 +157,9 @@ module.exports = {
   },
   mounted() {
     this.timer = null
+  },
+  created() {
+    this.username = electron.ipcRenderer.sendSync('steam:get-username') || 'You'
   }
 }
 </script>
