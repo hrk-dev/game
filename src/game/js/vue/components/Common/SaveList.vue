@@ -9,7 +9,7 @@
             class="save-item"
             :class="{ 'save-highlight': index === key }"
           >
-            <div v-if="item.ready">
+            <div v-if="item.ready" style="width: 250px">
               <div>Play Time: {{ item.playtime }}</div>
               <div>Save Time: {{ item.savetime }}</div>
             </div>
@@ -147,8 +147,8 @@ module.exports = {
     },
     getSaveData(id) {
       if (DataManager.savefileExists(id + 1)) {
-        this.$set(this.list[id], 'playtime', DataManager._globalInfo[id + 1].playtime || '-')
-        this.$set(this.list[id], 'savetime', (new Date(DataManager._globalInfo[id + 1].timestamp)).toLocaleString() || '-')
+        this.$set(this.list[id], 'playtime', DataManager._globalInfo?.[id + 1]?.playtime || '-')
+        this.$set(this.list[id], 'savetime', DataManager._globalInfo?.[id + 1]?.timestamp ? (new Date(DataManager._globalInfo?.[id + 1]?.timestamp)).toLocaleString() : '-')
         this.$set(this.list[id], 'ready', true)
       }
     }

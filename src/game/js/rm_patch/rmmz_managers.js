@@ -151,7 +151,7 @@ DataManager.makeSavename = function (savefileId) {
     for (let i = 0; i <= savefileId; i++) {
       temp += 'i'
     }
-    return `hi${temp}ro`
+    return `hii${temp}ro`
   }
   return `test-${savefileId}`
 }
