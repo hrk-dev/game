@@ -174,8 +174,6 @@ module.exports = {
             $gameTemp.reserveCommonEvent(98)
             SceneManager.goto(Scene_Map)
             $gameSystem.onAfterLoad()
-            Components.Loading.loadingHide()
-            Patch.showTip()
             Patch.stopWait()
           })
           .catch(() => {
