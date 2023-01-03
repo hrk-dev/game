@@ -34,4 +34,17 @@ global.Methods = class {
   static showChoice(en, cn, fn, cb) {
     Components.Choice.showChoice(en, cn, fn, cb)
   }
+
+  static getChapter(num) {
+    switch (num) {
+      case 3:
+        return 3.5
+      case 4:
+        return 4
+      case 5:
+        return 0
+      default:
+        return num + 1
+    }
+  }
 }

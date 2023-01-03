@@ -57,16 +57,7 @@ module.exports = {
       }, 300)
     },
     getNumber(num) {
-      switch (num) {
-        case 3:
-          return 3.5
-        case 4:
-          return 4
-        case 5:
-          return 0
-        default:
-          return  num + 1
-      }
+      return Methods.getChapter(num)
     },
     setNext(next) {
       if (this.flag) {

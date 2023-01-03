@@ -115,6 +115,18 @@ ConfigManager.applyData = function (config) {
 }
 
 // DataManager._globalInfo = []
+
+DataManager.makeSavefileInfo = function () {
+  const info = {}
+  info.title = $dataSystem.gameTitle
+  info.characters = $gameParty.charactersForSavefile()
+  info.faces = $gameParty.facesForSavefile()
+  info.playtime = $gameSystem.playtimeText()
+  info.timestamp = Date.now()
+  info.chapters = $gameVariables.value(1)
+  return info
+}
+
 DataManager.saveGlobalInfo = function () {
   StorageManager.saveObject('hiro', this._globalInfo)
 }
@@ -154,6 +166,17 @@ DataManager.makeSavename = function (savefileId) {
     return `hii${temp}ro`
   }
   return `test-${savefileId}`
+}
+
+DataManager.loadGame = function (savefileId) {
+  const saveName = this.makeSavename(savefileId)
+  return StorageManager.loadObject(saveName).then(contents => {
+    Components.Log.list.length = 0
+    this.createGameObjects()
+    this.extractSaveContents(contents)
+    this.correctDataErrors()
+    return 0
+  })
 }
 
 SceneManager.onKeyDown = function (event) {

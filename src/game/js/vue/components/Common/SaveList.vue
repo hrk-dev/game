@@ -9,6 +9,7 @@
             class="save-item"
             :class="{ 'save-highlight': index === key }"
           >
+            <div class="chapter" v-if="item.chapters">Chapter {{ item.chapters }}</div>
             <div v-if="item.ready" style="width: 250px">
               <div>Play Time: {{ item.playtime }}</div>
               <div>Save Time: {{ item.savetime }}</div>
@@ -33,11 +34,9 @@ module.exports = {
   methods: {
     // 0-load 1-save
     show(type, confirm) {
-      this.getSaveData(0)
-      this.getSaveData(1)
-      this.getSaveData(2)
-      this.getSaveData(3)
-      this.getSaveData(4)
+      for (let i = 0; i <= 4; i++) {
+        this.getSaveData(i)
+      }
 
       this.type = type
       this.confirm = confirm
@@ -147,8 +146,9 @@ module.exports = {
     },
     getSaveData(id) {
       if (DataManager.savefileExists(id + 1)) {
-        this.$set(this.list[id], 'playtime', DataManager._globalInfo?.[id + 1]?.playtime || '-')
-        this.$set(this.list[id], 'savetime', DataManager._globalInfo?.[id + 1]?.timestamp ? (new Date(DataManager._globalInfo?.[id + 1]?.timestamp)).toLocaleString() : '-')
+        this.$set(this.list[id], 'chapters', Methods.getChapter(DataManager._globalInfo?.[id + 1]?.chapters))
+        this.$set(this.list[id], 'playtime', DataManager._globalInfo?.[id + 1]?.playtime || 'Unknown')
+        this.$set(this.list[id], 'savetime', DataManager._globalInfo?.[id + 1]?.timestamp ? (new Date(DataManager._globalInfo?.[id + 1]?.timestamp)).toLocaleString() : 'Unknown')
         this.$set(this.list[id], 'ready', true)
       }
     }
@@ -176,6 +176,7 @@ module.exports = {
     border-radius 15px
 
     .save-item
+      position relative
       display flex
       justify-content center
       align-items center
@@ -184,6 +185,14 @@ module.exports = {
       border-radius 5px
       height 20%
       margin 5px
+
+      .chapter
+        position absolute
+        right 0px
+        bottom 0px
+        font-size 12px
+        line-height 20px
+        width 70px
 
       .no-data
         font-size 26px
