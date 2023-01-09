@@ -39,7 +39,6 @@ const Patch = class {
   }
 
   static async save(id) {
-    console.log('save', 4)
     $gameSystem.onBeforeSave()
     try {
       await DataManager.saveGame(id)

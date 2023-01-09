@@ -6,6 +6,10 @@ function activateAchievement(name) {
     if (!app.isPackaged) {
       console.log('激活成就: ', name)
     }
+  }, err => {
+    if (!app.isPackaged) {
+      console.log(name, '-', err)
+    }
   })
 }
 

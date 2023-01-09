@@ -160,7 +160,6 @@ module.exports = {
       this.menu.list[1].show = Patch.loopData.load !== false && this.hasSave
     },
     save(id) {
-      console.log('save', id)
       Patch.save(id)
       this.showMenu()
     },
