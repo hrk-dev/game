@@ -35,14 +35,14 @@ module.exports = {
       this.skip = skip
       if (anime) {
         this.anime = anime
-        this.setNext(Number(Patch.loopData.next) - 1)
+        this.setNext(Number(Patch.loopData._next) - 1)
       } else {
         this.setNext(Patch.loopData.next)
       }
       this.isShow = true
       if (anime) {
         setTimeout(() => {
-          this.setNext(Patch.loopData.next)
+          this.setNext(Patch.loopData._next)
           setTimeout(() => {
             this.hide()
           }, 1000)

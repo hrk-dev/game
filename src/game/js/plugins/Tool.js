@@ -189,14 +189,15 @@ void function () {
       Components.Tip.tempTip(en, cn, Number(time), true)
     },
     保存周目存档: ({ next }) => {
+      next = Number(next)
       if (Patch.loopData.next) {
-        if (Patch.loopData.next < Number(next)) {
-          Patch.loopData.next = Number(next)
-          Patch.addLoopData({
-            lock: true,
-            skip: true
-          })
+        if (Patch.loopData.next < next) {
+          Patch.loopData.next = next
         }
+        Patch.loopData.lock = true
+        Patch.loopData.skip = true
+        Patch.loopData._next = next
+        Patch.saveLoopData()
       } else {
         Patch.addLoopData({
           next: 1,
@@ -206,9 +207,8 @@ void function () {
           newGame: false
         })
       }
-      Patch.saveLoopData()
       $gameSystem.onBeforeSave()
-      DataManager.saveGame(Number(next) + 100)
+      DataManager.saveGame(next + 100)
     },
     解锁成就: ({ id }) => {
       Steam.activateAchievement(id)

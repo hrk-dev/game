@@ -261,7 +261,7 @@ module.exports = {
     },
     chapterHide(skip) {
       if (skip) {
-        this.startLoop(Patch.loopData.next)
+        this.startLoop(Patch.loopData._next)
       } else {
         this.showMenu()
       }
