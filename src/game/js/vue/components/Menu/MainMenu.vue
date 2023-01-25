@@ -170,7 +170,7 @@ module.exports = {
         }
       } else {
         this.initMenu()
-        this.blur = Patch.loopData.next || 0
+        this.setBlur()
       }
       if (Patch.loopData.load === false) {
         this.menu.list[1].show = false
@@ -367,9 +367,16 @@ module.exports = {
         this.showMenu()
       }, 200)
     },
+    setBlur () {
+      if (Patch.loopData.end) {
+        this.blur = 10
+      } else {
+        this.blur = Patch.loopData.next || 0
+      }
+    },
     async showMenu() {
       if (this.menu.show) return
-      this.blur = Patch.loopData.next || 0
+      this.setBlur()
       this.menu.show = true
       this.menuShowAnime()
       await this.$nextTick()

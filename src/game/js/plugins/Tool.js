@@ -191,11 +191,15 @@ void function () {
     保存周目存档: ({ next }) => {
       next = Number(next)
       if (Patch.loopData.next) {
-        if (Patch.loopData.next < next) {
+        if (Patch.loopData.next < next && next !== 5) {
           Patch.loopData.next = next
         }
         Patch.loopData.lock = true
-        Patch.loopData.skip = true
+        if (next !== 5) {
+          Patch.loopData.skip = true
+        } else {
+          Patch.loopData.end = true
+        }
         Patch.loopData._next = next
         Patch.saveLoopData()
       } else {
