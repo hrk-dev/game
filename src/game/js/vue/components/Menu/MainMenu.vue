@@ -26,16 +26,18 @@
             </template>
           </div>
         </transition>
-        <Setting ref="Setting" @back="settingExit"></Setting>
+        <Setting ref="Setting" @back="winClose"></Setting>
+        <Save ref="Save" @load="load" @back="winClose"></Save>
       </div>
     </transition>
-    <Chapters ref="Chapter" @start="startLoop" @back="showMenu"></Chapters>
+    <Chapters ref="Chapter" @start="startLoop" @back="chapterHide"></Chapters>
   </div>
 </template>
 
 <script>
 module.exports = {
   components: {
+    Save: VueMain.loadComponent('Common/SaveList'),
     Setting: VueMain.loadComponent('Common/Setting'),
     Chapters: VueMain.loadComponent('Common/Chapters')
   },
@@ -86,21 +88,11 @@ module.exports = {
             if (Patch.loopData.restart) {
               this.chapterEnd()
             } else {
-              this.hideMenu()
-              Components.Loading.loadingShow()
-              setTimeout(() => {
-                DataManager.loadGame(1)
-                  .then(() => {
-                    this.show = false
-                    $gameTemp.reserveCommonEvent(98)
-                    SceneManager.goto(Scene_Map)
-                  })
-                  .catch(() => {
-                    Methods.showPopup('Error', '奇怪的错误', 1500)
-                    Components.Loading.loadingHide()
-                    this.showMenu()
-                  })
-              }, 300)
+              if (this.$refs.Save) {
+                SoundManager.playOk()
+                this.hideMenu()
+                this.$refs.Save.show(0, false)
+              }
             }
           }
         },
@@ -171,13 +163,14 @@ module.exports = {
         await this.$nextTick()
         if (this.$refs?.Chapter) {
           Patch.loopData.lock = false
-          this.$refs?.Chapter?.show(true)
+          this.$refs?.Chapter?.show(true, Patch.loopData.skip)
+          Patch.loopData.skip = false
         } else {
           this.initMenu()
         }
       } else {
         this.initMenu()
-        this.blur = Patch.loopData.next || 0
+        this.setBlur()
       }
       if (Patch.loopData.load === false) {
         this.menu.list[1].show = false
@@ -266,6 +259,30 @@ module.exports = {
           })
       }, 300)
     },
+    chapterHide(skip) {
+      if (skip) {
+        this.startLoop(Patch.loopData._next)
+      } else {
+        this.showMenu()
+      }
+    },
+    load(id) {
+      this.hideMenu()
+      Components.Loading.loadingShow()
+      setTimeout(() => {
+        DataManager.loadGame(id)
+          .then(() => {
+            this.show = false
+            $gameTemp.reserveCommonEvent(98)
+            SceneManager.goto(Scene_Map)
+          })
+          .catch(() => {
+            Methods.showPopup('Error', '奇怪的错误', 1500)
+            Components.Loading.loadingHide()
+            this.showMenu()
+          })
+      }, 300)
+    },
     checkInput(buttonName) {
       if (!this.show || this.busy) return
       if (Components.Credits.show) return
@@ -273,6 +290,8 @@ module.exports = {
         this.$refs.Chapter.checkInput(buttonName)
       } else if (this.$refs?.Setting?.show) {
         this.$refs.Setting.checkInput(buttonName)
+      } else if (this.$refs?.Save?.isShow) {
+        this.$refs.Save.checkInput(buttonName)
       } else if (this.menu.show) {
         switch (buttonName) {
           case 'left':
@@ -343,14 +362,21 @@ module.exports = {
       this.$refs?.Setting?.back()
       this.showMenu()
     },
-    settingExit() {
+    winClose() {
       setTimeout(() => {
         this.showMenu()
       }, 200)
     },
+    setBlur () {
+      if (Patch.loopData.end) {
+        this.blur = 10
+      } else {
+        this.blur = Patch.loopData.next || 0
+      }
+    },
     async showMenu() {
       if (this.menu.show) return
-      this.blur = Patch.loopData.next || 0
+      this.setBlur()
       this.menu.show = true
       this.menuShowAnime()
       await this.$nextTick()

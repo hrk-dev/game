@@ -29,6 +29,7 @@
       <transition name="slide-left" appear>
         <Todo v-if="menu.show"></Todo>
       </transition>
+      <Save ref="Save" @save="save" @load="load" @back="showMenu"></Save>
       <transition name="fade">
         <Item v-if="item" ref="Item"></Item>
       </transition>
@@ -42,6 +43,7 @@
 module.exports = {
   components: {
     Todo: VueMain.loadComponent('Common/Todo'),
+    Save: VueMain.loadComponent('Common/SaveList'),
     Item: VueMain.loadComponent('Common/ItemList'),
     Setting: VueMain.loadComponent('Common/Setting')
   },
@@ -61,11 +63,10 @@ module.exports = {
           en: 'Save',
           fn() {
             if (this.hasSave) {
-              Methods.showChoice('Do you wish to overwrite this save file', '是否覆盖存档', () => {
-                Patch.save()
-              })
+              this.hideMenu()
+              this.$refs.Save.show(1, true)
             } else {
-              Patch.save()
+              Patch.save(1)
             }
           }
         },
@@ -74,27 +75,8 @@ module.exports = {
           cn: '读取',
           en: 'Load',
           fn() {
-            Methods.showChoice('Do you wish to load this save file', '是否读取存档', () => {
-              this.show = false
-              Components.Loading.loadingShow()
-              setTimeout(() => {
-                DataManager.loadGame(1)
-                  .then(() => {
-                    Patch.startWait()
-                    // $gameTemp.reserveCommonEvent(98)
-                    SceneManager.goto(Scene_Map)
-                    $gameSystem.onAfterLoad()
-                    Components.Loading.loadingHide()
-                    Patch.showTip()
-                    Patch.stopWait()
-                  })
-                  .catch(() => {
-                    Methods.showPopup('Load failed', '读取失败', 1500)
-                    Components.Loading.loadingHide()
-                    this.show = true
-                  })
-              }, 300)
-            })
+            this.hideMenu()
+            this.$refs.Save.show(0, true)
           }
         },
         {
@@ -119,8 +101,8 @@ module.exports = {
         },
         {
           show: false,
-          cn: '调试',
-          en: 'Debug',
+          cn: '日志',
+          en: 'Log',
           fn() {
             this.hideMenu()
             Components.Debug.show()
@@ -177,6 +159,29 @@ module.exports = {
       this.hasSave = Patch.checkSave()
       this.menu.list[1].show = Patch.loopData.load !== false && this.hasSave
     },
+    save(id) {
+      Patch.save(id)
+      this.showMenu()
+    },
+    load(id) {
+      this.show = false
+      Components.Loading.loadingShow()
+      setTimeout(() => {
+        DataManager.loadGame(id)
+          .then(() => {
+            Patch.startWait()
+            $gameTemp.reserveCommonEvent(98)
+            SceneManager.goto(Scene_Map)
+            $gameSystem.onAfterLoad()
+            Patch.stopWait()
+          })
+          .catch(() => {
+            Methods.showPopup('Load failed', '读取失败', 1500)
+            Components.Loading.loadingHide()
+            this.show = true
+          })
+      }, 300)
+    },
     checkInput(buttonName) {
       if (!this.show) return
       if (buttonName === 'escape') {
@@ -189,6 +194,8 @@ module.exports = {
       }
       if (Components.Choice.show) {
         Components.Choice.checkInput(buttonName)
+      } else if (this.$refs?.Save?.isShow) {
+        this.$refs.Save.checkInput(buttonName)
       } else if (this.item) {
         this.$refs.Item.checkInput(buttonName)
       } else if (this.$refs?.Setting?.show) {
@@ -265,6 +272,10 @@ module.exports = {
           setTimeout(() => {
             SceneManager.pop()
           }, 200)
+          return
+        }
+        if (this.$refs.Save.isShow) {
+          this.$refs.Save.back()
           return
         }
         if (this.item) {

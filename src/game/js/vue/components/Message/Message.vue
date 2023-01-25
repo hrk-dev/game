@@ -118,7 +118,7 @@ module.exports = {
       align: 0,
       // 0-有背景 1-无背景
       bg: 0,
-      // 0-正常字号 1-大一寸字号
+      // 0-正常字号 1-大一寸字号 2-小号字体
       size: 0,
       // 0-白色 1-黑色
       color: 0,
@@ -179,7 +179,13 @@ module.exports = {
       return this.message.bg == 1 ? 'no-bg' : 'bg'
     },
     _size() {
-      return this.message.size == 1 ? 'large-text' : 'normal-text'
+      if (this.message.size == 1) {
+        return 'large-text'
+      }
+      if (this.message.size == 2) {
+        return 'small-text'
+      }
+      return 'normal-text'
     },
     _color() {
       return this.message.color == 1 ? 'black-text' : 'white-text'
@@ -669,6 +675,15 @@ $pink = rgba(255, 176, 170, 0.9)
   .cn
     font-size 30px
     line-height 35px
+
+.small-text
+  .en
+    font-size 12px
+    line-height 18px
+
+  .cn
+    font-size 16px
+    line-height 26px
 
 .highlight
   transform scale(1.1)

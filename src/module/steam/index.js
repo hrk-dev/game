@@ -6,6 +6,10 @@ function activateAchievement(name) {
     if (!app.isPackaged) {
       console.log('激活成就: ', name)
     }
+  }, err => {
+    if (!app.isPackaged) {
+      console.log(name, '-', err)
+    }
   })
 }
 
@@ -27,6 +31,10 @@ function init() {
 
     ipcMain.on('steam:clear-achievement', (_e, name) => {
       clearAchievement(name)
+    })
+
+    ipcMain.on('steam:get-username', (e) => {
+      e.returnValue = greenworks.getSteamId()?.screenName
     })
   }
 }

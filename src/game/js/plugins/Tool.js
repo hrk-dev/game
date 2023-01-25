@@ -124,10 +124,6 @@
  * @type number
  * @desc 持续时间
  *
- * @command 保存
- * @text 保存
- * @desc 保存
- *
  * @command 保存周目存档
  * @text 保存周目存档
  * @desc 保存周目存档
@@ -143,7 +139,7 @@
  *
  * @arg id
  * @text ID
- * @type number
+ * @type string
  * @desc 成就ID
  *
  * @command 对话等待
@@ -192,13 +188,31 @@ void function () {
     临时提示: ({ en, cn, time }) => {
       Components.Tip.tempTip(en, cn, Number(time), true)
     },
-    保存: () => {
-      $gameSystem.onBeforeSave()
-      DataManager.saveGame(1)
-    },
     保存周目存档: ({ next }) => {
+      next = Number(next)
+      if (Patch.loopData.next) {
+        if (Patch.loopData.next < next && next !== 5) {
+          Patch.loopData.next = next
+        }
+        Patch.loopData.lock = true
+        if (next !== 5) {
+          Patch.loopData.skip = true
+        } else {
+          Patch.loopData.end = true
+        }
+        Patch.loopData._next = next
+        Patch.saveLoopData()
+      } else {
+        Patch.addLoopData({
+          next: 1,
+          lock: true,
+          restart: true,
+          load: true,
+          newGame: false
+        })
+      }
       $gameSystem.onBeforeSave()
-      DataManager.saveGame(Number(next) + 100)
+      DataManager.saveGame(next + 100)
     },
     解锁成就: ({ id }) => {
       Steam.activateAchievement(id)
