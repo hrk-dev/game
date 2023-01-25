@@ -64,8 +64,8 @@ module.exports = {
         } else {
           const lastSaveId = DataManager.latestSavefileId() - 1
           this.index = lastSaveId < 0 ? 0 : lastSaveId
+          this.isShow = true
         }
-        this.isShow = true
       } else {
         this.isShow = true
       }

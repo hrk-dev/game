@@ -262,6 +262,7 @@ module.exports = {
         if (Components.Choice.show) {
           SoundManager.playCancel()
           Methods.hidePopup()
+          Components.Choice.cb()
           Components.Choice.reset()
           return
         }
