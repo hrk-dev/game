@@ -51,6 +51,10 @@ module.exports = {
       }
       if (this.title === 'Hirr' && code === 79) {
         this.title = 'Hirro'
+
+        Patch.loopData.extra = false
+        Patch.saveLoopData()
+
         Methods.showPopup('', '我打你啊！', 1000)
           .then(() => {
             this.reset()

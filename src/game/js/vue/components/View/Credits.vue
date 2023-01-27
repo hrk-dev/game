@@ -3,9 +3,24 @@
     <transition name="fade">
       <div class="credits-wrapper" v-if="show">
         <transition name="fade">
+          <div class="credits-list" v-if="credits.show" :style="{
+            top: `-${credits.top}px`,
+            transition: credits.transition
+          }">
+            <img class="credits-img" :src="getUrl(credits.img)" />
+          </div>
+        </transition>
+        <transition name="fade">
           <div class="img-wrapper" :style="{ left: `-${img.index * 1034}px` }" v-if="img.show">
-            <div class="img" v-for="(name, index) in img.list" :key="index">
-              <img :src="getUrl(name)" />
+            <div class="img" v-for="(urls, index) in img.list" :key="index">
+              <template v-if="urls.length > 1">
+                <div class="img-list">
+                  <img v-for="(url, index2) in urls" :key="`${index}-${index2}`" :src="getUrl(url)" />
+                </div>
+              </template>
+              <template v-else>
+                <img :src="getUrl(urls[0])" />
+              </template>
             </div>
             <div class="text">
               <div class="en">Debug</div>
@@ -37,30 +52,24 @@ module.exports = {
   data: () => ({
     show: false,
     username: 'You',
+    extra: false,
+    credits: {
+      show: false,
+      img: '制作组.png',
+      transition: '',
+      top: 0
+    },
     img: {
       show: false,
       index: 0,
       list: [
-        '咸鱼.png',
-        'TAKUKO.png',
-        '陌诺.jpg',
-        'Ahnna.png',
-        '淼.png',
-        'Fifth_J.png',
-        '囧-Smith.png',
-        'Lysinelai.png',
-        '极致西瓜.jpg',
-        'Alexis.jpg',
-        '-M0M0-.png',
-        'ShawnTheMaroon.png',
-        '小白.png',
-        '咸鱼黄豆人.jpg',
-        'Echo小生.jpg',
-        '星铸E3n.jpg',
-        '月饼.png',
-        '安安安迪生AnDition.png',
-        'pv.png',
-        'test.png'
+        ['咸鱼.png'],
+        ['TAKUKO.png'],
+        ['陌诺.jpg', 'Ahnna.png', '囧-Smith.png', '淼.png'],
+        ['极致西瓜.jpg', '慕斯蛋糕.jpg', '要发芽的大西瓜.png', 'Alexis.jpg'],
+        ['-M0M0-.png', 'Fifth_J.png', 'Lysinelai.png', 'czcjdtc.png'],
+        ['照云.png', 'ShawnTheMaroon.png', '咸鱼黄豆人.jpg', '小白.png'],
+        ['安安安迪生AnDition.png', '月饼.png', 'Echo小生.jpg', '星铸E3n.jpg']
       ]
     },
     hiiro: {
@@ -102,16 +111,40 @@ module.exports = {
   }),
   methods: {
     start() {
+      this.extra = Patch.loopData.extra
       this.show = true
+      this.creditsStart()
+    },
+    creditsStart() {
+      // 更换图片后需要修改图片高度和持续时间
+      this.credits.transition = 'top 5s linear'
+      this.credits.show = true
+      setTimeout(() => {
+        this.credits.top = 3600
+        setTimeout(() => {
+          this.credits.show = false
+          this.credits.transition = ''
+          this.credits.top = 0
+
+          this.imgStart()
+        }, 5000)
+      }, 500)
+    },
+    imgStart() {
       this.img.index = 0
       this.img.show = true
+      const length = this.extra ? this.img.list.length : this.img.list.length + 1
       this.timer = setInterval(() => {
-        if (++this.img.index > this.img.list.length + 1) {
+        if (++this.img.index > length) {
           clearInterval(this.timer)
           this.timer = null
           this.img.show = false
-          this.hiiro.index = 0
-          this.hiiro.show = true
+          if (this.extra) {
+            this.back()
+          } else {
+            this.hiiro.index = 0
+            this.hiiro.show = true
+          }
         }
       }, 2000)
     },
@@ -142,14 +175,22 @@ module.exports = {
           volume: 100
         })
         Components.TitleBar.title = 'Hirro'
+
+        Steam.activateAchievement('CREDITS')
+        Patch.loopData.extra = true
+        Patch.saveLoopData()
+
         setTimeout(() => {
           this.end.show = false
-          this.show = false
-          Components.TitleBar.reset()
-          Components.MainMenu.showMenu()
-          AudioManager.playBgm($dataSystem.titleBgm)
+          this.back()
         }, 3000)
       }, 1000)
+    },
+    back() {
+      this.show = false
+      Components.TitleBar.reset()
+      Components.MainMenu.showMenu()
+      AudioManager.playBgm($dataSystem.titleBgm)
     },
     getUrl(name) {
       return `../credits/${name}`
@@ -172,10 +213,20 @@ module.exports = {
   background #000
   color #fff
 
+  .credits-list
+    position absolute
+    top 0
+    width 100%
+    height 100%
+
+    .credits-img
+      display block
+      width 100%
+
   .img-wrapper
     display flex
     position absolute
-    top 1px
+    top 5px
     left 0
     transition left 0.5s
 
@@ -184,7 +235,15 @@ module.exports = {
       height 730px
 
       img
+        display block
         height 100%
+
+      .img-list
+        display grid
+        width 100%
+        height 100%
+        grid-template-columns 50% 50%
+        grid-template-rows 50% 50%
 
     .text
       display flex
