@@ -152,3 +152,26 @@ Game_Map.prototype.tileEventsXy = function (x, y) {
 Game_CharacterBase.prototype.realMoveSpeed = function () {
   return this._moveSpeed + (this.isDashing() ? 1.25 : 0)
 }
+
+Game_Interpreter.prototype.command261 = function (params) {
+  if ($gameMessage.isBusy()) {
+    return false
+  }
+  let name = params[0]
+  if (name.length > 0) {
+    const ext = this.videoFileExt()
+    const videoPath = dev ? 'movies/' : `${md5('movies').substr(8, 16)}/`
+    if (dev) {
+      name = name + ext
+    } else {
+      name = md5(name + ext).substr(8, 16)
+    }
+    Video.play(videoPath + name)
+    this.setWaitMode('video')
+  }
+  return true
+}
+
+Game_Interpreter.prototype.videoFileExt = function () {
+  return'.webm'
+}
