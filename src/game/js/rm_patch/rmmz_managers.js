@@ -160,7 +160,7 @@ DataManager.makeSavename = function (savefileId) {
   }
   if (savefileId > 100) {
     savefileId -= 100
-    for (let i = 0; i <= savefileId; i++) {
+    for (let i = 0; i < savefileId; i++) {
       temp += 'i'
     }
     return `hii${temp}ro`
