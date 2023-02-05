@@ -58,7 +58,7 @@ module.exports = {
               this.$emit('back')
             })
           } else {
-            this.$emit('back')
+            this.$emit('back', true)
             this.$emit('load', id + 1)
           }
         } else {

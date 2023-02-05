@@ -362,7 +362,8 @@ module.exports = {
       this.$refs?.Setting?.back()
       this.showMenu()
     },
-    winClose() {
+    winClose(skipMenu) {
+      if (skipMenu) return
       setTimeout(() => {
         this.showMenu()
       }, 200)

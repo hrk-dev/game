@@ -23,6 +23,8 @@ function clearAchievement(name) {
 
 function init() {
   if (greenworks.init()) {
+    greenworks.setRichPresence('steam_display', '#Dreaming')
+
     activateAchievement('FIRST_START')
 
     ipcMain.on('steam:achievement', (_e, name) => {

@@ -23,22 +23,24 @@
               </template>
             </div>
             <div class="text">
-              <div class="en">Debug</div>
-              <div class="cn">{{ username }}</div>
-            </div>
-            <div class="text">
               <div class="en">Special Thanks</div>
               <div class="cn">特别鸣谢</div>
+            </div>
+            <div class="text">
+              {{ username }}
+            </div>
+            <div class="text hiiro-text">
+              Hiiro
             </div>
           </div>
         </transition>
         <transition name="fade" :duration="{ enter: 100, leave: 50 }" @after-enter="hiiroStart">
-          <div class="ending-name" v-if="hiiro.show">
+          <div class="ending hiiro-text" v-if="hiiro.show">
             {{ hiiro.list[hiiro.index] + 'iiro' }}
           </div>
         </transition>
         <transition name="fade" duration="0" @after-enter="endingStart">
-          <div class="ending" :class="{ animation: end.anime }" v-if="end.show">
+          <div class="ending hiiro-text" :class="{ animation: end.anime }" v-if="end.show">
             <div>{{ end.text }}</div>
           </div>
         </transition>
@@ -117,23 +119,23 @@ module.exports = {
     },
     creditsStart() {
       // 更换图片后需要修改图片高度和持续时间
-      this.credits.transition = 'top 5s linear'
+      this.credits.transition = 'top 15s linear'
       this.credits.show = true
       setTimeout(() => {
-        this.credits.top = 3600
+        this.credits.top = 4200
         setTimeout(() => {
           this.credits.show = false
           this.credits.transition = ''
           this.credits.top = 0
 
           this.imgStart()
-        }, 5000)
+        }, 15 * 1000)
       }, 500)
     },
     imgStart() {
       this.img.index = 0
       this.img.show = true
-      const length = this.extra ? this.img.list.length : this.img.list.length + 1
+      const length = this.extra ? this.img.list.length + 1 : this.img.list.length + 2
       this.timer = setInterval(() => {
         if (++this.img.index > length) {
           clearInterval(this.timer)
@@ -146,7 +148,7 @@ module.exports = {
             this.hiiro.show = true
           }
         }
-      }, 2000)
+      }, 1.5 * 1000)
     },
     hiiroStart() {
       this.timer = setInterval(() => {
@@ -258,21 +260,19 @@ module.exports = {
       .cn
         font-size 22px
 
-  .ending-name
-    position fixed
-    top 50%
-    left 50%
-    transform translate(-50%, -50%)
-    filter blur(1px)
-
   .ending
     position fixed
-    inset 0
+    top 10px
+    bottom 0
+    left 0
+    right 0
     display flex
-    flex-direction column
     align-items center
     justify-content center
-    filter blur(1px)
+
+.hiiro-text
+  font-family Hiiro
+  filter blur(1px)
 
 .animation
   text-shadow -5px -5px 0px rgba(248, 240, 5, 0.5), 5px 5px 0px rgba(0, 230, 246, 0.5)

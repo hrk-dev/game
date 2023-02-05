@@ -1,9 +1,14 @@
 @font-face {
     font-family: GameFont;
-    src: url("GenJyuuGothic-Monospace-Normal-2.ttf");
+    src: url("ResourceHanRoundedCN-Normal.ttf");
 }
 
 @font-face {
     font-family: Error;
     src: url("error.ttf");
+}
+
+@font-face {
+    font-family: Hiiro;
+    src: url("hiiro.ttf");
 }
