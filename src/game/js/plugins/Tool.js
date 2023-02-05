@@ -204,6 +204,7 @@ void function () {
         Patch.saveLoopData()
       } else {
         Patch.addLoopData({
+          _next: 1,
           next: 1,
           lock: true,
           restart: true,
