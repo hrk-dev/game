@@ -119,17 +119,17 @@ module.exports = {
     },
     creditsStart() {
       // 更换图片后需要修改图片高度和持续时间
-      this.credits.transition = 'top 15s linear'
+      this.credits.transition = 'top 20s linear'
       this.credits.show = true
       setTimeout(() => {
-        this.credits.top = 4200
+        this.credits.top = 4300
         setTimeout(() => {
           this.credits.show = false
           this.credits.transition = ''
           this.credits.top = 0
 
           this.imgStart()
-        }, 15 * 1000)
+        }, 20 * 1000)
       }, 500)
     },
     imgStart() {
