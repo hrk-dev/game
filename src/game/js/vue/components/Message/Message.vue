@@ -340,7 +340,7 @@ module.exports = {
     },
     checkInput(buttonName) {
       if (this.hide.flag) {
-        if (buttonName === 'escape' || buttonName === 'shift') {
+        if (buttonName !== 'control' && buttonName !== 'alt' && buttonName !== 'tab') {
           this.hide.flag = false
         }
         return

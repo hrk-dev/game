@@ -104,7 +104,7 @@ ConfigManager.load = function () {
 }
 
 ConfigManager.applyData = function (config) {
-  this.alwaysDash = this.readFlag(config, 'alwaysDash', false)
+  this.alwaysDash = this.readFlag(config, 'alwaysDash', true)
   this.commandRemember = this.readFlag(config, 'commandRemember', false)
   this.touchUI = this.readFlag(config, 'touchUI', true)
   this.bgmVolume = this.readVolume(config, 'bgmVolume')

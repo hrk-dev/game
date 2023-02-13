@@ -110,7 +110,7 @@ module.exports = {
         }
       } else {
         if (buttonName === 'tab') {
-          if ($gamePlayer.isMoving() || SceneManager.isSceneChanging() || this.noShow) return
+          if ($gamePlayer.isMoving() || SceneManager.isSceneChanging() || this.noShow || Components.Message?.hide.flag) return
           if (Components.Message?.message.show) {
             Components.Message.message.show = false
             this.message = true
