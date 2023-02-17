@@ -43,12 +43,12 @@ global.Methods = class {
         if (Patch.loopData.end) {
           return 0
         } else {
-          return 4
+          return '4?'
         }
       case 5:
         return 0
       case 999:
-        return 4
+        return '4?'
       default:
         return num + 1
     }
