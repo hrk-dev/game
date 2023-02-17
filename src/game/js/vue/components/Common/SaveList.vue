@@ -9,7 +9,7 @@
             class="save-item"
             :class="{ 'save-highlight': index === key }"
           >
-            <div class="chapter" v-if="item.chapters">Chapter {{ item.chapters }}</div>
+            <div class="chapter" v-if="item.chapters === 0 || item.chapters">Chapter {{ item.chapters }}</div>
             <div v-if="item.ready" style="width: 250px">
               <div>Play Time: {{ item.playtime }}</div>
               <div>Save Time: {{ item.savetime }}</div>

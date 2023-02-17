@@ -39,10 +39,16 @@ global.Methods = class {
     switch (num) {
       case 3:
         return 3.5
-      case 4:
-        return 4
+        case 4:
+        if (Patch.loopData.end) {
+          return 0
+        } else {
+          return 4
+        }
       case 5:
         return 0
+      case 999:
+        return 4
       default:
         return num + 1
     }

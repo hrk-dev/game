@@ -141,7 +141,7 @@ module.exports = {
   .title-text
     font-family 'GameFont'
     overflow hidden
-    height 100%
+    height 110%
 
   .title-btn-list
     display flex

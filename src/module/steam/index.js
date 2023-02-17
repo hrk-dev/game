@@ -22,7 +22,12 @@ function clearAchievement(name) {
 }
 
 function init() {
-  if (greenworks.init()) {
+  let ready = false
+  try {
+    ready = greenworks.init()
+  } catch { }
+
+  if (ready) {
     greenworks.setRichPresence('steam_display', '#Dreaming')
 
     activateAchievement('FIRST_START')
@@ -37,6 +42,14 @@ function init() {
 
     ipcMain.on('steam:get-username', (e) => {
       e.returnValue = greenworks.getSteamId()?.screenName
+    })
+  } else {
+    ipcMain.on('steam:achievement', () => { })
+
+    ipcMain.on('steam:clear-achievement', () => { })
+
+    ipcMain.on('steam:get-username', (e) => {
+      e.returnValue = undefined
     })
   }
 }

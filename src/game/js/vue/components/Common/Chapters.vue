@@ -37,8 +37,10 @@ module.exports = {
         this.anime = anime
         if (Patch.loopData._next == 5) {
           this.transition = 'slide-down-text'
+          this.setNext(999)
+        } else {
+          this.setNext(Number(Patch.loopData._next) - 1)
         }
-        this.setNext(Number(Patch.loopData._next) - 1)
       } else {
         this.setNext(Patch.loopData.next)
       }

@@ -194,7 +194,9 @@ void function () {
         if (Patch.loopData.next < next && next !== 5) {
           Patch.loopData.next = next
         }
-        Patch.loopData.lock = true
+        if (next !== 5 || !Patch.loopData.end) {
+          Patch.loopData.lock = true
+        }
         if (next !== 5) {
           Patch.loopData.skip = true
         } else {
