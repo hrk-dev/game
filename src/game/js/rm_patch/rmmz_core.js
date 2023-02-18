@@ -98,6 +98,8 @@ Input.gamepadMapper = {
   1: 'escape',  // B
   2: 'shift',   // X
   3: 'control', // Y
+  7: "shift",   // LT
+  8: "shift",   // RT
   9: 'tab',     // Menu
   12: 'up',     // D-pad up
   13: 'down',   // D-pad down
