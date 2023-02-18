@@ -131,7 +131,6 @@ module.exports = {
     bgm() {
       AudioManager.bgmVolume = this._bgm
       AudioManager.bgsVolume = this._bgm
-      console.log(Math.min(1, (this.bgm + 2) / 10))
       Video.setVolume(Math.min(1, (this.bgm + 2) / 10))
     },
     se() {

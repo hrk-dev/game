@@ -93,5 +93,55 @@ Input._onKeyDown = function (event) {
   Components?.TitleBar.checkInput(event.keyCode)
 }
 
+Input.gamepadMapper = {
+  0: 'ok',      // A
+  1: 'escape',  // B
+  2: 'shift',   // X
+  3: 'control', // Y
+  9: 'tab',     // Menu
+  12: 'up',     // D-pad up
+  13: 'down',   // D-pad down
+  14: 'left',   // D-pad left
+  15: 'right'   // D-pad right
+}
+
+Input._updateGamepadState = function (gamepad) {
+  const lastState = this._gamepadStates[gamepad.index] || []
+  const newState = []
+  const buttons = gamepad.buttons
+  const axes = gamepad.axes
+  const threshold = 0.5
+  newState[12] = false
+  newState[13] = false
+  newState[14] = false
+  newState[15] = false
+  for (let i = 0; i < buttons.length; i++) {
+    newState[i] = buttons[i].pressed
+  }
+  if (axes[1] < -threshold) {
+    newState[12] = true // up
+  } else if (axes[1] > threshold) {
+    newState[13] = true // down
+  }
+  if (axes[0] < -threshold) {
+    newState[14] = true // left
+  } else if (axes[0] > threshold) {
+    newState[15] = true // right
+  }
+  for (let j = 0; j < newState.length; j++) {
+    if (newState[j] !== lastState[j]) {
+      const buttonName = this.gamepadMapper[j]
+      if (buttonName) {
+        this._currentState[buttonName] = newState[j]
+      }
+      if (lastState[j] === false) {
+        (Components[VueMain._current[VueMain._current.length - 1]])?.checkInput(buttonName)
+        Components?.Message.checkInput(buttonName)
+      }
+    }
+  }
+  this._gamepadStates[gamepad.index] = newState
+}
+
 /** 禁用触摸操作 */
 TouchInput._setupEventHandlers = function () { }
