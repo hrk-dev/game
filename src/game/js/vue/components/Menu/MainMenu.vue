@@ -253,9 +253,20 @@ module.exports = {
           })
           .catch((err) => {
             console.error(err)
-            Methods.showPopup('Error', '奇怪的错误', 1500)
-            Components.Loading.loadingHide()
-            this.showMenu()
+            console.warn('周目存档读取失败')
+
+            this.hideMenu()
+            DataManager.setupNewGame()
+            $gameMap._interpreter.command115()
+            $gameVariables.setValue(1, next)
+            $gameTemp.reserveCommonEvent(97)
+            AudioManager.stopAll()
+            SceneManager.goto(Scene_Map)
+            Patch.startWait()
+            setTimeout(() => {
+              this.show = false
+              Patch.stopWait()
+            }, 300)
           })
       }, 300)
     },
@@ -276,8 +287,14 @@ module.exports = {
             $gameTemp.reserveCommonEvent(98)
             SceneManager.goto(Scene_Map)
           })
-          .catch(() => {
-            Methods.showPopup('Error', '奇怪的错误', 1500)
+          .catch((err) => {
+            console.error(err)
+            const msg = err.message
+            if (msg) {
+              Methods.showPopup(msg, '存档读取失败', 1500)
+            } else {
+              Methods.showPopup('Error', '奇怪的错误', 1500)
+            }
             Components.Loading.loadingHide()
             this.showMenu()
           })

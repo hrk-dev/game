@@ -32,6 +32,9 @@ module.exports = {
   }),
   methods: {
     show(anime, skip) {
+      if (Patch.loopData._next === undefined) {
+        Patch.loopData._next = 1
+      }
       this.skip = skip
       if (anime) {
         this.anime = anime
