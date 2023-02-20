@@ -15,8 +15,8 @@ global.Methods = class {
     Components.Tip.hideTip()
   }
 
-  static clearTip() {
-    Components.Tip.clear()
+  static clearTip(other) {
+    Components.Tip.clear(other)
   }
 
   static getTipState() {
