@@ -405,6 +405,7 @@ module.exports = {
       // } else {
       //   SoundManager.playOk()
       // }
+      SceneManager._scene._messageWindow._choiceListWindow.updateInputData()
       SceneManager._scene._messageWindow._choiceListWindow.deactivate()
       $gameMessage.onChoice(this.choice.index)
       SceneManager._scene._messageWindow._choiceListWindow._messageWindow.terminateMessage()

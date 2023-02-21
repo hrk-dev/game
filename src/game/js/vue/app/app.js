@@ -36,6 +36,9 @@ VueMain.app = new Vue({
     this.$nextTick(() => {
       electron.ipcRenderer.send('vue:ready', (test || dev))
     })
+  },
+  errorCaptured(_err, vm, info) {
+    console.error(`[${info}]:` ,vm)
   }
 })
 

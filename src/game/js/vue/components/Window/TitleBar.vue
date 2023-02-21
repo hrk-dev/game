@@ -31,7 +31,13 @@ module.exports = {
   }),
   methods: {
     testEvent() {
-      $gameTemp.reserveCommonEvent(100)
+      if (Components.MainMenu.show) {
+        Components.MainMenu.hideMenu()
+        DataManager.setupNewGame()
+        SceneManager.goto(Scene_Map)
+        $gameTemp.reserveCommonEvent(100)
+        Components.MainMenu.show = false
+      }
     },
     ipc(type) {
       electron.ipcRenderer.send(type)

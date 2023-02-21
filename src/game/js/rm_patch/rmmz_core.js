@@ -88,7 +88,9 @@ Input._onKeyDown = function (event) {
   if (buttonName) {
     this._currentState[buttonName] = true
   }
-  (Components[VueMain._current[VueMain._current.length - 1]])?.checkInput(buttonName)
+  if (Components?.[VueMain._current[VueMain._current.length - 1]]) {
+    Components[VueMain._current[VueMain._current.length - 1]].checkInput(buttonName)
+  }
   Components?.Message.checkInput(buttonName)
   Components?.TitleBar.checkInput(event.keyCode)
 }
@@ -130,19 +132,21 @@ Input._updateGamepadState = function (gamepad) {
   } else if (axes[0] > threshold) {
     newState[15] = true // right
   }
+  this._gamepadStates[gamepad.index] = newState
   for (let j = 0; j < newState.length; j++) {
     if (newState[j] !== lastState[j]) {
       const buttonName = this.gamepadMapper[j]
       if (buttonName) {
         this._currentState[buttonName] = newState[j]
       }
-      if (lastState[j] === false) {
-        (Components[VueMain._current[VueMain._current.length - 1]])?.checkInput(buttonName)
+      if (newState[j] === true) {
+        if (Components?.[VueMain._current[VueMain._current.length - 1]]) {
+          Components[VueMain._current[VueMain._current.length - 1]].checkInput(buttonName)
+        }
         Components?.Message.checkInput(buttonName)
       }
     }
   }
-  this._gamepadStates[gamepad.index] = newState
 }
 
 /** 禁用触摸操作 */
