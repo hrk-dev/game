@@ -192,7 +192,7 @@ module.exports = {
         Methods.hidePopup()
         return
       }
-      if (Components.Choice.show) {
+      if (Components.Choice?.show) {
         Components.Choice.checkInput(buttonName)
       } else if (this.$refs?.Save?.isShow) {
         this.$refs.Save.checkInput(buttonName)
@@ -215,7 +215,7 @@ module.exports = {
             this.down()
             break
           case 'ok':
-            if (Components.Choice.show) return
+            if (Components.Choice?.show) return
             SoundManager.playOk()
             this.menu.list[this.menu.current].fn.call(this)
             break
@@ -259,7 +259,7 @@ module.exports = {
           this.showMenu()
           return
         }
-        if (Components.Choice.show) {
+        if (Components.Choice?.show) {
           SoundManager.playCancel()
           Methods.hidePopup()
           Components.Choice.cb()

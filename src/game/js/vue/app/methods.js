@@ -8,7 +8,7 @@ global.Methods = class {
   }
 
   static showTip(en, cn, time, other) {
-    Components.Tip.showTip(en, cn, time, other)
+    Components.Tip?.showTip(en, cn, time, other)
   }
 
   static hideTip() {
@@ -20,11 +20,11 @@ global.Methods = class {
   }
 
   static getTipState() {
-    return Components.Tip.show
+    return Components.Tip?.show
   }
 
   static showPopup(en, cn, time) {
-    return Components.Popup.show(en, cn, time)
+    return Components.Popup?.show(en, cn, time)
   }
 
   static hidePopup() {

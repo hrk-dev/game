@@ -50,11 +50,11 @@ module.exports = {
     hide() {
       this.isShow = false
       if (this.message) {
-        Components.Message.message.show = true
+        Components.Message?.message.show = true
         this.message = false
       }
       if (this.choice) {
-        Components.Message.choice.show = true
+        Components.Message?.choice.show = true
         this.choice = false
       }
       Patch.stopWait()

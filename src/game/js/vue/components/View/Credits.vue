@@ -148,7 +148,7 @@ module.exports = {
             this.hiiro.show = true
           }
         }
-      }, 1.5 * 1000)
+      }, 2.5 * 1000)
     },
     hiiroStart() {
       this.timer = setInterval(() => {
